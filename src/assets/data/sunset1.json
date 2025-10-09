@@ -1,0 +1,243 @@
+{
+  "path": "/default-domain/workspaces/martin/photo-of-a-cityscape-wit",
+  "type": "Picture",
+  "state": "project",
+  "lockOwner": null,
+  "lockCreated": null,
+  "versionLabel": null,
+  "isCheckedOut": "true",
+  "lastModified": "2025-06-20T06:27:59.800Z",
+  "contextParameters": {
+
+  },
+  "changeToken": "7-0",
+  "facets": [
+    "Versionable",
+    "NXTag",
+    "Publishable",
+    "Picture",
+    "Commentable",
+    "HasRelatedText"
+  ],
+  "parentRef": "6edf6939-9540-4102-9c78-27f28a281893",
+  "uid": "e2355f24-9493-4170-8c58-85c367bd1f64",
+  "title": "photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+  "name": null,
+  "retainUntil": null,
+  "versionableId": null,
+  "record": false,
+  "id": "e2355f24-9493-4170-8c58-85c367bd1f64",
+  "locked": false,
+  "version": false,
+  "checkedOut": true,
+  "underRetentionOrLegalHold": false,
+  "proxy": false,
+  "trashed": false,
+  "lock": null,
+  "entity-type": "document",
+  "repository": "default",
+  "properties": {
+    "uid:uid": null,
+    "uid:major_version": 0,
+    "uid:minor_version": 0,
+    "imd:color_space": "Uncalibrated",
+    "imd:user_comment": null,
+    "imd:image_description": null,
+    "imd:date_time_original": null,
+    "imd:focal_length": null,
+    "imd:white_balance": null,
+    "imd:copyright": null,
+    "imd:fnumber": null,
+    "imd:pixel_xdimension": null,
+    "imd:equipment": null,
+    "imd:orientation": "Horizontal (normal)",
+    "imd:exposure_time": null,
+    "imd:xresolution": 72,
+    "imd:iso_speed_ratings": null,
+    "imd:icc_profile": null,
+    "imd:yresolution": 72,
+    "imd:pixel_ydimension": null,
+    "imd:focalLength": null,
+    "file:content": {
+      "name": "photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+      "mime-type": "image/jpeg",
+      "encoding": null,
+      "digestAlgorithm": "MD5",
+      "digest": "dc3446b5b0d639d3c1360a1acea1e1fd",
+      "length": "1638720",
+      "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/file:content/photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+    },
+    "common:icon-expanded": null,
+    "common:icon": "/icons/image.gif",
+    "dc:description": null,
+    "dc:language": null,
+    "dc:coverage": null,
+    "dc:valid": null,
+    "dc:creator": "Administrator",
+    "dc:modified": "2025-06-20T06:27:59.800Z",
+    "dc:lastContributor": "Administrator",
+    "dc:rights": null,
+    "dc:expired": null,
+    "dc:format": null,
+    "dc:created": "2025-06-20T06:27:59.800Z",
+    "dc:title": "photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+    "dc:issued": null,
+    "dc:nature": null,
+    "dc:subjects": [],
+    "dc:contributors": [
+      "Administrator"
+    ],
+    "dc:source": null,
+    "dc:publisher": null,
+    "relatedtext:relatedtextresources": [],
+    "picture:dateline": null,
+    "picture:origin": null,
+    "picture:caption": null,
+    "picture:language": null,
+    "picture:source": null,
+    "picture:cropCoords": null,
+    "picture:slugline": null,
+    "picture:genre": null,
+    "picture:typage": null,
+    "picture:credit": null,
+    "picture:headline": null,
+    "picture:subheadline": null,
+    "picture:byline": null,
+    "picture:views": [
+      {
+        "filename": "Thumbnail_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+        "width": 100,
+        "description": "Thumbnail size",
+        "tag": null,
+        "title": "Thumbnail",
+        "content": {
+          "name": "Thumbnail_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+          "mime-type": "image/jpeg",
+          "encoding": null,
+          "digestAlgorithm": "MD5",
+          "digest": "0f66ddb0e0ad1e219f359a51af09409a",
+          "length": "2290",
+          "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/picture:views/0/content/Thumbnail_photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+        },
+        "height": 67,
+        "info": {
+          "colorSpace": "sRGB",
+          "depth": 8,
+          "width": 100,
+          "format": "JPEG",
+          "height": 67
+        }
+      },
+      {
+        "filename": "Small_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+        "width": 560,
+        "description": "Small size",
+        "tag": null,
+        "title": "Small",
+        "content": {
+          "name": "Small_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+          "mime-type": "image/jpeg",
+          "encoding": null,
+          "digestAlgorithm": "MD5",
+          "digest": "8c371dd13058546f78b75f6763607f0b",
+          "length": "29778",
+          "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/picture:views/1/content/Small_photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+        },
+        "height": 373,
+        "info": {
+          "colorSpace": "sRGB",
+          "depth": 8,
+          "width": 560,
+          "format": "JPEG",
+          "height": 373
+        }
+      },
+      {
+        "filename": "Medium_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+        "width": 1000,
+        "description": "Medium size",
+        "tag": null,
+        "title": "Medium",
+        "content": {
+          "name": "Medium_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+          "mime-type": "image/jpeg",
+          "encoding": null,
+          "digestAlgorithm": "MD5",
+          "digest": "60e63614222bf6c14b8a23dbe619150d",
+          "length": "82841",
+          "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/picture:views/2/content/Medium_photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+        },
+        "height": 667,
+        "info": {
+          "colorSpace": "sRGB",
+          "depth": 8,
+          "width": 1000,
+          "format": "JPEG",
+          "height": 667
+        }
+      },
+      {
+        "filename": "FullHD_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+        "width": 1920,
+        "description": "Full HD size",
+        "tag": null,
+        "title": "FullHD",
+        "content": {
+          "name": "FullHD_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+          "mime-type": "image/jpeg",
+          "encoding": null,
+          "digestAlgorithm": "MD5",
+          "digest": "7dfab99ccc00029bc9058f282c108c3b",
+          "length": "252796",
+          "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/picture:views/3/content/FullHD_photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+        },
+        "height": 1280,
+        "info": {
+          "colorSpace": "sRGB",
+          "depth": 8,
+          "width": 1920,
+          "format": "JPEG",
+          "height": 1280
+        }
+      },
+      {
+        "filename": "OriginalJpeg_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+        "width": 4460,
+        "description": "Original jpeg image",
+        "tag": null,
+        "title": "OriginalJpeg",
+        "content": {
+          "name": "OriginalJpeg_photo-of-a-cityscape-with-a-ferris-wheel.jpg",
+          "mime-type": "image/jpeg",
+          "encoding": null,
+          "digestAlgorithm": "MD5",
+          "digest": "0282deed59cc45b63ec83cce9f4ff8dc",
+          "length": "1187803",
+          "data": "http://10.93.168.137:8080/nuxeo/nxfile/default/e2355f24-9493-4170-8c58-85c367bd1f64/picture:views/4/content/OriginalJpeg_photo-of-a-cityscape-with-a-ferris-wheel.jpg?changeToken=7-0"
+        },
+        "height": 2973,
+        "info": {
+          "colorSpace": "sRGB",
+          "depth": 8,
+          "width": 4460,
+          "format": "JPEG",
+          "height": 2973
+        }
+      }
+    ],
+    "picture:info": {
+      "colorSpace": "sRGB",
+      "depth": 8,
+      "width": 4460,
+      "format": "JPEG",
+      "height": 2973
+    },
+    "nxtag:tags": []
+  },
+  "isProxy": false,
+  "isTrashed": false,
+  "isRecord": false,
+  "hasLegalHold": false,
+  "isUnderRetentionOrLegalHold": false,
+  "isVersion": false
+}

@@ -1,0 +1,111 @@
+meta {
+  name: 01 - Check Token Status
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/auth/token/status
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+vars:pre-request {
+  testStartTime: {{$timestamp}}
+}
+
+script:pre-request {
+  // 记录测试开始时间
+  bru.setVar("testStartTime", Date.now());
+  
+  console.log("🔍 开始检查Token状态");
+  console.log("📅 测试时间:", new Date().toLocaleString());
+  
+  // 检查是否有必要的环境变量
+  if (!bru.getEnvVar("ACCESS_TOKEN")) {
+    throw new Error("❌ ACCESS_TOKEN 环境变量未设置");
+  }
+}
+
+script:post-response {
+  // 验证响应
+  test("Status code should be 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response should have token info", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('accessToken');
+    expect(body).to.have.property('isExpired');
+    expect(body).to.have.property('expiresAt');
+  });
+  
+  // 提取token信息
+  const tokenInfo = res.getBody();
+  const currentTime = Date.now();
+  const expiresAt = tokenInfo.expiresAt * 1000; // 转换为毫秒
+  const timeRemaining = Math.round((expiresAt - currentTime) / 60000); // 转换为分钟
+  
+  // 保存测试结果
+  bru.setVar("tokenExpiresAt", tokenInfo.expiresAt);
+  bru.setVar("timeRemainingMinutes", timeRemaining);
+  bru.setVar("isExpired", tokenInfo.isExpired);
+  bru.setVar("isExpiringSoon", tokenInfo.isExpiringSoon);
+  
+  // 输出测试结果
+  console.log("✅ Token状态检查完成");
+  console.log("📊 Token信息:");
+  console.log("  - 是否过期:", tokenInfo.isExpired ? "❌ 是" : "✅ 否");
+  console.log("  - 即将过期:", tokenInfo.isExpiringSoon ? "⚠️ 是" : "✅ 否");
+  console.log("  - 剩余时间:", timeRemaining + " 分钟");
+  console.log("  - 过期时间:", new Date(expiresAt).toLocaleString());
+  
+  // 根据剩余时间提供建议
+  if (timeRemaining <= 5) {
+    console.log("💡 建议: Token即将过期，可以测试刷新机制");
+  } else if (timeRemaining <= 15) {
+    console.log("💡 建议: 可以模拟过期来测试刷新机制");
+  } else {
+    console.log("💡 建议: Token状态正常，可以继续其他测试");
+  }
+  
+  // 测试执行时间
+  const testDuration = Date.now() - bru.getVar("testStartTime");
+  console.log("⏱️ 测试耗时:", testDuration + "ms");
+}
+
+docs {
+  # Token状态检查
+
+  ## 🎯 测试目的
+  获取当前access token的状态信息，包括：
+  - Token是否有效
+  - 过期时间
+  - 剩余有效时间
+  - 是否即将过期（5分钟内）
+
+  ## 📋 验证点
+  1. ✅ HTTP状态码为200
+  2. ✅ 响应包含必要的token信息
+  3. ✅ 时间计算准确性
+  4. ✅ 过期状态判断正确性
+
+  ## 📊 输出数据
+  - `tokenExpiresAt`: Token过期时间戳
+  - `timeRemainingMinutes`: 剩余时间（分钟）
+  - `isExpired`: 是否已过期
+  - `isExpiringSoon`: 是否即将过期
+
+  ## 🔄 后续测试
+  根据检查结果决定后续测试策略：
+  - 如果即将过期 → 直接测试刷新
+  - 如果时间充足 → 先模拟过期再测试
+}

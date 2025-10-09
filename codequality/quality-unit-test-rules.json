@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "displayName": "Statement Coverage",
+      "metricKey": "StatementCoverage",
+      "value": "90",
+      "comparator": "GTE"
+    }
+  ]
+}

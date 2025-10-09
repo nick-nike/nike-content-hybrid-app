@@ -1,0 +1,73 @@
+meta {
+  name: Okta Token Lifecycle Tests
+  type: collection
+  version: 1.0.0
+}
+
+auth {
+  mode: bearer
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: Bruno/1.0 Okta-Token-Lifecycle-Tests
+}
+
+vars {
+  baseUrl: http://localhost:3000
+  oktaIssuer: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7
+  clientId: 0oa1xrlg1KIEhCRyk1t8
+  redirectUri: http://localhost:3000/login/callback
+}
+
+docs {
+  # Okta Token生命周期测试集合
+
+  ## 🎯 测试目标
+  
+  这个Bruno测试集合用于验证Okta token的完整生命周期，包括：
+  
+  1. **用户登录流程** - Login with Okta
+  2. **Token有效性检查** - 验证access token和refresh token
+  3. **自动刷新机制** - 5分钟前开始刷新
+  4. **重试逻辑测试** - 失败后10秒重试，最多3次
+  5. **会话过期处理** - 3次失败后触发重新授权
+
+  ## 🔄 完整闭环逻辑
+
+  ```
+  用户登录 → 获取token → 监控过期时间 → 5分钟前刷新 
+     ↓
+  刷新成功 → 继续监控循环
+     ↓
+  刷新失败 → 延迟10秒重试 → 最多3次 → 弹窗重新授权
+  ```
+
+  ## 🚀 使用方法
+
+  ### 1. 环境设置
+  确保在bruno-tests/.env中设置：
+  ```
+  ACCESS_TOKEN=your_actual_access_token
+  REFRESH_TOKEN=your_actual_refresh_token
+  ```
+
+  ### 2. 运行测试
+  - 单个测试：点击具体请求运行
+  - 完整套件：使用"Run Collection"
+  - CI/CD集成：使用Bruno CLI
+
+  ### 3. 测试场景
+  - **正常场景**：验证正常的token刷新流程
+  - **过期场景**：模拟token过期的处理
+  - **失败场景**：模拟刷新失败的重试逻辑
+  - **边界场景**：测试各种边界条件
+
+  ## 📊 测试数据收集
+
+  每个测试会收集以下数据：
+  - Token的过期时间
+  - 刷新响应时间
+  - 重试次数和间隔
+  - 错误类型和处理方式
+}

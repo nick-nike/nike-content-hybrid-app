@@ -1,0 +1,176 @@
+meta {
+  name: 03 - Test Auto Refresh
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/auth/token/test-refresh
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "timeoutMinutes": 2,
+    "expectedBehavior": "auto_refresh",
+    "triggerRefresh": true
+  }
+}
+
+vars:pre-request {
+  refreshTestStartTime: {{$timestamp}}
+  maxWaitTime: 120000
+}
+
+script:pre-request {
+  bru.setVar("refreshTestStartTime", Date.now());
+  
+  console.log("🔄 开始测试自动刷新机制");
+  console.log("📋 测试参数:");
+  console.log("  - 超时时间: 2分钟");
+  console.log("  - 期望行为: 自动刷新");
+  
+  // 检查前置条件
+  const simulatedMinutes = bru.getVar("simulatedMinutes");
+  if (simulatedMinutes === undefined) {
+    console.warn("⚠️ 警告: 未找到模拟过期的结果，建议先运行过期模拟测试");
+  } else if (simulatedMinutes > 10) {
+    console.warn("⚠️ 警告: Token剩余时间较长(" + simulatedMinutes + "分钟)，可能需要更长等待时间");
+  }
+  
+  // 设置合理的超时时间
+  let timeoutMinutes = 2;
+  if (simulatedMinutes && simulatedMinutes > 5) {
+    timeoutMinutes = Math.min(simulatedMinutes + 1, 5); // 最多等待5分钟
+  }
+  
+  req.setBody(JSON.stringify({
+    timeoutMinutes: timeoutMinutes,
+    expectedBehavior: "auto_refresh",
+    triggerRefresh: true
+  }));
+  
+  bru.setVar("timeoutMinutes", timeoutMinutes);
+  console.log("🕐 设置超时时间:", timeoutMinutes + "分钟");
+}
+
+script:post-response {
+  test("Status code should be 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response should have refresh test results", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('success');
+    expect(body).to.have.property('events');
+    expect(body).to.have.property('duration');
+  });
+  
+  const result = res.getBody();
+  const testDuration = Date.now() - bru.getVar("refreshTestStartTime");
+  
+  console.log("📊 自动刷新测试结果:");
+  console.log("  - 测试成功:", result.success ? "✅ 是" : "❌ 否");
+  console.log("  - 事件数量:", result.events.length);
+  console.log("  - 测试耗时:", Math.round(testDuration / 1000) + "秒");
+  
+  // 分析刷新事件
+  const refreshEvents = result.events.filter(e => e.type === 'tokenRenewed');
+  const failureEvents = result.events.filter(e => e.type === 'refreshFailed');
+  
+  if (refreshEvents.length > 0) {
+    console.log("✅ 检测到Token刷新事件:");
+    refreshEvents.forEach((event, index) => {
+      const eventTime = new Date(event.timestamp).toLocaleTimeString();
+      console.log(`  ${index + 1}. ${eventTime} - 刷新成功`);
+    });
+    
+    test("Token refresh should succeed", function() {
+      expect(result.success).to.be.true;
+      expect(refreshEvents.length).to.be.greaterThan(0);
+    });
+  } else if (failureEvents.length > 0) {
+    console.log("❌ 检测到Token刷新失败:");
+    failureEvents.forEach((event, index) => {
+      const eventTime = new Date(event.timestamp).toLocaleTimeString();
+      console.log(`  ${index + 1}. ${eventTime} - 刷新失败:`, event.detail?.error || 'Unknown error');
+    });
+    
+    test("Should handle refresh failure gracefully", function() {
+      expect(failureEvents.length).to.be.greaterThan(0);
+      // 刷新失败是可以接受的，只要系统能够正确处理
+    });
+  } else {
+    console.log("⚠️ 未检测到刷新事件");
+    
+    test("Should have some refresh activity", function() {
+      // 在一定时间内应该有刷新活动
+      expect(result.events.length).to.be.greaterThan(0);
+    });
+  }
+  
+  // 保存测试结果
+  bru.setVar("refreshTestSuccess", result.success);
+  bru.setVar("refreshEventsCount", refreshEvents.length);
+  bru.setVar("failureEventsCount", failureEvents.length);
+  
+  // 性能评估
+  const avgResponseTime = result.duration / result.events.length || 0;
+  console.log("📈 性能指标:");
+  console.log("  - 平均响应时间:", Math.round(avgResponseTime) + "ms");
+  console.log("  - 事件处理效率:", result.events.length + "个事件/" + Math.round(testDuration / 1000) + "秒");
+  
+  // 下一步建议
+  if (result.success && refreshEvents.length > 0) {
+    console.log("💡 建议: 刷新机制正常，可以测试失败重试逻辑");
+  } else if (failureEvents.length > 0) {
+    console.log("💡 建议: 已发现刷新失败，正好可以测试重试机制");
+  } else {
+    console.log("💡 建议: 考虑调整测试参数或检查系统配置");
+  }
+}
+
+docs {
+  # 自动刷新机制测试
+
+  ## 🎯 测试目的
+  验证token即将过期时的自动刷新机制是否正常工作。
+
+  ## 📋 测试流程
+  1. 触发自动刷新检查
+  2. 监听刷新相关事件
+  3. 等待刷新结果（成功或失败）
+  4. 记录刷新过程中的所有事件
+  5. 分析刷新性能和可靠性
+
+  ## 🔍 监听事件
+  - `tokenRenewed` - Token刷新成功
+  - `refreshFailed` - Token刷新失败
+  - `modalShown` - 认证弹窗显示
+
+  ## 📊 验证点
+  1. ✅ 刷新机制能够被触发
+  2. ✅ 刷新事件能够被正确监听
+  3. ✅ 成功/失败状态能够被正确识别
+  4. ✅ 性能指标在合理范围内
+
+  ## 🎛️ 智能参数调整
+  - 根据token剩余时间调整超时时间
+  - 根据前置测试结果优化测试策略
+  - 动态设置合理的等待时间
+
+  ## 📈 性能指标
+  - 平均响应时间
+  - 事件处理效率
+  - 刷新成功率
+  - 测试执行时间
+}

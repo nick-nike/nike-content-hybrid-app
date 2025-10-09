@@ -1,0 +1,10 @@
+{
+    "rules": [
+        {
+            "displayName": "error count",
+            "metricKey": "errorCount",
+            "value": "0",
+            "comparator": "E"
+        }
+    ]
+}

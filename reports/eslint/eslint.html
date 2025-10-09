@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+    <head>
+        <title>ESLint Report</title>
+        <style>
+            body {
+                font-family:Arial, "Helvetica Neue", Helvetica, sans-serif;
+                font-size:16px;
+                font-weight:normal;
+                margin:0;
+                padding:0;
+                color:#333
+            }
+            #overview {
+                padding:20px 30px
+            }
+            td, th {
+                padding:5px 10px
+            }
+            h1 {
+                margin:0
+            }
+            table {
+                margin:30px;
+                width:calc(100% - 60px);
+                max-width:1000px;
+                border-radius:5px;
+                border:1px solid #ddd;
+                border-spacing:0px;
+            }
+            th {
+                font-weight:400;
+                font-size:normal;
+                text-align:left;
+                cursor:pointer
+            }
+            td.clr-1, td.clr-2, th span {
+                font-weight:700
+            }
+            th span {
+                float:right;
+                margin-left:20px
+            }
+            th span:after {
+                content:"";
+                clear:both;
+                display:block
+            }
+            tr:last-child td {
+                border-bottom:none
+            }
+            tr td:first-child, tr td:last-child {
+                color:#9da0a4
+            }
+            #overview.bg-0, tr.bg-0 th {
+                color:#468847;
+                background:#dff0d8;
+                border-bottom:1px solid #d6e9c6
+            }
+            #overview.bg-1, tr.bg-1 th {
+                color:#f0ad4e;
+                background:#fcf8e3;
+                border-bottom:1px solid #fbeed5
+            }
+            #overview.bg-2, tr.bg-2 th {
+                color:#b94a48;
+                background:#f2dede;
+                border-bottom:1px solid #eed3d7
+            }
+            td {
+                border-bottom:1px solid #ddd
+            }
+            td.clr-1 {
+                color:#f0ad4e
+            }
+            td.clr-2 {
+                color:#b94a48
+            }
+            td a {
+                color:#3a33d1;
+                text-decoration:none
+            }
+            td a:hover {
+                color:#272296;
+                text-decoration:underline
+            }
+        </style>
+    </head>
+    <body>
+        <div id="overview" class="bg-2">
+            <h1>ESLint Report</h1>
+            <div>
+                <span>11 problems (9 errors, 2 warnings)</span> - Generated on Wed Aug 20 2025 16:08:42 GMT+0800 (China Standard Time)
+            </div>
+        </div>
+        <table>
+            <tbody>
+                <tr class="bg-2" data-group="f-0">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/AppAsider/index.tsx
+        <span>4 problems (4 errors, 0 warnings)</span>
+    </th>
+</tr>
+<tr style="display:none" class="f-0">
+    <td>73:23</td>
+    <td class="clr-2">Error</td>
+    <td>Arrow function has too many lines (164). Maximum allowed is 150.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/max-lines-per-function" target="_blank">max-lines-per-function</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-0">
+    <td>124:8</td>
+    <td class="clr-2">Error</td>
+    <td>React Hook useEffect has a missing dependency: &#39;activeMenu&#39;. Either include it or remove the dependency array.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/react-hooks/exhaustive-deps" target="_blank">react-hooks/exhaustive-deps</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-0">
+    <td>143:38</td>
+    <td class="clr-2">Error</td>
+    <td>Expected newline between test and consequent of ternary expression.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/@stylistic/multiline-ternary" target="_blank">@stylistic/multiline-ternary</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-0">
+    <td>143:67</td>
+    <td class="clr-2">Error</td>
+    <td>Expected newline between consequent and alternate of ternary expression.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/@stylistic/multiline-ternary" target="_blank">@stylistic/multiline-ternary</a>
+    </td>
+</tr>
+
+<tr class="bg-0" data-group="f-1">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/AppLayout/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-2">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/ZoomPane/components/ViewPane/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-3">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/ZoomPane/components/ZoomStore/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-4">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/ZoomPane/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-5">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/ZoomPane/services/useZoom.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-2" data-group="f-6">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/components/login-form.tsx
+        <span>3 problems (2 errors, 1 warning)</span>
+    </th>
+</tr>
+<tr style="display:none" class="f-6">
+    <td>75:22</td>
+    <td class="clr-1">Warning</td>
+    <td>Classname &#39;authentication-divider&#39; is not a Tailwind CSS class!</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/tailwindcss/no-custom-classname" target="_blank">tailwindcss/no-custom-classname</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-6">
+    <td>140:29</td>
+    <td class="clr-2">Error</td>
+    <td>The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/jsx-a11y/anchor-is-valid" target="_blank">jsx-a11y/anchor-is-valid</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-6">
+    <td>158:21</td>
+    <td class="clr-2">Error</td>
+    <td>The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/jsx-a11y/anchor-is-valid" target="_blank">jsx-a11y/anchor-is-valid</a>
+    </td>
+</tr>
+
+<tr class="bg-0" data-group="f-7">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/config.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-8">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/hooks/use-mobile.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-2" data-group="f-9">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/index.tsx
+        <span>2 problems (2 errors, 0 warnings)</span>
+    </th>
+</tr>
+<tr style="display:none" class="f-9">
+    <td>12:7</td>
+    <td class="clr-2">Error</td>
+    <td>&#39;isAuthenticated&#39; is assigned a value but never used. Allowed unused vars must match /^_/u.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/@typescript-eslint/no-unused-vars" target="_blank">@typescript-eslint/no-unused-vars</a>
+    </td>
+</tr>
+
+<tr style="display:none" class="f-9">
+    <td>18:1</td>
+    <td class="clr-2">Error</td>
+    <td>exported declaration &#39;setAuthenticated&#39; not used within other modules</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/import/no-unused-modules" target="_blank">import/no-unused-modules</a>
+    </td>
+</tr>
+
+<tr class="bg-0" data-group="f-10">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/lib/utils.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-11">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/document-list/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-12">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/document-list/services/columns.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-13">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/document-list/services/types.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-14">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/document/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-1" data-group="f-15">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/components/AnnoImage/index.tsx
+        <span>1 problem (0 errors, 1 warning)</span>
+    </th>
+</tr>
+<tr style="display:none" class="f-15">
+    <td>144:22</td>
+    <td class="clr-1">Warning</td>
+    <td>Unexpected any. Specify a different type.</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/@typescript-eslint/no-explicit-any" target="_blank">@typescript-eslint/no-explicit-any</a>
+    </td>
+</tr>
+
+<tr class="bg-0" data-group="f-16">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/components/ToolBox/index.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-2" data-group="f-17">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/index.tsx
+        <span>1 problem (1 error, 0 warnings)</span>
+    </th>
+</tr>
+<tr style="display:none" class="f-17">
+    <td>5:1</td>
+    <td class="clr-2">Error</td>
+    <td>exported declaration &#39;Main&#39; not used within other modules</td>
+    <td>
+        <a href="http://eslint.org/docs/rules/import/no-unused-modules" target="_blank">import/no-unused-modules</a>
+    </td>
+</tr>
+
+<tr class="bg-0" data-group="f-18">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/services/useAnnoLastSelected.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-19">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/services/useExportData.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-20">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/modules/pdp-review/services/useStyles.ts
+        <span>0 problems</span>
+    </th>
+</tr>
+
+<tr class="bg-0" data-group="f-21">
+    <th colspan="4">
+        [+] /Users/nha8/poc-content-hybrid-app/src/pages/login.tsx
+        <span>0 problems</span>
+    </th>
+</tr>
+
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            var groups = document.querySelectorAll("tr[data-group]");
+            for (i = 0; i < groups.length; i++) {
+                groups[i].addEventListener("click", function() {
+                    var inGroup = document.getElementsByClassName(this.getAttribute("data-group"));
+                    this.innerHTML = (this.innerHTML.indexOf("+") > -1) ? this.innerHTML.replace("+", "-") : this.innerHTML.replace("-", "+");
+                    for (var j = 0; j < inGroup.length; j++) {
+                        inGroup[j].style.display = (inGroup[j].style.display !== "none") ? "none" : "table-row";
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

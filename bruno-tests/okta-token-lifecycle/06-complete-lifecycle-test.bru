@@ -1,0 +1,276 @@
+meta {
+  name: 06 - Complete Lifecycle Test
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/auth/token/complete-lifecycle
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "testConfig": {
+      "expiryMinutes": 5,
+      "refreshThreshold": 5,
+      "maxRetryAttempts": 3,
+      "retryDelaySeconds": 10,
+      "modalTimeoutSeconds": 20
+    },
+    "generateReport": true,
+    "includePerformanceMetrics": true
+  }
+}
+
+vars:pre-request {
+  lifecycleTestStartTime: {{$timestamp}}
+}
+
+script:pre-request {
+  bru.setVar("lifecycleTestStartTime", Date.now());
+  
+  console.log("🧪 开始完整生命周期测试");
+  console.log("📋 完整测试流程:");
+  console.log("  1. 用户通过 Login with Okta 登录成功");
+  console.log("  2. Access token 剩余5分钟开始 refresh token");
+  console.log("  3. Refresh 成功就继续倒计时等下一次即将过期");
+  console.log("  4. 如果失败，延迟10秒retry，retry 3次后弹窗提示需要重新授权");
+  console.log("  5. 验证整个闭环逻辑的完整性");
+  
+  // 收集前面所有测试的结果
+  const previousResults = {
+    tokenStatus: {
+      isExpired: bru.getVar("isExpired"),
+      timeRemaining: bru.getVar("timeRemainingMinutes"),
+      expiresAt: bru.getVar("tokenExpiresAt")
+    },
+    simulation: {
+      minutes: bru.getVar("simulatedMinutes"),
+      expiryTime: bru.getVar("simulatedExpiryTime")
+    },
+    refresh: {
+      success: bru.getVar("refreshTestSuccess"),
+      eventsCount: bru.getVar("refreshEventsCount")
+    },
+    retry: {
+      success: bru.getVar("retryTestSuccess"),
+      attempts: bru.getVar("totalRetryAttempts"),
+      working: bru.getVar("retryLogicWorking")
+    },
+    modal: {
+      success: bru.getVar("modalTestSuccess"),
+      shown: bru.getVar("modalShown"),
+      triggerTime: bru.getVar("modalTriggerTime")
+    }
+  };
+  
+  console.log("📊 前序测试结果汇总:");
+  console.log("  - Token检查:", previousResults.tokenStatus.isExpired ? "❌" : "✅");
+  console.log("  - 过期模拟:", previousResults.simulation.minutes + "分钟");
+  console.log("  - 自动刷新:", previousResults.refresh.success ? "✅" : "❌");
+  console.log("  - 重试逻辑:", previousResults.retry.attempts + "次");
+  console.log("  - 弹窗触发:", previousResults.modal.shown ? "✅" : "❌");
+  
+  // 将前序结果传递给后端
+  req.setBody(JSON.stringify({
+    testConfig: {
+      expiryMinutes: 5,
+      refreshThreshold: 5,
+      maxRetryAttempts: 3,
+      retryDelaySeconds: 10,
+      modalTimeoutSeconds: 20
+    },
+    generateReport: true,
+    includePerformanceMetrics: true,
+    previousResults: previousResults
+  }));
+}
+
+script:post-response {
+  test("Status code should be 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response should have complete lifecycle results", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('success');
+    expect(body).to.have.property('phases');
+    expect(body).to.have.property('summary');
+  });
+  
+  const result = res.getBody();
+  const totalTestDuration = Date.now() - bru.getVar("lifecycleTestStartTime");
+  
+  console.log("\n🎉 完整生命周期测试结果");
+  console.log("=" .repeat(50));
+  
+  // 分析各个阶段的结果
+  const phases = result.phases || {};
+  const phaseResults = Object.entries(phases).map(([key, value]: [string, any]) => ({
+    phase: key,
+    status: value.status,
+    description: value.description,
+    duration: value.timestamp ? "已完成" : "未开始"
+  }));
+  
+  console.log("📊 各阶段执行结果:");
+  phaseResults.forEach((phase, index) => {
+    const icon = phase.status?.includes('✅') ? '✅' : 
+                 phase.status?.includes('❌') ? '❌' : 
+                 phase.status?.includes('⏳') ? '⏳' : '❓';
+    console.log(`  ${index + 1}. ${phase.description}: ${icon}`);
+  });
+  
+  // 验证完整性
+  const successfulPhases = phaseResults.filter(p => p.status?.includes('✅')).length;
+  const totalPhases = phaseResults.length;
+  const completionRate = Math.round((successfulPhases / totalPhases) * 100);
+  
+  test("Lifecycle test should have reasonable completion rate", function() {
+    expect(completionRate).to.be.at.least(70); // 至少70%的阶段成功
+  });
+  
+  console.log("\n📈 测试完整性分析:");
+  console.log("  - 成功阶段:", successfulPhases + "/" + totalPhases);
+  console.log("  - 完成率:", completionRate + "%");
+  
+  // 性能分析
+  if (result.summary) {
+    const summary = result.summary;
+    console.log("\n⏱️ 性能分析:");
+    console.log("  - 总测试时长:", summary.durationFormatted || "未知");
+    console.log("  - 完成时间:", summary.completedAt || "未知");
+    
+    if (summary.duration) {
+      const avgPhaseTime = Math.round(summary.duration / totalPhases);
+      console.log("  - 平均阶段耗时:", avgPhaseTime + "ms");
+    }
+  }
+  
+  // 生成完整报告
+  if (result.report) {
+    console.log("\n📋 详细测试报告:");
+    console.log("================");
+    
+    // 闭环逻辑验证
+    const hasLoginPhase = result.phases.phase1_initial?.status?.includes('✅');
+    const hasRefreshPhase = result.phases.phase3_refresh?.status?.includes('✅');
+    const hasRetryPhase = result.phases.phase4_retry?.status?.includes('✅');
+    const hasModalPhase = result.phases.phase5_modal?.status?.includes('✅');
+    
+    console.log("🔄 闭环逻辑验证:");
+    console.log("  - 登录状态检查:", hasLoginPhase ? "✅ 通过" : "❌ 失败");
+    console.log("  - 自动刷新机制:", hasRefreshPhase ? "✅ 正常" : "❌ 异常");
+    console.log("  - 重试逻辑执行:", hasRetryPhase ? "✅ 正常" : "❌ 异常");
+    console.log("  - 弹窗触发机制:", hasModalPhase ? "✅ 正常" : "❌ 异常");
+    
+    // 整体评估
+    const criticalComponents = [hasLoginPhase, hasRefreshPhase, hasRetryPhase].filter(Boolean).length;
+    const totalCritical = 3;
+    const systemHealth = Math.round((criticalComponents / totalCritical) * 100);
+    
+    console.log("\n🏥 系统健康度评估:");
+    console.log("  - 核心组件状态:", criticalComponents + "/" + totalCritical);
+    console.log("  - 系统健康度:", systemHealth + "%");
+    
+    if (systemHealth >= 90) {
+      console.log("  - 评级: 🌟 优秀 - 系统运行完美");
+    } else if (systemHealth >= 70) {
+      console.log("  - 评级: ✅ 良好 - 系统基本正常");
+    } else if (systemHealth >= 50) {
+      console.log("  - 评级: ⚠️ 一般 - 需要关注");
+    } else {
+      console.log("  - 评级: ❌ 较差 - 需要修复");
+    }
+  }
+  
+  // 保存最终结果
+  bru.setVar("lifecycleTestComplete", true);
+  bru.setVar("lifecycleCompletionRate", completionRate);
+  bru.setVar("totalTestDuration", totalTestDuration);
+  
+  // 最终建议
+  console.log("\n💡 最终建议:");
+  if (completionRate >= 80) {
+    console.log("✅ Token生命周期管理系统运行良好，建议:");
+    console.log("  - 定期运行此测试套件监控系统状态");
+    console.log("  - 在生产环境部署前执行完整测试");
+    console.log("  - 关注性能指标的长期趋势");
+  } else {
+    console.log("⚠️ 系统存在一些问题，建议:");
+    console.log("  - 检查失败的阶段并修复相关问题");
+    console.log("  - 重新运行测试验证修复效果");
+    console.log("  - 考虑调整系统配置参数");
+  }
+  
+  console.log("\n🎯 测试目标达成情况:");
+  console.log("1. 验证完整闭环逻辑:", result.success ? "✅ 达成" : "❌ 未达成");
+  console.log("2. 性能指标收集:", result.summary ? "✅ 完成" : "❌ 未完成");
+  console.log("3. 问题发现和定位:", phaseResults.length > 0 ? "✅ 完成" : "❌ 未完成");
+  
+  console.log("\n" + "=".repeat(50));
+  console.log("🧪 Okta Token生命周期测试 - 完整测试结束");
+}
+
+docs {
+  # 完整生命周期测试
+
+  ## 🎯 测试目的
+  执行完整的token生命周期闭环测试，验证整个系统的端到端功能。
+
+  ## 🔄 完整闭环逻辑
+  ```
+  1. 用户通过 Login with Okta 登录成功
+     ↓
+  2. Access token 剩余5分钟开始 refresh token
+     ↓
+  3. Refresh 成功就继续倒计时等下一次即将过期
+     ↓
+  4. 如果失败，延迟10秒retry，retry 3次后弹窗提示需要重新授权
+     ↓
+  5. 用户重新授权或应用安全退出
+  ```
+
+  ## 📋 测试覆盖范围
+  1. **Token状态管理** - 检查、模拟、监控
+  2. **自动刷新机制** - 触发、执行、验证
+  3. **重试逻辑** - 失败处理、间隔控制、次数限制
+  4. **用户交互** - 弹窗显示、操作响应、状态恢复
+  5. **系统恢复** - 错误处理、状态重置、正常运行
+
+  ## 🏥 系统健康度评估标准
+  - 🌟 **优秀** (90-100%) - 所有核心功能正常
+  - ✅ **良好** (70-89%) - 基本功能正常，小问题可忽略
+  - ⚠️ **一般** (50-69%) - 有问题需要关注和修复
+  - ❌ **较差** (< 50%) - 严重问题需要立即修复
+
+  ## 📊 收集的数据
+  - **执行时间** - 各阶段和总体耗时
+  - **成功率** - 各功能模块的成功率
+  - **性能指标** - 响应时间、处理效率
+  - **错误信息** - 失败原因和详细日志
+  - **用户体验** - 弹窗响应、操作流畅度
+
+  ## 💡 使用建议
+  1. **开发阶段** - 每次功能修改后运行
+  2. **测试阶段** - 集成到CI/CD流程
+  3. **生产监控** - 定期执行健康检查
+  4. **问题排查** - 系统异常时的诊断工具
+
+  ## 🔧 配置参数
+  - `expiryMinutes`: Token过期模拟时间
+  - `refreshThreshold`: 刷新触发阈值
+  - `maxRetryAttempts`: 最大重试次数
+  - `retryDelaySeconds`: 重试间隔时间
+  - `modalTimeoutSeconds`: 弹窗超时时间
+}

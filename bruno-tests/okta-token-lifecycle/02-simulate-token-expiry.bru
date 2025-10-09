@@ -1,0 +1,149 @@
+meta {
+  name: 02 - Simulate Token Expiry
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/token/simulate-expiry
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{ACCESS_TOKEN}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "minutes": 4,
+    "scenario": "normal"
+  }
+}
+
+vars:pre-request {
+  simulationStartTime: {{$timestamp}}
+}
+
+script:pre-request {
+  bru.setVar("simulationStartTime", Date.now());
+  
+  console.log("⏰ 开始模拟Token过期");
+  console.log("📋 模拟场景: 4分钟后过期");
+  
+  // 根据前一个测试的结果调整策略
+  const timeRemaining = bru.getVar("timeRemainingMinutes");
+  let scenario = "normal";
+  let minutes = 4;
+  
+  if (timeRemaining && timeRemaining <= 5) {
+    // 如果已经即将过期，使用立即过期场景
+    scenario = "immediate";
+    minutes = 0;
+    console.log("🔄 检测到Token即将过期，切换到立即过期场景");
+  } else if (timeRemaining && timeRemaining <= 15) {
+    // 如果时间不多，缩短到5分钟
+    minutes = 5;
+    console.log("🔄 调整过期时间为5分钟");
+  }
+  
+  // 更新请求体
+  req.setBody(JSON.stringify({
+    minutes: minutes,
+    scenario: scenario
+  }));
+  
+  bru.setVar("targetMinutes", minutes);
+  bru.setVar("targetScenario", scenario);
+}
+
+script:post-response {
+  test("Status code should be 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response should confirm simulation", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('success');
+    expect(body.success).to.be.true;
+    expect(body).to.have.property('newExpiryTime');
+  });
+  
+  const result = res.getBody();
+  const targetMinutes = bru.getVar("targetMinutes");
+  const targetScenario = bru.getVar("targetScenario");
+  
+  // 计算实际设置的过期时间
+  const currentTime = Date.now();
+  const newExpiryTime = new Date(result.newExpiryTime);
+  const actualMinutesRemaining = Math.round((newExpiryTime.getTime() - currentTime) / 60000);
+  
+  console.log("✅ Token过期模拟完成");
+  console.log("📊 模拟结果:");
+  console.log("  - 目标场景:", targetScenario);
+  console.log("  - 目标时间:", targetMinutes + " 分钟");
+  console.log("  - 实际剩余:", actualMinutesRemaining + " 分钟");
+  console.log("  - 新过期时间:", newExpiryTime.toLocaleString());
+  
+  // 保存结果供后续测试使用
+  bru.setVar("simulatedExpiryTime", result.newExpiryTime);
+  bru.setVar("simulatedMinutes", actualMinutesRemaining);
+  
+  // 验证模拟的准确性
+  if (targetScenario === "immediate") {
+    test("Immediate expiry should be in the past", function() {
+      expect(actualMinutesRemaining).to.be.lessThan(1);
+    });
+    console.log("🚨 立即过期场景验证通过");
+  } else {
+    test("Target expiry time should be approximately correct", function() {
+      const tolerance = 1; // 1分钟误差
+      expect(Math.abs(actualMinutesRemaining - targetMinutes)).to.be.lessThan(tolerance);
+    });
+    console.log("⏰ 定时过期场景验证通过");
+  }
+  
+  // 测试执行时间
+  const testDuration = Date.now() - bru.getVar("simulationStartTime");
+  console.log("⏱️ 模拟耗时:", testDuration + "ms");
+  
+  // 为下一步测试提供建议
+  if (actualMinutesRemaining <= 1) {
+    console.log("💡 建议: 立即进行刷新测试");
+  } else {
+    console.log("💡 建议: 等待", actualMinutesRemaining, "分钟后进行刷新测试");
+  }
+}
+
+docs {
+  # Token过期模拟
+
+  ## 🎯 测试目的
+  模拟token即将过期的场景，为后续的刷新测试做准备。
+
+  ## 📋 支持的场景
+  1. **normal** - 正常过期场景（默认4分钟）
+  2. **immediate** - 立即过期场景
+  3. **refresh_fail** - 刷新失败场景（同时过期refresh token）
+
+  ## 🔧 智能调整
+  根据当前token状态自动调整模拟策略：
+  - 如果已经即将过期 → 使用立即过期
+  - 如果时间不多 → 缩短过期时间
+  - 如果时间充足 → 使用标准4分钟
+
+  ## 📊 验证点
+  1. ✅ 模拟操作成功执行
+  2. ✅ 新的过期时间设置正确
+  3. ✅ 场景参数应用正确
+  4. ✅ 时间计算准确性
+
+  ## 🔄 输出数据
+  - `simulatedExpiryTime`: 模拟的过期时间
+  - `simulatedMinutes`: 模拟的剩余分钟数
+  - `targetScenario`: 使用的模拟场景
+}

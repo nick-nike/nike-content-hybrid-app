@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okta认证系统控制台测试验证</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .test-step {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .test-step.completed {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .test-step.running {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        .test-step.failed {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .console-command {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .expected-result {
+            background: #e6f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button.danger {
+            background: #dc3545;
+        }
+        .button.danger:hover {
+            background: #c82333;
+        }
+        .modal-preview {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .modal-title {
+            font-size: 4rem;
+            font-weight: normal;
+            margin: 20px 0;
+            color: black;
+        }
+        .modal-description {
+            font-size: 1.5rem;
+            color: #666;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        .modal-button {
+            background: black;
+            color: white;
+            padding: 15px 60px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧪 Okta认证系统控制台测试验证</h1>
+            <p>基于auth-tester的两次验证测试，包含3次重试失效弹窗验证</p>
+        </div>
+
+        <div class="test-step">
+            <h3>📋 测试准备</h3>
+            <p><strong>测试地址：</strong> <a href="http://localhost:8080/auth-tester" target="_blank">http://localhost:8080/auth-tester</a></p>
+            <p><strong>测试账号：</strong> sunandy3@gmail.com / Gxfc.1234@</p>
+            <div class="warning">
+                <strong>⚠️ 重要提示：</strong>
+                <ul>
+                    <li>请在新标签页打开auth-tester页面</li>
+                    <li>打开浏览器开发者工具 (F12) → Console</li>
+                    <li>确保已登录Okta账号</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>🔍 第一次验证：正常认证流程测试</h3>
+            <p>验证正常的登录、token管理演示和刷新机制</p>
+            
+            <h4>1. 检查当前状态</h4>
+            <div class="console-command">oktaTest.status()</div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ 显示当前token状态</li>
+                    <li>✅ 显示剩余时间</li>
+                    <li>✅ 显示是否即将过期</li>
+                </ul>
+            </div>
+
+            <h4>2. 测试正常刷新机制</h4>
+            <div class="console-command">oktaTest.expire5min()</div>
+            <div class="console-command">oktaTest.refresh()</div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ 模拟5分钟后过期</li>
+                    <li>✅ 自动触发刷新机制</li>
+                    <li>✅ 刷新成功，获得新token</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <strong>✅ 第一次验证完成</strong> - 正常认证流程工作正常
+            </div>
+        </div>
+
+        <div class="test-step running">
+            <h3>🚨 第二次验证：3次重试失效测试</h3>
+            <p>验证3次重试失败后触发SessionExpiredModal弹窗</p>
+            
+            <h4>1. 触发重试失效场景</h4>
+            <div class="console-command">oktaTest.retryModal()</div>
+            <div class="warning">
+                <strong>⚠️ 或者使用快速版本：</strong>
+                <div class="console-command">oktaTest.simpleRetry()</div>
+            </div>
+            
+            <div class="expected-result">
+                <strong>预期执行流程：</strong>
+                <ol>
+                    <li>🔄 Token过期检测</li>
+                    <li>❌ 第1次刷新失败 → 等待10秒</li>
+                    <li>❌ 第2次刷新失败 → 等待10秒</li>
+                    <li>❌ 第3次刷新失败 → 触发弹窗</li>
+                    <li>🚨 显示Session Expired弹窗</li>
+                </ol>
+            </div>
+
+            <h4>2. 验证弹窗设计</h4>
+            <div class="modal-preview">
+                <div class="modal-title">Session Expired</div>
+                <div class="modal-description">
+                    Your session has expired. Click "Resume Session" to renew your<br>
+                    session in a new tab.<br><br>
+                    Feel free to return to this window and continue where you left off.
+                </div>
+                <button class="modal-button">Resume Session</button>
+            </div>
+            
+            <div class="expected-result">
+                <strong>弹窗验证要点：</strong>
+                <ul>
+                    <li>✅ 白色全屏背景</li>
+                    <li>✅ 超大"Session Expired"标题</li>
+                    <li>✅ 大字体描述文本，分行显示</li>
+                    <li>✅ 黑色圆角"Resume Session"按钮</li>
+                    <li>✅ 页面完全锁定，无法操作背景</li>
+                </ul>
+            </div>
+
+            <h4>3. 测试弹窗功能</h4>
+            <div class="expected-result">
+                <strong>功能验证：</strong>
+                <ul>
+                    <li>✅ 点击"Resume Session"按钮跳转到新标签页</li>
+                    <li>✅ 完成认证后弹窗自动检测新token</li>
+                    <li>✅ 检测成功后弹窗自动关闭</li>
+                    <li>✅ 返回auth-tester页面继续操作</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>🎯 控制台测试命令参考</h3>
+            
+            <h4>基础命令</h4>
+            <div class="console-command">
+oktaTest.help()        // 显示所有可用命令
+oktaTest.status()      // 检查当前token状态
+oktaTest.refresh()     // 测试token刷新
+oktaTest.report()      // 获取测试报告
+            </div>
+
+            <h4>过期模拟命令</h4>
+            <div class="console-command">
+oktaTest.expire1min()  // 模拟1分钟后过期
+oktaTest.expire5min()  // 模拟5分钟后过期
+oktaTest.expireNow()   // 模拟立即过期
+            </div>
+
+            <h4>重试失效测试命令</h4>
+            <div class="console-command">
+oktaTest.retryModal()  // 🎯 正确重试逻辑验证（推荐）
+oktaTest.simpleRetry() // 🚀 简化重试验证（快速）
+oktaTest.quickModal()  // 验证完整重试失败流程
+            </div>
+
+            <h4>完整测试命令</h4>
+            <div class="console-command">
+oktaTest.fullTest()    // 运行完整生命周期测试
+oktaTest.quickTest()   // 🚀 快速验证（1分钟完整流程）
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>📊 测试结果记录</h3>
+            <div id="test-results">
+                <p>请在控制台执行测试命令，结果将显示在浏览器控制台中。</p>
+                
+                <div class="expected-result">
+                    <strong>成功标准：</strong>
+                    <ul>
+                        <li>✅ 第一次验证：正常认证流程无异常</li>
+                        <li>✅ 第二次验证：3次重试后成功触发弹窗</li>
+                        <li>✅ 弹窗设计：完全符合附件样式</li>
+                        <li>✅ 弹窗功能：Resume按钮和自动检测正常</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>🔧 故障排除</h3>
+            
+            <h4>常见问题</h4>
+            <div class="warning">
+                <strong>问题1：oktaTest命令不存在</strong><br>
+                解决：刷新页面，确保在auth-tester页面执行命令
+            </div>
+            
+            <div class="warning">
+                <strong>问题2：弹窗未显示</strong><br>
+                解决：确保已登录，使用oktaTest.retryModal()命令
+            </div>
+            
+            <div class="warning">
+                <strong>问题3：测试超时</strong><br>
+                解决：检查网络连接，使用oktaTest.simpleRetry()快速测试
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加一些交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Okta认证系统测试页面已加载');
+            console.log('📋 请访问 http://localhost:8080/auth-tester 开始测试');
+            console.log('🔧 在auth-tester页面的控制台中执行 oktaTest.help() 查看所有命令');
+        });
+    </script>
+</body>
+</html>

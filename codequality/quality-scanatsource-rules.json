@@ -1,0 +1,10 @@
+{
+    "rules": [
+        {
+            "displayName": "More tolerant of low violations",
+            "metricKey": "highCount",
+            "value": "3",
+            "comparator": "LTE"
+        }
+    ]
+}

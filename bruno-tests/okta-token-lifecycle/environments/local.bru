@@ -1,0 +1,28 @@
+vars {
+  baseUrl: http://localhost:3000
+  oktaIssuer: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7
+  clientId: 0oa1xrlg1KIEhCRyk1t8
+  redirectUri: http://localhost:3000/login/callback
+  
+  # 测试配置
+  testTimeout: 30000
+  retryDelaySeconds: 10
+  maxRetryAttempts: 3
+  refreshThresholdMinutes: 5
+  
+  # 性能阈值
+  performanceThresholdMs: 5000
+  modalResponseThresholdMs: 30000
+  refreshResponseThresholdMs: 10000
+  
+  # 调试配置
+  debugMode: true
+  logLevel: info
+  verboseOutput: true
+}
+
+vars:secret [
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+  ID_TOKEN
+]

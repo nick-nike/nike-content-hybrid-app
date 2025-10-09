@@ -1,0 +1,45 @@
+qualityConfig:
+    application:
+        name: react-project-template
+        description: A React project template to get start with.
+        tier: 3
+        domain: GC-MarTech
+        classification: Highly confidential #classification can be Restricted Use, Highly confidential http://nisp.nike.com/dc/
+        email: Lst-GT.GC-MarTech.GCNCP.Support@nike.com
+        costcenter: 105125
+        organization: NCP
+        target_availability: 99.75
+        pager_duty: https://nikeb2c.pagerduty.com/service-directory/P4LBC00
+        snow_category: Digital
+        snow_sub_category: Communications
+        snow_service: OneNCP(GC)
+        snow_microservice: react-project-template
+        owner: Danny Zhang
+        team: Marketing Tech
+    phases:
+        build:
+            - ESLint:
+                  metricSource: eslint
+                  metricFile: reports/eslint/eslint.json
+                  reportIndex: reports/eslint/eslint.html
+                  metricRules: "codequality/quality-eslint-rules.json"
+            - UnitTest:
+                  metricSource: istanbul
+                  metricFile: reports/coverage/coverage-summary.json
+                  reportFiles:
+                      - reports/coverage/lcov-report/**/*
+                  reportIndex: reports/coverage/lcov-report/index.html
+                  metricRules: "codequality/quality-unit-test-rules.json"
+        scan:
+            - ScanAtSource:
+                  metricSource: "scanatsource"
+                  metricFile: "build/reports/scanatsource/scanAtSourceScanResults.json"
+                  reportIndex: "build/reports/scanatsource/scanAtSourceScanResults.json"
+                  metricRules: "codequality/quality-scanatsource-rules.json"
+        container:
+            - WizStaticScan:
+                  metricSource: "custom"
+                  metricFile: "build/reports/wiz/wizscan_out.json"
+                  reportIndex: "build/reports/wiz/wizscan.json"
+                  metricRules: "codequality/quality-wiz-rules.json"
+                  qualityGate: true

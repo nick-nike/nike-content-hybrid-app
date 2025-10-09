@@ -1,0 +1,46 @@
+export type DocumentListItem = {
+    'entity-type': string;
+    repository: string;
+    uid: string;
+    path: string;
+    type: string;
+    state: string;
+    parentRef: string;
+    isCheckedOut: boolean;
+    isRecord: boolean;
+    // retainUntil: null;
+    hasLegalHold: boolean;
+    isUnderRetentionOrLegalHold: boolean;
+    isVersion: boolean;
+    isProxy: boolean;
+    changeToken: string;
+    isTrashed: boolean;
+    title: string;
+    lastModified: string;
+    facets: string[];
+    schemas: { name: string; prefix: string }[];
+};
+
+export type DocumentListResponse = {
+    'entity-type': string;
+    isPaginable: boolean;
+    resultsCount: number;
+    pageSize: number;
+    maxPageSize: number;
+    resultsCountLimit: number;
+    currentPageSize: number;
+    currentPageIndex: number;
+    currentPageOffset: number;
+    numberOfPages: number;
+    isPreviousPageAvailable: boolean;
+    isNextPageAvailable: boolean;
+    isLastPageAvailable: boolean;
+    isSortable: boolean;
+    hasError: boolean;
+    errorMessage?: string;
+    totalSize: number;
+    pageIndex: number;
+    pageCount: number;
+    quickFilters: { name: string; active: boolean }[];
+    entries: DocumentListItem[];
+};
