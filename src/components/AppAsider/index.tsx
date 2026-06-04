@@ -1,23 +1,29 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-    Settings,
+    Activity,
+    Archive,
+    BarChart3,
+    Calendar,
+    Camera,
     ChevronDown,
     ChevronRight,
     ClipboardCheck,
-    User,
-    Archive,
-    Activity,
+    Flag,
+    GraduationCap,
+    Milestone,
     Image,
-    Upload,
-    Camera,
-    Workflow,
-    ShoppingBag,
     Layers3,
+    Settings,
+    ShoppingBag,
+    Upload,
+    User,
+    Workflow,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import iconNike from '@/assets/images/nike-filled.svg';
+
+import iconLululemon from '@/assets/images/lululemon-logo.svg';
 
 type Menu = {
     label: string;
@@ -28,6 +34,62 @@ type Menu = {
 };
 
 const menus: Menu[] = [
+    {
+        label: 'Dashboard',
+        icon: BarChart3,
+        key: 'dashboard',
+        link: '/dashboard',
+        children: [],
+    },
+    {
+        label: 'Weekly Meeting',
+        icon: Calendar,
+        key: 'weekly-meeting',
+        link: '/weekly-meeting',
+        children: [],
+    },
+    {
+        label: 'Project Calendar',
+        icon: Flag,
+        key: 'project-calendar',
+        link: '/project-calendar',
+        children: [],
+    },
+    {
+        label: 'Gateway Calendar',
+        icon: Milestone,
+        key: 'gateway-calendar',
+        link: '/gateway-calendar',
+        children: [],
+    },
+    {
+        label: 'Budget Calendar',
+        icon: Calendar,
+        key: 'budget-project-calendar',
+        link: '/budget-project-calendar',
+        children: [],
+    },
+    {
+        label: 'OPS CR Flow',
+        icon: Workflow,
+        key: 'ops-cr-flow',
+        link: '/ops-cr-flow',
+        children: [],
+    },
+    {
+        label: 'WBS Builder',
+        icon: ClipboardCheck,
+        key: 'wbs-builder',
+        link: '/wbs-builder',
+        children: [],
+    },
+    {
+        label: 'Interview KB',
+        icon: GraduationCap,
+        key: 'interview-knowledge-base',
+        link: '/interview-knowledge-base',
+        children: [],
+    },
     {
         label: 'Asset',
         icon: Image,
@@ -85,10 +147,10 @@ const menus: Menu[] = [
         children: [],
     },
     {
-        label: 'Combobox Demo',
+        label: 'Cost Forecasting',
         icon: Layers3,
-        key: 'combobox-demo',
-        link: '/combobox-demo',
+        key: 'cost-forecasting',
+        link: '/cost-forecasting',
         children: [],
     },
     {
@@ -126,16 +188,16 @@ const renderDirectMenuItem = (
         <div className="absolute left-1/2 z-10 -translate-x-1/2 transition-all duration-300 group-hover:left-4 group-hover:translate-x-0">
             <menu.icon
                 className={`size-5 ${isActive
-                        ? 'text-[#0D1117] group-hover:text-white'
-                        : 'text-gray-300'
-                    }`}
+                    ? 'text-[#0D1117] group-hover:text-white'
+                    : 'text-gray-300'
+                }`}
             />
         </div>
 
         {/* Menu label */}
         <span
             className={`ml-9 font-medium whitespace-nowrap opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${isActive ? 'text-white' : 'text-gray-300'
-                }`}
+            }`}
         >
             {menu.label}
         </span>
@@ -166,16 +228,16 @@ const renderSubmenuItem = (
             <div className="absolute left-1/2 z-10 -translate-x-1/2 transition-all duration-300 group-hover:left-4 group-hover:translate-x-0">
                 <menu.icon
                     className={`size-5 ${isActive
-                            ? 'text-[#0D1117] group-hover:text-white'
-                            : 'text-gray-300'
-                        }`}
+                        ? 'text-[#0D1117] group-hover:text-white'
+                        : 'text-gray-300'
+                    }`}
                 />
             </div>
 
             {/* Menu label */}
             <span
                 className={`ml-9 font-medium whitespace-nowrap opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${isActive ? 'text-white' : 'text-gray-300'
-                    }`}
+                }`}
             >
                 {menu.label}
             </span>
@@ -184,19 +246,19 @@ const renderSubmenuItem = (
             <span className="absolute right-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {openMenu === menu.key
                     ? (
-                        <ChevronDown className={`size-4 ${isActive
+                            <ChevronDown className={`size-4 ${isActive
                                 ? 'text-white'
                                 : 'text-gray-300'
                             }`}
-                        />
-                    )
+                            />
+                        )
                     : (
-                        <ChevronRight className={`size-4 ${isActive
+                            <ChevronRight className={`size-4 ${isActive
                                 ? 'text-white'
                                 : 'text-gray-300'
                             }`}
-                        />
-                    )}
+                            />
+                        )}
             </span>
         </button>
 
@@ -211,9 +273,9 @@ const renderSubmenuItem = (
                             <Link
                                 to={subMenu.link}
                                 className={`flex w-full items-center gap-2 rounded px-3 py-1.5 text-sm ${isSubActive
-                                        ? 'bg-white text-[#0D1117]'
-                                        : 'text-gray-300 hover:bg-[#1C2533]'
-                                    }`}
+                                    ? 'bg-white text-[#0D1117]'
+                                    : 'text-gray-300 hover:bg-[#1C2533]'
+                                }`}
                                 onClick={() => {
                                     setActiveMenu(menu.key);
                                     setActiveSubmenu(subMenu.key);
@@ -221,7 +283,7 @@ const renderSubmenuItem = (
                             >
                                 <subMenu.icon
                                     className={`size-4 flex-shrink-0 ${isSubActive ? 'text-[#0D1117]' : 'text-gray-400'
-                                        }`}
+                                    }`}
                                 />
                                 <span className="whitespace-nowrap">{subMenu.label}</span>
                             </Link>
@@ -236,7 +298,7 @@ const renderSubmenuItem = (
 const AppAsider: FC = () => {
     const location = useLocation();
     const [openMenu, setOpenMenu] = useState<string | null>(null);
-    const [activeMenu, setActiveMenu] = useState<string>('assets'); // Default to assets
+    const [activeMenu, setActiveMenu] = useState<string>('dashboard'); // Default to dashboard
     const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
 
     // Toggle submenu display status
@@ -279,20 +341,20 @@ const AppAsider: FC = () => {
             }
         }
 
-        // Default to assets if no match found
+        // Default to dashboard if no match found
         if (path === '/' || !activeMenu) {
-            setActiveMenu('assets');
+            setActiveMenu('dashboard');
             setActiveSubmenu(null);
         }
     }, [location.pathname, activeMenu]); // 添加 activeMenu 作为依赖项
 
     return (
-        <>
-            <div className="group absolute top-0 left-0 z-10 h-full min-h-screen w-20 overflow-x-hidden overflow-y-auto bg-[#0D1117] transition-all duration-300 hover:w-56">
+        <div className="flex w-20 shrink-0 transition-all duration-300 group-hover:w-56">
+            <div className="scrollbar-none fixed top-0 left-0 z-[60] h-screen w-20 overflow-x-hidden overflow-y-auto bg-[#0D1117] transition-all duration-300 group-hover:w-56">
                 {/* Logo area */}
                 <div className="flex items-center justify-center pt-6 pb-4">
-                    <img src={iconNike} alt="Logo" className="mb-2 size-12 invert filter" />
-                    <span className="ml-2 hidden text-base font-bold whitespace-nowrap text-white opacity-0 transition-opacity duration-300 group-hover:block group-hover:opacity-100">GC CONTENT HUB</span>
+                    <img src={iconLululemon} alt="Lululemon Logo" className="mb-2 size-12" />
+                    <span className="ml-2 hidden text-base font-bold whitespace-nowrap text-white opacity-0 transition-opacity duration-300 group-hover:block group-hover:opacity-100">Lululemon</span>
                 </div>
 
                 {/* Navigation menu */}
@@ -306,23 +368,21 @@ const AppAsider: FC = () => {
                                     {menu.children.length === 0
                                         ? renderDirectMenuItem(menu, isActive, setActiveMenu, setActiveSubmenu)
                                         : renderSubmenuItem(
-                                            menu,
-                                            isActive,
-                                            activeSubmenu,
-                                            setActiveMenu,
-                                            setActiveSubmenu,
-                                            toggleSubMenu,
-                                            openMenu,
-                                        )}
+                                                menu,
+                                                isActive,
+                                                activeSubmenu,
+                                                setActiveMenu,
+                                                setActiveSubmenu,
+                                                toggleSubMenu,
+                                                openMenu,
+                                            )}
                                 </li>
                             );
                         })}
                     </ul>
                 </nav>
             </div>
-            {/* Placeholder space, matching sidebar width */}
-            <div className="w-20" />
-        </>
+        </div>
     );
 };
 

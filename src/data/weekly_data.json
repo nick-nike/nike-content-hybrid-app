@@ -1,0 +1,1132 @@
+[
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10548525",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "FW: 关于2B 门店承运商线路调整需系统配置需求\n\n上海仓&医疗仓 route更新",
+    "Resolution notes": "上海仓&医疗仓 route更新",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10607432",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "TMS: JD SF单系统内无法打印",
+    "Resolution notes": "reason：误冻结账号oldtms@163.com账号，导致C状态未更新\nresolution：已解冻账号",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10608679",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "MDM: 2025Q4账号review",
+    "Resolution notes": "离职员工账号已于系统内删除",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10615811",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "回复：YF SNB回传差异 11.27\n\nproposal卡在B-processing",
+    "Resolution notes": "请wipro手工post解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10617971",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "Open proposal/Open review check - 25/11/28\n\nTP同步了重复PO",
+    "Resolution notes": "AS reject 重复po",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10618321",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "【生效日期2025/12/1和2025/12/15】EL25年12月组织架构变更",
+    "Resolution notes": "在HR系统看了下数据，是已经变动后的数据",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10618870",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1128CL/DJ/OR/AV\n\nTP推送了重复PO",
+    "Resolution notes": "AS reject 重复po",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10618890",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "广州TF待入职新人短信重新触发",
+    "Resolution notes": "联系jingke在人才库修改候选人手机号码\n",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10618993",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1128（MC）\n\nTP同步了重复PO",
+    "Resolution notes": "AS reject 重复PO",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10619011",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "CM113 (深圳万象城 )门店TMS网页需要重置密码 加急！！",
+    "Resolution notes": "使用初始密码可以正常登录",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10625097",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "MC148(成都群光广场)运维升级",
+    "Resolution notes": "DONE",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625112",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: 回复: 回复: 11.28 5720差异需求\n\nSF 库存移动报文未同步RFP",
+    "Resolution notes": "请中间件重推解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625126",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: 5880-状态 batchID阻止11.28 \n\n协助排除batchId",
+    "Resolution notes": "协助排除batchid",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625132",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: 5150-转属性和转状态异常11.28\n\nztvgt_7246_inbdl配置表多了5150 3000-4000的配置导致job失效",
+    "Resolution notes": "jason申请ffid删除表ztvgt_7246_inbdl  5150 3000-4000的配置",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625309",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Open proposal/Open review check - 25/12/1\n\nTP同步了重复PO &&定价错误",
+    "Resolution notes": "as reject 重复po ,确定正确定价日期，通知tp重推",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625329",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1201 LM\n\n定价错误",
+    "Resolution notes": "确定定价日期，通知TP重推",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625340",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "MMS创建状态发货单占用库存 ",
+    "Resolution notes": "已使用admin权限，解除异常占用",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625345",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1201CL/DJ/OR/AV\n\ntp推送了重复po && 定价错误",
+    "Resolution notes": "AS REJECT重复po,确定正确定价日期，通知TP重推",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10625488",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "[HR Process]咨询",
+    "Resolution notes": "esign干预签署截至日期",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10625535",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "The end user is unable to sign in NCO system",
+    "Resolution notes": "请通过DWP提交申请",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10625561",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "TF-开通一线管理系统权限",
+    "Resolution notes": "开通权限",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10625583",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "CM订单需要AC重新推送 NC6ASH251128melhe",
+    "Resolution notes": "已经重新生成PO单号并重新推送",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10625585",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "柜台增加（024南京金鹰毛戈平） ",
+    "Resolution notes": null,
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625592",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1129（MC）\n\ntp推送了重复po",
+    "Resolution notes": "as reject 重复po",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625611",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Open proposal and open order review check - 1201（JML）\n\nTP推送了重复PO",
+    "Resolution notes": "AS reject 重复po",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625631",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RMS系统-工单申请新增供货渠道",
+    "Resolution notes": "已建议重新发起权限申请",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10625642",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "nco有审批权限，没有下单权限，需要开通下单权限",
+    "Resolution notes": "请通过DWP提交申请",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10625657",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "FW: INC10536039 RE: EL负数订单type错误--积分兑礼退单trigger价格--1118 update\n",
+    "Resolution notes": "请wipro取消billing,修改item category",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10625712",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: 长沙万象城竞品填写申请开通",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10625923",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: 202510 TO Detail",
+    "Resolution notes": "查询一个人的离职流程，流程跟踪界面截图",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626162",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "转发: 李诗婷Vicky Li个人休假系统代理申请需求",
+    "Resolution notes": "代理申请年假",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626171",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "NC审批流更新--NCO ",
+    "Resolution notes": "CM的门店审批流主管信息已经修改完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10626175",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "CM168(南宁万象城)运维升级",
+    "Resolution notes": "密码已重置",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626176",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "need trainer_Ajinga / initiator_Ajinga  access",
+    "Resolution notes": "1.一线系统已经正常\n2.盖亚系统会自动同步",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626180",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: TF nco审批流更新\n\n",
+    "Resolution notes": "门店审批流已经修改完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626266",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "New Item Sub-Category Config in Order Usage",
+    "Resolution notes": "已经添加完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626322",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要导出订单明细\nNCAAJQ240611\nNCAAAD240430\nNCAAGV240620\nNCAATR240515\nNCAASN240509\nNCAAIE240620\n",
+    "Resolution notes": "已经邮件导出的订单明细",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626413",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: 关于NCO系统审批流程\n",
+    "Resolution notes": "yzhan的账号已经创建完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626440",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "11月离职访谈表-202511",
+    "Resolution notes": "后台报表拉取",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10626499",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "FW: 系统无三位批次\n\n协助完善MFC",
+    "Resolution notes": "请wipro完善MFC信息",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10626513",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "High",
+    "Weight": 1.0,
+    "Summary": "FW: 【退单汇总】JML FY26 -10月年退\n\n关闭做错的ZRTC",
+    "Resolution notes": "请wipro冲销billing,关闭ZRTC",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626516",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "新主管一线系统账号设置-易剑平",
+    "Resolution notes": "权限开通",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626532",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "转发: 【请审批】易剑平-一线转office系统代理操作",
+    "Resolution notes": "一线系统设置代理",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10626628",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL473(洛阳中州大卫城)  运维升级\n",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626656",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "回复: 入职流程改变",
+    "Resolution notes": "修改入职的主管",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10626670",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "自动邮件报错：数据提交出错",
+    "Resolution notes": "reason：因为业务量比较大 服务器资源使用很高自动重启了导致出现报错\nresolution：需观察此问题是否经常发生，如果经常发生，评估是否需要增加服务器资源",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10626697",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "整个波次含未PGI订单，导致无法打印",
+    "Resolution notes": "因为紧急，L3使用admin账号先处理修改发货单。建议用户，下次使用发货订单里批量修改发货单号的按钮，登出后重新登录能看到",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626722",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "[HR Process]咨询",
+    "Resolution notes": "查看邮件是否正常发送，目前看是正常发送的，但是有些延迟",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10626747",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL533(郑州郑东万象城)运维升级\n",
+    "Resolution notes": null,
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626829",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "NCO默认审批人更改\n",
+    "Resolution notes": "用户反馈目前不需要修改了，谢谢！",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10626839",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "一线权限开通-范琳琳",
+    "Resolution notes": "权限分配",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10626855",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "【Need your support】第三方供应商没有收到邮件提醒问题\n",
+    "Resolution notes": "经查询，邮件发送日志已经发送成功",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10629003",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: 离职人员事宜",
+    "Resolution notes": "流程干预",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10629147",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "尊敬的L2团队：\n\n系统检测到以下订单的收货方已被BLOCK，请及时处理：\n\n \n流水号 订单编号 申请人 收货方 BLOCK原因 数据接口状态 下单时间\n【1189200285941456918】 【】 【EL012】 【129848-百盛商业发展有限公司】 【Z1】 【开启】 【2025-10-10】\n \nL2团队请立即通知申请人撤销此流程\n\nRegards,\nNCO System\n",
+    "Resolution notes": "门店已经闭店，这个流水号已经归档",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10629188",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO下单权限",
+    "Resolution notes": "已经创建完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10629207",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要在NCO第三方订单系统里新增一个非收入相关的ship-to地址",
+    "Resolution notes": "说明函没有固定格式，只要说明清楚收货地址、收货人信息、简单描述原由、活动代理的有效时间区间即可，需要请agency盖他们的公章或财务章\n谢谢！\n",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10629298",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "CM171(北京翠微)运维升级",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10629514",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: EL421南宁水晶城申请竞品权限",
+    "Resolution notes": null,
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10629556",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL物资派样仓订单未接入TMS/76091017/76091018/76091022/76091023/76091024/76091025",
+    "Resolution notes": "reason：TMS里虽然柜台信息创建了，但是在地域-地址页面，地址未维护。导致MMS推送失败。resolution：提醒用户维护",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10629697",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: CSR月度竞品业绩提交与审批-2025-12-01",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10629829",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "回复: 11月离职访谈表-202511",
+    "Resolution notes": "后台拉取报表",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10629849",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: SF推送SAP失败的订单2025-12-02 14:30:00\n\nSF推送po到中间件失败",
+    "Resolution notes": "sap确认后通知TP重推解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10629850",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "MMS: 账号创建",
+    "Resolution notes": "账号已创建",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10629874",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RMS: 账号创建",
+    "Resolution notes": "账号已创建",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10629883",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO下单权限",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10629910",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "SF推送SAP失败的订单2025-12-01 21:30:00\n\nSF推送PO到中间件失败",
+    "Resolution notes": "sap确定后通知SF重推解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10629997",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要修改NCO团队权限",
+    "Resolution notes": " 已经帮你改好团队了， OR-TMKT",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10630095",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "ECQ customer interface issue\n",
+    "Resolution notes": "中间件问题，已处理",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10630117",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "can't login eleave system",
+    "Resolution notes": "域账号不对",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630200",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "创建美容师李莲莲/Li, Lian Lian的NCO下单权限",
+    "Resolution notes": "Closed by Caller",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630221",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO下单权限",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10630228",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: 毛戈平门店竞品添加",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630230",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO下单权限",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630250",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要修改团队权限为OR-TMKT",
+    "Resolution notes": "已经修改NCO团队为OR-TMKT",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630280",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO下单权限",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10630392",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "修改OR的第三方TP订单提醒邮箱(数据ID:  \n1178455815407714305)\n收件人：fengxuejie01@linkstars.com;group-xlororders@linkstars.com ; ncoInfo.recipient@baozun.com; Yu, Jelly jyu@cn.estee.com;\n\n",
+    "Resolution notes": "修改完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10630429",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "MAC-开通一线管理系统权限（Elva Cai）",
+    "Resolution notes": "权限开通",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10632642",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "Ship to: 424804 上海观朴广告有限公司---DJ",
+    "Resolution notes": "已经同步到NCO",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10632695",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "转发: 离职员工材料提交/离职会签提醒",
+    "Resolution notes": "开通代理，待用户操作完，再关掉",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10632716",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "转发: Leave Application by Zhang, Jie (Iris) (ID:167802, Type:Sick Leave)",
+    "Resolution notes": "代理审批",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10632747",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "MMS: 申请账号权限",
+    "Resolution notes": "已完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10632775",
+    "Assigned to": "Shanshan Huang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RMS:申请账号权限",
+    "Resolution notes": "账号已创建",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-CSP",
+    "Number": "INC10632794",
+    "Assigned to": "Jerry Wang",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL534乐山世豪月度数据更新申请",
+    "Resolution notes": "done",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10632892",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "KLFM-培训师会签",
+    "Resolution notes": "代理培训师离职会签",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10632898",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "回复: LL014(广州天环)  店长LL007转到LL014，pos系统没有此店长信息   运维升级",
+    "Resolution notes": "查询同步，是12.2日同步给hrc，4日才会同步到common",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10632995",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL376(河北沧州华北商厦) 运维升级",
+    "Resolution notes": "经NCO查询，除了最后一个P9NT01L000产品信息无法查询到， 其他SKU均被品牌设置了限制下单，所以无法搜寻到，\n\n请和门店确认是否有其他问题，谢谢！\n",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633212",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "北京京东世纪贸易有限公司---MC",
+    "Resolution notes": "已经都同步到了NCO",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10633246",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "RE: <建柜>-【TF】- 北京合生汇",
+    "Resolution notes": "接柜",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633289",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "疑似拆单报表（实时）导出功能的表头调整",
+    "Resolution notes": "已经调整完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10633319",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": " E-Approval 系统登录问题",
+    "Resolution notes": "电脑登陆账号不对",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633432",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "JML JD NCO地址被block",
+    "Resolution notes": "请在DWP系统里用以下form提交申请， 如没有该form的权限，请找Grace Gong申请，谢谢！",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10633602",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: RE: SF推送SAP失败的订单2025-12-02 20:15:00\n\nsf推送po到中间件失败",
+    "Resolution notes": "SAP确认后通知SF重传",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10633609",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "FW: sales order interface and SF PO interface  issue in ECQ\n\n网络问题",
+    "Resolution notes": "IT已解决网络问题",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633616",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "RE: LE LABO LL007&LL010&LL014店铺联系人修改",
+    "Resolution notes": "以下新联系人已经同步到NCO, 谢谢！",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10633629",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "d-chain 同步SF quota 系统\n\n协助推送SKU",
+    "Resolution notes": "协助推送SKU",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633637",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "Ship to：425612 太原王府井百货有限责任公司 MC",
+    "Resolution notes": "该shipto425612已经同步到NCO，谢谢！",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10633665",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "VBZ2400000 推送SF\n\n协助推送SKU",
+    "Resolution notes": "协助推送SKU",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633841",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "BB184(深圳湾万象城)运维升级",
+    "Resolution notes": "已经重置为默认密码",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633859",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "门店NCO账号密码需要重置",
+    "Resolution notes": "已经重置为默认密码",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10633868",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "转发: 一线人员离职审批通知：",
+    "Resolution notes": "代理审批",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10633870",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "麻烦重置NCO密码",
+    "Resolution notes": "已经重置为默认密码",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10633923",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Medium",
+    "Weight": 2.5,
+    "Summary": "回复: IN77新店KL019/FM019 商场签字确认报错",
+    "Resolution notes": "柜台还未新建",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10634093",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "INC10521030-LM OR DY渠道NCO收货方新增",
+    "Resolution notes": "一共有三个流水号，已经重新发送，请查收，谢谢！",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10636463",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": " 一线系统渠道数据-入职时间：2025.11.1-11.30",
+    "Resolution notes": "报表拉取",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10636506",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "EL426(宁波万象城 )运维升级\n",
+    "Resolution notes": "可以登录，已截图邮件给门店",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10636814",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "麻烦请教下  柜台下单时发现POP up的下单信息如下，code并非425612  且收货地址还是太原  请问 柜台实操可否有同事帮忙指引下  \n盼复 感谢 ！\n",
+    "Resolution notes": "如teams沟通，可以根据门店编号以及shipto区分收货方是北京的地址",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10636943",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: RE: SF推送SAP失败的订单2025-12-04 11:00:00\n\nSF推送PO到中间件失败",
+    "Resolution notes": "SAP确定后通知sf重推解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN SCM Support",
+    "Number": "INC10636944",
+    "Assigned to": "Zhengguang Zhu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "FW: RE: SF推送SAP失败的订单2025-12-04 11:45:00\n\nSF推送PO到中间件报错",
+    "Resolution notes": "SAP确认后通知SF重推解决",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10637182",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "NCO订单取消",
+    "Resolution notes": "已经归档",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10637253",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NC1.0退货账号：\n1.账户名：xiashi\n2.退货渠道：Sephora\n3.退货品牌：EL, MAC, AV, BB, CL, LAB, TO\n",
+    "Resolution notes": "已经创建完成",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10637521",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO账号",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN-NCO",
+    "Number": "INC10637538",
+    "Assigned to": "Suzy Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "需要创建NCO账号",
+    "Resolution notes": "NCO权限已加好，\nNCO系统可通过如下SSO网址进行免密登录：\nhttps://nco.elcompanies.cn/build/intauthclient/verify/index.html?tk=07b66eb0ea2a5c3a779ddc9a86a1333…",
+    "Rationale": null
+  },
+  {
+    "Category": "CN HR Support",
+    "Number": "INC10638512",
+    "Assigned to": "Keen Xu",
+    "Difficulty Level": "Easy",
+    "Weight": 1.0,
+    "Summary": "回复: 岗位变动通知：工号：ELCA122198,姓名：叶晓朦,品牌：LM - 海蓝之谜,原职位：代理柜长,现职位：美容顾问,门店：合肥万象城-467",
+    "Resolution notes": "流程干预",
+    "Rationale": null
+  }
+]

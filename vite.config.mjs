@@ -2,12 +2,18 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import EnvironmentPlugin from 'vite-plugin-environment';
 
 const vendors = ['react', 'react-dom', 'react-router-dom', 'classnames', 'tailwind-merge'];
+const clientProcessEnv = {
+    ENV: process.env.ENV ?? '',
+    NODE_ENV: process.env.NODE_ENV ?? 'development',
+    REACT_APP_OKTA_DOMAIN: process.env.REACT_APP_OKTA_DOMAIN ?? '',
+    REACT_APP_OKTA_CLIENT_ID: process.env.REACT_APP_OKTA_CLIENT_ID ?? '',
+    REACT_APP_OKTA_AUTH_URL: process.env.REACT_APP_OKTA_AUTH_URL ?? '',
+};
 
 export default defineConfig({
-    plugins: [react(), EnvironmentPlugin('all'), tailwindcss()],
+    plugins: [react(), tailwindcss()],
     server: {
         port: 8080,
         open: true,
@@ -30,6 +36,7 @@ export default defineConfig({
     },
     define: {
         global: 'window',
+        'process.env': clientProcessEnv,
     },
     build: {
         target: 'esnext',

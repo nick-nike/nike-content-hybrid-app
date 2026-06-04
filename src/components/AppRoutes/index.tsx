@@ -1,42 +1,50 @@
+// import { CompleteAuthFlowDemo } from '@/modules/okta/utils/CompleteAuthFlowDemo'; // 已整合到login模块
+import { useOktaAuth } from '@okta/okta-react';
 import type { FC } from 'react';
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+
+import { AssetsListPage } from '@/modules/assets-list';
+import { ComboboxDemo } from '@/modules/combobox-demo/combobox-demo';
+import { DashboardPage } from '@/modules/dashboard';
+import { IngestionListPage } from '@/modules/ingestion-list';
+import { InterviewKnowledgeBasePage } from '@/modules/interview-knowledge-base';
+import { NewPDPPage } from '@/modules/pdp-page/new-pdp';
+import { WeeklyMeetingPage } from '@/modules/weekly-meeting';
+import { TaskListPage } from '@/modules/task-list';
+import { DistributionListPage } from '@/modules/distribution-list';
+import { ProjectCalendarPage } from '@/modules/project-calendar';
+import { GatewayCalendarPage } from '@/modules/gateway-calendar';
+import { BudgetProjectCalendarPage } from '@/modules/budget-project-calendar';
+import { OpsCrFlowPage } from '@/modules/ops-cr-flow';
+import { WbsBuilderPage } from '@/modules/wbs-builder';
+
 import { Main as DocmentMain } from '../../modules/document';
 import { Main as DocmentListMain } from '../../modules/document-list';
 import { ImageToolkitPage } from '../../modules/image-toolkit-demo';
 import { ImageWorkflowDemo } from '../../modules/image-workflow-demo';
-import { Main as LoginMain } from '../../modules/login';
 import { OktaCallback } from '../../modules/login';
 import { AppLayout } from '../AppLayout';
-import { ComboboxDemo } from '@/modules/combobox-demo/combobox-demo';
-import { NewPDPPage } from '@/modules/pdp-page/new-pdp';
-// import { CompleteAuthFlowDemo } from '@/modules/okta/utils/CompleteAuthFlowDemo'; // 已整合到login模块
-import { useOktaAuth } from '@okta/okta-react';
-import { useOktaAuth as useCustomOktaAuth } from '@/modules/login/services/useOktaAuth';
 
 const UserListMain = lazy(() => import('../../modules/user-list').then(module => ({ default: module.Main })));
 
 /**
  * Main application routing component
  * Handles route protection and authentication flow
+ * NOTE: Authentication checks are currently disabled for development
  */
 const AppRoutes: FC = () => {
-    const { authState, oktaAuth } = useOktaAuth();
-    const { 
-        showAuthModal, 
-        authModalReason, 
-        authModalAttempts, 
-        closeAuthModal, 
-        handleReauthorize 
-    } = useCustomOktaAuth();
-    
-    // 改进认证状态处理逻辑
-    const isAuthenticated = authState?.isAuthenticated ?? false;
-    const isLoading = authState?.isPending ?? false;
-    
+    const { authState: _authState, oktaAuth: _oktaAuth } = useOktaAuth();
+
+    // 认证相关逻辑已隐藏，直接跳过加载状态
+    // const isAuthenticated = authState?.isAuthenticated ?? false;
+    // const isLoading = authState?.isPending ?? false;
+
+    /*
+    // 已注释：超时处理逻辑
     // 添加超时处理，避免无限等待
     const [initTimeout, setInitTimeout] = React.useState(false);
-    
+
     React.useEffect(() => {
         const timer = setTimeout(() => {
             if (!authState) {
@@ -44,19 +52,19 @@ const AppRoutes: FC = () => {
                 setInitTimeout(true);
             }
         }, 3000); // 3秒超时
-        
+
         return () => clearTimeout(timer);
     }, [authState]);
-    
+
     // 可选：添加调试信息（生产环境中应移除）
     if (process.env.NODE_ENV === 'development') {
-        console.log('AuthState Debug:', { 
-            authState, 
-            isAuthenticated, 
-            isLoading, 
+        console.log('AuthState Debug:', {
+            authState,
+            isAuthenticated,
+            isLoading,
             initTimeout,
             hasOktaAuth: !!oktaAuth,
-            hasAuthState: !!authState 
+            hasAuthState: !!authState
         });
     }
 
@@ -78,93 +86,107 @@ const AppRoutes: FC = () => {
             </div>
         );
     }
+    */
 
     return (
         <>
-        <Routes>
-            {/* Root route - redirects based on auth status */}
-            <Route path="/" element={isAuthenticated ? <Navigate to="/assets/list" /> : <Navigate to="/login" />} />
+            <Routes>
+                {/* Root route - directly navigate to dashboard */}
+                <Route path="/" element={<Navigate to="/dashboard" />} />
 
-            {/* Okta callback route */}
-            <Route path="/authorize/callback" element={<OktaCallback />} />
+                {/* Okta callback route */}
+                <Route path="/authorize/callback" element={<OktaCallback />} />
 
-            {/* Login page route */}
-            <Route
+                {/* Login page route - hidden by default */}
+                {/* <Route
                 path="/login"
                 element={isAuthenticated ? <Navigate to="/assets/list" /> : <LoginMain />}
-            />
+            /> */}
 
-            {/* Protected routes */}
-            <Route
-                path="/*"
-                element={
-                    isAuthenticated
-                        ? (
-                            <AppLayout>
-                                <Suspense fallback={<div>Loading content...</div>}>
-                                    <Outlet />
-                                </Suspense>
-                            </AppLayout>
-                        )
-                        : (
-                            <Navigate to="/login" />
-                        )
-                }
-            >
-                {/* Asset management routes */}
-                <Route path="assets/list" element={<div>This is assets list page</div>} />
-                <Route path="assets/details" element={<div>This is asset details page</div>} />
+                {/* Protected routes - no auth check */}
+                <Route
+                    path="/*"
+                    element={(
+                        <AppLayout>
+                            <Suspense fallback={<div>Loading content...</div>}>
+                                <Outlet />
+                            </Suspense>
+                        </AppLayout>
+                    )}
+                >
+                    {/* Dashboard route */}
+                    <Route path="dashboard" element={<DashboardPage />} />
 
-                {/* Ingestion management routes */}
-                <Route path="ingestion/list" element={<div>This is ingestion list page</div>} />
-                <Route path="ingestion/details" element={<div>This is ingestion details page</div>} />
+                    {/* Asset management routes */}
+                    <Route path="assets/list" element={<AssetsListPage />} />
+                    <Route path="assets/details" element={<div>This is asset details page</div>} />
 
-                {/* Task management routes */}
-                <Route path="task/list" element={<div>This is task list page</div>} />
-                <Route path="task/details" element={<div>This is task details page</div>} />
+                    {/* Ingestion management routes */}
+                    <Route path="ingestion/list" element={<IngestionListPage />} />
+                    <Route path="ingestion/details" element={<div>This is ingestion details page</div>} />
 
-                {/* Distribution management routes */}
-                <Route path="distribution/list" element={<div>This is distribution list page</div>} />
-                <Route path="distribution/details" element={<div>This is distribution details page</div>} />
+                    {/* Task management routes */}
+                    <Route path="task/list" element={<TaskListPage />} />
+                    <Route path="task/details" element={<div>This is task details page</div>} />
 
-                {/* Tracking list route */}
-                <Route path="tracking/list" element={<div>This is tracking list page</div>} />
+                    {/* Distribution management routes */}
+                    <Route path="distribution/list" element={<DistributionListPage />} />
+                    <Route path="distribution/details" element={<div>This is distribution details page</div>} />
 
-                {/* Administration routes */}
-                <Route path="administration" element={<div>This is administration page</div>} />
-                <Route path="administration/users" element={<UserListMain />} />
+                    {/* Tracking list route */}
+                    <Route path="tracking/list" element={<div>This is tracking list page</div>} />
 
-                {/* Existing module routes */}
-                <Route path="document-list" element={<DocmentListMain />} />
+                    {/* Administration routes */}
+                    <Route path="administration" element={<div>This is administration page</div>} />
+                    <Route path="administration/users" element={<UserListMain />} />
 
-                {/* Image Toolkit Demo */}
-                <Route path="image-toolkit" element={<ImageToolkitPage />} />
+                    {/* Existing module routes */}
+                    <Route path="document-list" element={<DocmentListMain />} />
 
-                {/* 新的完整闭环Demo */}
-                <Route path="image-workflow" element={<ImageWorkflowDemo />} />
+                    {/* Image Toolkit Demo */}
+                    <Route path="image-toolkit" element={<ImageToolkitPage />} />
 
-                {/* PDP页面 */}
-                <Route path="pdp-page" element={<NewPDPPage />} />
+                    {/* Image Workflow Demo */}
+                    <Route path="image-workflow" element={<ImageWorkflowDemo />} />
 
-                {/* Combobox 组件演示 */}
-                <Route path="combobox-demo" element={<ComboboxDemo />} />
+                    {/* PDP Page */}
+                    <Route path="pdp-page" element={<NewPDPPage />} />
 
-                {/* Complete Okta Session Lifecycle Management Demo */}
-                {/* <Route path="auth-tester" element={<CompleteAuthFlowDemo />} /> */}
+                    {/* Cost Forecasting Report */}
+                    <Route path="cost-forecasting" element={<ComboboxDemo />} />
 
-            </Route>
+                    {/* Weekly Meeting Review */}
+                    <Route path="weekly-meeting" element={<WeeklyMeetingPage />} />
 
-            {/* Document detail page route */}
-            <Route
-                path="/document/:documentId"
-                element={isAuthenticated ? <DocmentMain /> : <Navigate to="/login" />}
-            />
+                    {/* Project Calendar */}
+                    <Route path="project-calendar" element={<ProjectCalendarPage />} />
 
-            {/* Catch-all route - 404 page */}
-            <Route path="*" element={<div>Page Not Found</div>} />
-        </Routes>
-        
-        
+                    {/* Gateway Calendar */}
+                    <Route path="gateway-calendar" element={<GatewayCalendarPage />} />
+
+                    {/* Budget Project Calendar */}
+                    <Route path="budget-project-calendar" element={<BudgetProjectCalendarPage />} />
+
+                    {/* OPS CR Flow */}
+                    <Route path="ops-cr-flow" element={<OpsCrFlowPage />} />
+
+                    {/* WBS Builder */}
+                    <Route path="wbs-builder" element={<WbsBuilderPage />} />
+
+                    {/* Interview Knowledge Base */}
+                    <Route path="interview-knowledge-base" element={<InterviewKnowledgeBasePage />} />
+                </Route>
+
+                {/* Document detail page route - no auth check */}
+                <Route
+                    path="/document/:documentId"
+                    element={<DocmentMain />}
+                />
+
+                {/* Catch-all route - 404 page */}
+                <Route path="*" element={<div>Page Not Found</div>} />
+            </Routes>
+
         </>
     );
 };
