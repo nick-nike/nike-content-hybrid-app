@@ -18,6 +18,7 @@ import { GatewayCalendarPage } from '@/modules/gateway-calendar';
 import { BudgetProjectCalendarPage } from '@/modules/budget-project-calendar';
 import { OpsCrFlowPage } from '@/modules/ops-cr-flow';
 import { WbsBuilderPage } from '@/modules/wbs-builder';
+import { DailySnapshotPage } from '@/modules/daily-snapshot';
 
 import { Main as DocmentMain } from '../../modules/document';
 import { Main as DocmentListMain } from '../../modules/document-list';
@@ -172,6 +173,9 @@ const AppRoutes: FC = () => {
 
                     {/* WBS Builder */}
                     <Route path="wbs-builder" element={<WbsBuilderPage />} />
+
+                    {/* Daily Snapshot */}
+                    <Route path="daily-snapshot" element={<DailySnapshotPage />} />
 
                     {/* Interview Knowledge Base */}
                     <Route path="interview-knowledge-base" element={<InterviewKnowledgeBasePage />} />

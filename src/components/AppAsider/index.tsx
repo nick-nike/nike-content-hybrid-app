@@ -8,6 +8,7 @@ import {
     ChevronDown,
     ChevronRight,
     ClipboardCheck,
+    FileText,
     Flag,
     GraduationCap,
     Milestone,
@@ -81,6 +82,13 @@ const menus: Menu[] = [
         icon: ClipboardCheck,
         key: 'wbs-builder',
         link: '/wbs-builder',
+        children: [],
+    },
+    {
+        label: 'Daily Snapshot',
+        icon: FileText,
+        key: 'daily-snapshot',
+        link: '/daily-snapshot',
         children: [],
     },
     {

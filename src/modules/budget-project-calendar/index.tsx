@@ -383,6 +383,7 @@ const sumGatewayCount = (project: GatewayProject) => MONTHS.reduce(
     0,
 );
 const allGatewayMarkers = (project: GatewayProject) => MONTHS.flatMap(month => project.gatewayMonths[month] ?? []).filter(isGatewayMarker);
+const allNodeMarkers = (project: GatewayProject) => MONTHS.flatMap(month => project.gatewayMonths[month] ?? []);
 const firstGatewayDue = (project: GatewayProject) => allGatewayMarkers(project)
     .map(marker => marker.end || marker.start)
     .filter(Boolean)
@@ -930,7 +931,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                     <div className="bg-[#f4aa00] px-5 py-2 text-sm font-bold text-white">{group.domain}</div>
                                     <div className="grid grid-cols-1 divide-y divide-[#eee6dc] xl:grid-cols-2 xl:divide-x xl:divide-y-0">
                                         {group.projects.map((project) => {
-                                            const markers = project.gatewayMonths[selectedMonth] ?? [];
+                                            const markers = allNodeMarkers(project);
                                             const meetingInput = meetingInputs[projectKey(project)];
                                             const urgency = projectUrgency(project, meetingInput);
                                             return (
