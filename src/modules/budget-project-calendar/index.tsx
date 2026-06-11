@@ -81,7 +81,7 @@ const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-date-overrid
 const GATEWAY_STATUS_STORAGE_KEY = 'budget-project-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
-const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v1';
+const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v2';
 const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'Done' },
     { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'Done' },
