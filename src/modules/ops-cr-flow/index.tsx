@@ -57,6 +57,25 @@ const Arrow = ({
     marker?: 'arrow' | 'thinArrow';
 }) => <path d={d} stroke="#343434" strokeWidth={marker === 'thinArrow' ? 1.2 : 1.5} fill="none" markerEnd={`url(#${marker})`} />;
 
+const StatusTag = ({ x, y, label, tone = 'blue' }: { x: number; y: number; label: string; tone?: 'gray' | 'blue' | 'green' }) => {
+    const fill = tone === 'green' ? '#dbeec2' : tone === 'gray' ? '#e8e3dc' : '#dce9f8';
+    const stroke = tone === 'green' ? '#8cbf5a' : tone === 'gray' ? '#c8beb4' : '#9cb9d6';
+
+    return (
+        <>
+            <rect x={x} y={y} width={label.length * 7 + 16} height={16} rx={3} fill={fill} stroke={stroke} />
+            <text x={x + 8} y={y + 12} fontSize="10" fontWeight="700" fill="#28313d">{label}</text>
+        </>
+    );
+};
+
+const StatusSourceNote = ({ x, y }: { x: number; y: number }) => (
+    <>
+        <rect x={x} y={y} width={190} height={26} rx={3} fill="#f1f6fb" stroke="#9cb9d6" />
+        <text x={x + 10} y={y + 17} fontSize="11" fontWeight="700" fill="#344154">Status source: Jira Epic status</text>
+    </>
+);
+
 const SwimlaneSvg = () => (
     <svg viewBox="0 0 1260 690" className="block min-w-[1260px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to solution swimlane">
         <defs>
@@ -88,7 +107,7 @@ const SwimlaneSvg = () => (
         <Box x={508} y={266} width={180} height={58} title="Dependency check" sub="related incidents" />
         <Decision x={598} y={384} label="Solution" />
         <Box x={452} y={560} width={172} height={58} title="ST solution" sub="SCM & Corp Tech Ops" tone="red" />
-        <Box x={660} y={560} width={172} height={58} title="LT CR solution" sub="business funded" tone="red" />
+        <Box x={660} y={560} width={172} height={58} title="LT Bug/Enhancement" sub="business funded" tone="red" />
 
         <Box x={942} y={384} width={190} height={58} title="Business intake" sub="budget owner" />
         <Box x={942} y={560} width={190} height={58} title="Domain delivery" sub="deliver / handover" />
@@ -118,14 +137,14 @@ const SwimlaneSvg = () => (
 );
 
 const CleanFlowSvg = () => (
-    <svg viewBox="0 0 1480 560" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="Clean incident solution flowchart">
+    <svg viewBox="0 0 1480 620" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="Clean incident solution flowchart">
         <defs>
             <marker id="flowArrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L7,3 z" fill="#343434" />
             </marker>
         </defs>
 
-        <rect x="0" y="0" width="1480" height="560" fill="#fffdf8" stroke="#d8d0c5" />
+        <rect x="0" y="0" width="1480" height="620" fill="#fffdf8" stroke="#d8d0c5" />
 
         <Box x={38} y={52} width={190} height={58} title="Incident" sub="operation case" tone="red" />
         <Box x={282} y={52} width={190} height={58} title="Impact" sub="business / system" />
@@ -146,11 +165,13 @@ const CleanFlowSvg = () => (
         <text x="1112" y="169" textAnchor="middle" fontSize="12" fontWeight="700" fill="#746b62">LT</text>
 
         <rect x="38" y="220" width="560" height="250" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="66" y="257" fontSize="18" fontWeight="700">Short-term: Emergency Solution</text>
-        <text x="66" y="287" fontSize="14" fontWeight="700" fill="#d31321">Driver</text>
-        <text x="126" y="287" fontSize="14" fontWeight="700">SCM & Corp Tech Ops</text>
-        <text x="66" y="314" fontSize="14" fontWeight="700" fill="#d31321">Delivery</text>
-        <text x="146" y="314" fontSize="14" fontWeight="700">SCM & Corp Tech Ops</text>
+        <text x="66" y="254" fontSize="18" fontWeight="700">Short-term: Emergency Solution</text>
+        <rect x="66" y="272" width="420" height="28" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="82" y="290" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
+        <text x="140" y="290" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
+        <rect x="66" y="306" width="420" height="34" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="82" y="327" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
+        <text x="148" y="327" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
         <line x1="66" y1="344" x2="570" y2="344" stroke="#d8d0c5" />
         <Box x={66} y={376} width={140} height={48} title="Urgent handling" />
         <Box x={246} y={376} width={140} height={48} title="Owner + ETA" sub="confirmed" />
@@ -158,38 +179,51 @@ const CleanFlowSvg = () => (
         <Arrow d="M206 400 L246 400" marker="thinArrow" />
         <Arrow d="M386 400 L426 400" marker="thinArrow" />
 
-        <rect x="648" y="220" width="760" height="286" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="710" y="257" fontSize="18" fontWeight="700">Long-term: CR Solution</text>
-        <text x="710" y="287" fontSize="14" fontWeight="700" fill="#d31321">Intake</text>
-        <text x="770" y="287" fontSize="14" fontWeight="700">SCM & Corp Tech Ops creates intake and drives CR coordination</text>
-        <text x="710" y="314" fontSize="14" fontWeight="700" fill="#d31321">Budget</text>
-        <text x="770" y="314" fontSize="14" fontWeight="700">OPEX budget model</text>
-        <text x="710" y="341" fontSize="14" fontWeight="700" fill="#d31321">Delivery</text>
-        <text x="784" y="341" fontSize="13" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
+        <rect x="648" y="220" width="760" height="340" fill="#ffffff" stroke="#d8d0c5" />
+        <text x="710" y="254" fontSize="18" fontWeight="700">Long-term: Bug/Enhancement Solution</text>
+        <rect x="710" y="272" width="420" height="28" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="726" y="290" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
+        <text x="784" y="290" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
+        <rect x="710" y="306" width="420" height="34" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="726" y="327" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
+        <text x="792" y="327" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="690" y1="360" x2="1370" y2="360" stroke="#d8d0c5" />
-        <Box x={690} y={388} width={108} height={46} title="Create intake" tone="red" />
-        <Box x={818} y={388} width={108} height={46} title="Tech Ops drive" />
-        <Box x={946} y={388} width={118} height={46} title="Domain delivery" />
-        <Box x={1084} y={388} width={58} height={46} title="Close" />
-        <Arrow d="M798 411 L818 411" marker="thinArrow" />
-        <Arrow d="M926 411 L946 411" marker="thinArrow" />
-        <Arrow d="M1064 411 L1084 411" marker="thinArrow" />
+        <StatusSourceNote x={1180} y={314} />
+        <Box x={690} y={382} width={140} height={46} title="Jira Task" sub="Bug/Enh details" tone="red" />
+        <StatusTag x={720} y={433} label="STRATEGY" tone="gray" />
+        <Box x={878} y={382} width={140} height={46} title="Gateway" sub="Charley approve" />
+        <StatusTag x={910} y={433} label="STRATEGY" tone="gray" />
+        <Box x={1066} y={382} width={140} height={46} title="Wishlist" sub="delivery backlog" />
+        <StatusTag x={1100} y={433} label="DISCOVERY" />
+        <Box x={690} y={470} width={140} height={46} title="Business Confirm" sub="go / no-go" />
+        <StatusTag x={720} y={521} label="DISCOVERY" />
+        <Box x={878} y={470} width={140} height={46} title="Create Intake" sub="business owner" />
+        <StatusTag x={914} y={521} label="EXECUTION" />
+        <Box x={1066} y={470} width={140} height={46} title="Create CSCOP" sub="Jenny" />
+        <StatusTag x={1106} y={521} label="EXECUTION" />
+        <Box x={1254} y={470} width={140} height={46} title="Delivery Gateway" sub="business sign-off" />
+        <Arrow d="M830 405 L878 405" marker="thinArrow" />
+        <Arrow d="M1018 405 L1066 405" marker="thinArrow" />
+        <Arrow d="M1136 428 L1136 448 L760 448 L760 470" marker="thinArrow" />
+        <Arrow d="M830 493 L878 493" marker="thinArrow" />
+        <Arrow d="M1018 493 L1066 493" marker="thinArrow" />
+        <Arrow d="M1206 493 L1254 493" marker="thinArrow" />
     </svg>
 );
 
 const TpmoIntakeOwnerSvg = () => (
-    <svg viewBox="0 0 1480 620" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to CR solution process">
+    <svg viewBox="0 0 1480 690" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to Bug/Enhancement solution process">
         <defs>
             <marker id="tpmoArrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L7,3 z" fill="#343434" />
             </marker>
         </defs>
 
-        <rect x="0" y="0" width="1480" height="620" fill="#fffdf8" stroke="#d8d0c5" />
+        <rect x="0" y="0" width="1480" height="690" fill="#fffdf8" stroke="#d8d0c5" />
         <rect x="0" y="0" width="1480" height="54" fill="#111111" />
-        <text x="740" y="35" textAnchor="middle" fill="#ffffff" fontSize="20" fontWeight="700" letterSpacing="5">SCM &amp; Corp Tech Ops Incident to CR Solution Process</text>
+        <text x="740" y="35" textAnchor="middle" fill="#ffffff" fontSize="20" fontWeight="700" letterSpacing="5">SCM &amp; Corp Tech Ops Incident to Bug/Enhancement Solution Process</text>
 
-        <rect x="18" y="74" width="1444" height="520" fill="#fffdf8" stroke="#d8d0c5" />
+        <rect x="18" y="74" width="1444" height="588" fill="#fffdf8" stroke="#d8d0c5" />
         <rect x="38" y="86" width="1200" height="20" fill="#f7f0e8" stroke="#d8d0c5" />
         <text x="638" y="101" textAnchor="middle" fontSize="11" fontWeight="700" fill="#655f57" letterSpacing="3">SCM &amp; CORP TECH OPS</text>
 
@@ -214,13 +248,13 @@ const TpmoIntakeOwnerSvg = () => (
         <text x="1098" y="261" textAnchor="middle" fontSize="12" fontWeight="700" fill="#746b62">LT</text>
 
         <rect x="54" y="294" width="524" height="230" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="84" y="329" fontSize="18" fontWeight="700">Short-term: Emergency Solution</text>
-        <text x="84" y="352" fontSize="14" fontWeight="700" fill="#d31321">Driver</text>
-        <text x="144" y="352" fontSize="14" fontWeight="700">SCM & Corp Tech Ops</text>
-        <text x="84" y="378" fontSize="14" fontWeight="700" fill="#d31321">Budget</text>
-        <text x="154" y="378" fontSize="14" fontWeight="700">OPEX</text>
-        <text x="84" y="404" fontSize="14" fontWeight="700" fill="#d31321">Delivery</text>
-        <text x="164" y="404" fontSize="14" fontWeight="700">SCM & Corp Tech Ops</text>
+        <text x="84" y="326" fontSize="18" fontWeight="700">Short-term: Emergency Solution</text>
+        <rect x="84" y="344" width="420" height="28" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="100" y="362" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
+        <text x="158" y="362" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
+        <rect x="84" y="378" width="420" height="34" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="100" y="399" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
+        <text x="166" y="399" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
         <line x1="84" y1="428" x2="548" y2="428" stroke="#d8d0c5" />
         <Box x={84} y={458} width={126} height={38} title="Urgent handling" />
         <Box x={254} y={458} width={126} height={38} title="Owner + ETA" />
@@ -228,20 +262,35 @@ const TpmoIntakeOwnerSvg = () => (
         <path d="M210 477 L254 477" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
         <path d="M380 477 L424 477" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
 
-        <rect x="646" y="294" width="760" height="230" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="694" y="329" fontSize="18" fontWeight="700">Long-term: CR Solution</text>
-        <text x="694" y="352" fontSize="14" fontWeight="700" fill="#d31321">Driver</text>
-        <text x="754" y="352" fontSize="14" fontWeight="700">SCM & Corp Tech Ops</text>
-        <text x="694" y="378" fontSize="14" fontWeight="700" fill="#d31321">Budget</text>
-        <text x="754" y="378" fontSize="13" fontWeight="700">OPEX: SCM & Corp Tech Ops leads intake / CAPEX: Business leads intake</text>
-        <text x="694" y="404" fontSize="14" fontWeight="700" fill="#d31321">Delivery</text>
-        <text x="764" y="404" fontSize="13" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
+        <rect x="646" y="294" width="760" height="316" fill="#ffffff" stroke="#d8d0c5" />
+        <text x="694" y="326" fontSize="18" fontWeight="700">Long-term: Bug/Enhancement Solution</text>
+        <rect x="694" y="344" width="430" height="28" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="710" y="362" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
+        <text x="768" y="362" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
+        <rect x="694" y="378" width="430" height="34" fill="#fffdf8" stroke="#e5ded5" />
+        <text x="710" y="399" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
+        <text x="776" y="399" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="680" y1="428" x2="1370" y2="428" stroke="#d8d0c5" />
-        <Box x={760} y={458} width={118} height={38} title="Create intake" tone="red" />
-        <Box x={936} y={458} width={128} height={38} title="Domain delivery" />
-        <Box x={1122} y={458} width={64} height={38} title="Close" />
-        <path d="M878 477 L936 477" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
-        <path d="M1064 477 L1122 477" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <StatusSourceNote x={1180} y={382} />
+        <Box x={680} y={448} width={142} height={44} title="Jira Task" sub="Bug/Enh details" tone="red" />
+        <StatusTag x={710} y={497} label="STRATEGY" tone="gray" />
+        <Box x={866} y={448} width={142} height={44} title="Gateway" sub="Charley approve" />
+        <StatusTag x={898} y={497} label="STRATEGY" tone="gray" />
+        <Box x={1052} y={448} width={142} height={44} title="Wishlist" sub="delivery backlog" />
+        <StatusTag x={1086} y={497} label="DISCOVERY" />
+        <Box x={680} y={528} width={142} height={44} title="Business Confirm" sub="go / no-go" />
+        <StatusTag x={710} y={577} label="DISCOVERY" />
+        <Box x={866} y={528} width={142} height={44} title="Create Intake" sub="business owner" />
+        <StatusTag x={902} y={577} label="EXECUTION" />
+        <Box x={1052} y={528} width={142} height={44} title="Create CSCOP" sub="Jenny" />
+        <StatusTag x={1092} y={577} label="EXECUTION" />
+        <Box x={1238} y={528} width={142} height={44} title="Delivery Gateway" sub="business sign-off" />
+        <path d="M822 470 L866 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1008 470 L1052 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1123 492 L1123 510 L751 510 L751 528" stroke="#343434" strokeWidth="1.5" fill="none" markerEnd="url(#tpmoArrow)" />
+        <path d="M822 550 L866 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1008 550 L1052 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1194 550 L1238 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
     </svg>
 );
 
@@ -251,11 +300,11 @@ export const OpsCrFlowPage: React.FC = () => (
             <div className="mx-auto max-w-[1600px] px-6 py-7 lg:px-10">
                 <div className="inline-flex items-center gap-2 border border-white/35 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]">
                     <Network size={14} />
-                    SCM &amp; Corp Tech Ops Incident to CR Solution Process
+                    SCM &amp; Corp Tech Ops Incident to Bug/Enhancement Solution Process
                 </div>
                 <h1 className="mt-4 text-4xl font-semibold tracking-normal md:text-5xl">Incident to Solution Flow</h1>
                 <p className="mt-4 max-w-5xl text-sm leading-6 text-white/72">
-                    All cases start as incidents. SCM & Corp Tech Ops checks impact and dependency across related incidents. If the solution becomes LT, budget type defines intake ownership and Delivery Domain teams deliver.
+                    All cases start as incidents. SCM & Corp Tech Ops checks impact and dependency across related incidents. If the solution becomes LT, the Bug/Enhancement is documented in Jira first, approved through Gateway, then handed over to Delivery Domain teams.
                 </p>
             </div>
         </header>
@@ -267,13 +316,13 @@ export const OpsCrFlowPage: React.FC = () => (
                 </div>
             </Section>
 
-            <Section title="SCM & Corp Tech Ops Incident to CR Solution Process">
+            <Section title="SCM & Corp Tech Ops Incident to Bug/Enhancement Solution Process">
                 <div className="overflow-auto">
                     <CleanFlowSvg />
                 </div>
             </Section>
 
-            <Section title="SCM & Corp Tech Ops Incident to CR Solution Process">
+            <Section title="SCM & Corp Tech Ops Incident to Bug/Enhancement Solution Process">
                 <div className="overflow-auto">
                     <TpmoIntakeOwnerSvg />
                 </div>
