@@ -52,6 +52,7 @@ type ProjectMeetingInput = {
     size: string;
     priority: string;
     goLive: string;
+    note?: string;
 };
 
 type GatewayDateOverride = {
@@ -60,11 +61,13 @@ type GatewayDateOverride = {
 };
 
 type GatewayStatus = 'To Do' | 'WIP' | 'Done' | 'On Hold';
+type HandoverStatusFilter = 'Active' | GatewayStatus | 'All';
 
 type DefaultGatewayPatch = {
     projectName: string;
     cscopNo: string;
-    type: 'GW1/2' | 'GW3/4/5';
+    type: GatewayMarker['type'];
+    start?: string;
     end: string;
     status?: GatewayStatus;
 };
@@ -78,16 +81,90 @@ const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'gateway-calendar-date-overrides-v1';
 const GATEWAY_STATUS_STORAGE_KEY = 'gateway-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-status-patch-version';
-const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-02-v3';
+const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v1';
 const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
-    { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'WIP' },
-    { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'WIP' },
-    { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW3/4/5', end: '2026-06-05', status: 'WIP' },
+    { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'Done' },
+    { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'Done' },
+    { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW3/4/5', end: '2026-06-05', status: 'Done' },
     { projectName: 'Weather alert', cscopNo: 'CSCOP-891', type: 'GW1/2', end: '2026-05-30', status: 'WIP' },
-    { projectName: 'Store Clustering SU27 Women / CN Adoption', cscopNo: 'CSCOP-785', type: 'GW3/4/5', end: '2026-06-02', status: 'WIP' },
+    { projectName: 'Store Clustering SU27 Women / CN Adoption', cscopNo: 'CSCOP-785', type: 'GW3/4/5', end: '2026-06-02', status: 'Done' },
     { projectName: 'Price Portal enhancement: MD pricing Phase 1 Retail MD', cscopNo: 'CSCOP-939', type: 'GW3/4/5', end: '2026-06-05', status: 'WIP' },
     { projectName: 'China Service Center', cscopNo: 'CSCOP-935', type: 'GW1/2', end: '2026-06-12', status: 'WIP' },
     { projectName: 'OTB Report Automation', cscopNo: 'CSCOP-924', type: 'GW3/4/5', end: '2026-06-02', status: 'On Hold' },
+    { projectName: 'CR : Chart Attribute Change', cscopNo: 'CSCOP-938', type: 'TUAT', end: '2026-06-24' },
+    { projectName: 'CR : Chart Attribute Change', cscopNo: 'CSCOP-938', type: 'GW3/4/5', start: '2026-06-25', end: '2026-07-01', status: 'WIP' },
+    { projectName: 'CR : E2P Enhancement', cscopNo: 'CSCOP-810', type: 'TUAT', end: '2026-06-24' },
+    { projectName: 'CR : E2P Enhancement', cscopNo: 'CSCOP-810', type: 'GW3/4/5', start: '2026-06-25', end: '2026-07-01', status: 'WIP' },
+    { projectName: 'Price Portal enhancement: MD pricing Phase2 EC MD', cscopNo: 'CSCOP-971', type: 'TUAT', end: '2026-07-29' },
+    { projectName: 'Price Portal enhancement: MD pricing Phase2 EC MD', cscopNo: 'CSCOP-971', type: 'GW3/4/5', start: '2026-07-30', end: '2026-08-12', status: 'WIP' },
+    { projectName: 'DC to Province Mapping data EDE Publish', cscopNo: 'CSCOP-984', type: 'TUAT', start: '2026-07-01', end: '2026-07-15' },
+    { projectName: 'DC to Province Mapping data EDE Publish', cscopNo: 'CSCOP-984', type: 'GW3/4/5', start: '2026-07-16', end: '2026-07-29', status: 'WIP' },
+    { projectName: 'SSOT : Product Dataset', cscopNo: 'CSCOP-851', type: 'TUAT', end: '2026-07-03' },
+    { projectName: 'SSOT : Product Dataset', cscopNo: 'CSCOP-851', type: 'GW3/4/5', start: '2026-07-06', end: '2026-07-17', status: 'WIP' },
+    { projectName: 'SFS | JD channel', cscopNo: 'CSCOP-956', type: 'GW3/4/5', start: '2026-06-17', end: '2026-06-30', status: 'WIP' },
+    { projectName: 'SFS Enhancement :​ Low ROI Item', cscopNo: 'N/A', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
+    { projectName: 'FY25 CCTV监控视频云备份', cscopNo: 'N/A-CCTV', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
+    { projectName: '[MDM] Timestamp & Dummy Indicator', cscopNo: 'CSCOP-1010', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
+    { projectName: '[MDM] Product Sibling', cscopNo: 'CSCOP-1011', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
+    { projectName: 'Reporting Adoption for 3rd DC R2', cscopNo: 'CSCOP-967', type: 'TUAT', start: '2026-05-01', end: '2026-06-09' },
+    { projectName: 'Reporting Adoption for 3rd DC R2', cscopNo: 'CSCOP-967', type: 'GW3/4/5', start: '2026-06-10', end: '2026-06-23', status: 'WIP' },
+];
+const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
+    'CSCOP-956::SFS | JD channel': {
+        size: '',
+        priority: 'Charley asks close by Jun 30',
+        goLive: '2026-06-08',
+    },
+    'N/A::SFS Enhancement :​ Low ROI Item': {
+        size: '',
+        priority: 'Confirm deliverables by Jun 19; complete GW3/4/5 by Jun 26',
+        goLive: '2026-06-30',
+    },
+    'N/A-CCTV::FY25 CCTV监控视频云备份': {
+        size: '',
+        priority: 'Handover confirmed on Jun 10; sign-off by Jun 26',
+        goLive: '2025-12-12',
+    },
+    'CSCOP-1010::[MDM] Timestamp & Dummy Indicator': {
+        size: '',
+        priority: 'Prepare handover materials this week; GW3/4/5 by Jun 26',
+        goLive: '2026-05-26',
+        note: '06/10 Touchbase with Aki',
+    },
+    'CSCOP-1011::[MDM] Product Sibling': {
+        size: '',
+        priority: 'Prepare handover materials this week; GW3/4/5 by Jun 26',
+        goLive: '2026-05-26',
+        note: '06/10 Touchbase with Aki',
+    },
+};
+const REMOVED_GATEWAY_MARKERS = [
+    { projectName: 'DC to Province Mapping data EDE Publish', cscopNo: 'CSCOP-984', type: 'GW1/2' },
+    { projectName: 'Reporting Adoption for 3rd DC R2', cscopNo: 'CSCOP-967', type: 'GW1/2' },
+];
+const EXTRA_PROJECTS: GatewayProject[] = [
+    {
+        businessDomain: 'Corporate',
+        projectName: 'FY25 CCTV监控视频云备份',
+        cscopNo: 'N/A-CCTV',
+        status: '进行中',
+        contractOps: '',
+        handoverDone: '',
+        taskCount: 0,
+        taskStart: '2025-12-12',
+        taskEnd: '2026-06-26',
+        gatewayCount: 0,
+        hasGateway: false,
+        gatewayMonths: MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
+            acc[month] = [];
+            return acc;
+        }, {}),
+    },
+];
+const CANCELED_PROJECT_NAMES = [
+    'CR : Inventory Efficiency Tool Enhancement',
+    'Demand Factors PBI enhancement',
+    'On order OTP',
 ];
 const isGatewayMarker = (marker: GatewayMarker) => marker.type === 'GW1/2' || marker.type === 'GW3/4/5';
 
@@ -102,6 +179,29 @@ const todayIso = () => isoFromDate(new Date());
 const addDaysIso = (value: string, days: number) => {
     const [year, month, day] = value.split('-').map(Number);
     const date = new Date(year, month - 1, day + days);
+    return isoFromDate(date);
+};
+const isIsoDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);
+const addBusinessDaysInclusive = (value: string, businessDays: number) => {
+    if (!isIsoDate(value) || businessDays <= 1) {
+        return value;
+    }
+
+    const [year, month, day] = value.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    let counted = 0;
+
+    while (counted < businessDays) {
+        const weekDay = date.getDay();
+        if (weekDay !== 0 && weekDay !== 6) {
+            counted += 1;
+        }
+
+        if (counted < businessDays) {
+            date.setDate(date.getDate() + 1);
+        }
+    }
+
     return isoFromDate(date);
 };
 const daysBetween = (start: string, end: string) => {
@@ -131,12 +231,21 @@ const hasValidCscop = (project: GatewayProject) => {
     const value = project.cscopNo.trim().toUpperCase();
     return Boolean(value) && !['N/A', 'NA', 'NONE', 'NULL', '-'].includes(value);
 };
+const shouldShowProject = (project: GatewayProject) => hasValidCscop(project) || project.projectName === 'SFS Enhancement :​ Low ROI Item';
+const isCanceledProject = (project: GatewayProject) => CANCELED_PROJECT_NAMES.some(name => project.projectName === name);
+const defaultProjectInputKey = (project: GatewayProject) => `${project.cscopNo}::${project.projectName}`;
+const projectInput = (project: GatewayProject, meetingInputs: Record<string, ProjectMeetingInput>) => (
+    meetingInputs[projectKey(project)] ?? DEFAULT_PROJECT_INPUTS[defaultProjectInputKey(project)]
+);
 const projectKey = (project: GatewayProject) => `${project.businessDomain}::${project.cscopNo}::${project.projectName}`;
 const gatewayOverrideKey = (project: GatewayProject, markerType: GatewayMarker['type']) => `${projectKey(project)}::${markerType}`;
+const isSameProjectRef = (project: Pick<GatewayProject, 'cscopNo' | 'projectName'>, ref: Pick<DefaultGatewayPatch, 'cscopNo' | 'projectName'>) => (
+    project.cscopNo === ref.cscopNo && project.projectName === ref.projectName
+);
 const confirmedPatchOverrideKeys = () => new Set(
     DEFAULT_GATEWAY_PATCHES
         .map((patch) => {
-            const project = data.projects.find(item => item.cscopNo === patch.cscopNo);
+            const project = [...data.projects, ...EXTRA_PROJECTS].find(item => isSameProjectRef(item, patch));
             return project ? gatewayOverrideKey(project, patch.type) : '';
         })
         .filter(Boolean),
@@ -164,7 +273,7 @@ const loadGatewayDateOverrides = (): Record<string, GatewayDateOverride> => {
     try {
         const raw = window.localStorage.getItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY);
         const overrides = raw ? JSON.parse(raw) as Record<string, GatewayDateOverride> : {};
-        const appliedPatchVersion = window.localStorage.getItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY);
+        const appliedPatchVersion = window.localStorage.getItem(GATEWAY_PATCH_VERSION_STORAGE_KEY);
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
             const patchedKeys = confirmedPatchOverrideKeys();
@@ -191,7 +300,7 @@ const loadGatewayStatuses = (): Record<string, GatewayStatus> => {
     try {
         const raw = window.localStorage.getItem(GATEWAY_STATUS_STORAGE_KEY);
         const statuses = raw ? JSON.parse(raw) as Record<string, GatewayStatus> : {};
-        const appliedPatchVersion = window.localStorage.getItem(GATEWAY_PATCH_VERSION_STORAGE_KEY);
+        const appliedPatchVersion = window.localStorage.getItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY);
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
             const patchedKeys = confirmedPatchOverrideKeys();
@@ -280,8 +389,9 @@ const markerMonth = (marker: GatewayMarker) => {
     return MONTHS[Number(targetDate.slice(5, 7)) - 1] ?? '';
 };
 
-const isPatchForProject = (patch: DefaultGatewayPatch, project: GatewayProject) => (
-    patch.cscopNo === project.cscopNo
+const isPatchForProject = (patch: DefaultGatewayPatch, project: GatewayProject) => isSameProjectRef(project, patch);
+const shouldRemoveMarker = (project: GatewayProject, marker: GatewayMarker) => REMOVED_GATEWAY_MARKERS.some(
+    item => item.cscopNo === project.cscopNo && item.projectName === project.projectName && item.type === marker.type,
 );
 
 const defaultGatewayStatus = (project: GatewayProject, marker: GatewayMarker): GatewayStatus => {
@@ -291,20 +401,35 @@ const defaultGatewayStatus = (project: GatewayProject, marker: GatewayMarker): G
 
 const patchToMarker = (patch: DefaultGatewayPatch): GatewayMarker => ({
     type: patch.type,
-    milestone: patch.type === 'GW1/2' ? 'Gateway Handover 1/2' : 'Gateway Handover 3/4/5',
-    deliverable: `${patch.type} Handover`,
-    start: patch.end,
-    end: patch.end,
+    milestone: patch.type === 'GW1/2'
+        ? 'Gateway Handover 1/2'
+        : patch.type === 'GW3/4/5'
+            ? 'Gateway Handover 3/4/5'
+            : patch.type,
+    deliverable: patch.type === 'GW1/2' || patch.type === 'GW3/4/5' ? `${patch.type} Handover` : patch.type,
+    start: patch.start ?? patch.end,
+    end: patch.type === 'GW3/4/5'
+        ? addBusinessDaysInclusive(patch.start ?? patch.end, 10)
+        : patch.end,
 });
 
 const applyDatePatch = (marker: GatewayMarker, patch?: DefaultGatewayPatch, override?: GatewayDateOverride) => {
-    const patchedMarker = patch
+    const normalizedMarker = marker.type === 'GW3/4/5' && marker.start
         ? {
                 ...marker,
-                start: patch.end,
-                end: patch.end,
+                end: addBusinessDaysInclusive(marker.start, 10),
             }
         : marker;
+
+    const patchedMarker = patch
+        ? {
+                ...normalizedMarker,
+                start: patch.start ?? patch.end,
+                end: patch.type === 'GW3/4/5'
+                    ? addBusinessDaysInclusive(patch.start ?? patch.end, 10)
+                    : patch.end,
+            }
+        : normalizedMarker;
 
     return override
         ? {
@@ -329,12 +454,14 @@ const applyGatewayDateOverrides = (
 
     MONTHS.forEach((month) => {
         (project.gatewayMonths[month] ?? []).forEach((marker) => {
-            const defaultPatch = isGatewayMarker(marker)
-                ? DEFAULT_GATEWAY_PATCHES.find(patch => isPatchForProject(patch, project) && patch.type === marker.type)
-                : undefined;
+            if (shouldRemoveMarker(project, marker)) {
+                return;
+            }
+
+            const defaultPatch = DEFAULT_GATEWAY_PATCHES.find(patch => isPatchForProject(patch, project) && patch.type === marker.type);
             const override = isGatewayMarker(marker) ? overrides[gatewayOverrideKey(project, marker.type)] : undefined;
             const nextMarker = applyDatePatch(marker, defaultPatch, override);
-            const nextMonth = isGatewayMarker(nextMarker) ? (markerMonth(nextMarker) || month) : month;
+            const nextMonth = markerMonth(nextMarker) || month;
             nextProject.gatewayMonths[nextMonth].push(nextMarker);
         });
     });
@@ -362,6 +489,52 @@ const applyGatewayDateOverrides = (
     return nextProject;
 });
 
+const resolveGatewayStatus = (
+    project: GatewayProject,
+    marker: GatewayMarker,
+    statuses: Record<string, GatewayStatus>,
+) => statuses[gatewayOverrideKey(project, marker.type)] ?? defaultGatewayStatus(project, marker);
+
+const matchesHandoverStatusFilter = (
+    project: GatewayProject,
+    marker: GatewayMarker,
+    statuses: Record<string, GatewayStatus>,
+    filter: HandoverStatusFilter,
+) => {
+    if (!isGatewayMarker(marker) || isCanceledProject(project)) {
+        return false;
+    }
+
+    const status = resolveGatewayStatus(project, marker, statuses);
+    if (filter === 'All') {
+        return true;
+    }
+    if (filter === 'Active') {
+        return status !== 'Done' && status !== 'On Hold';
+    }
+    return status === filter;
+};
+
+const projectHasMatchingHandoverInMonth = (
+    project: GatewayProject,
+    month: string,
+    statuses: Record<string, GatewayStatus>,
+    filter: HandoverStatusFilter,
+) => (project.gatewayMonths[month] ?? []).some(marker => matchesHandoverStatusFilter(project, marker, statuses, filter));
+
+const monthDetailMarkers = (
+    project: GatewayProject,
+    month: string,
+    statuses: Record<string, GatewayStatus>,
+    filter: HandoverStatusFilter,
+) => {
+    const nonGatewayMarkers = allNodeMarkers(project).filter(marker => !isGatewayMarker(marker));
+    const monthGatewayMarkers = (project.gatewayMonths[month] ?? [])
+        .filter(marker => matchesHandoverStatusFilter(project, marker, statuses, filter));
+
+    return [...nonGatewayMarkers, ...monthGatewayMarkers];
+};
+
 const exportMarkerHtml = (marker: GatewayMarker, status?: GatewayStatus) => {
     const subLabel = markerSubLabel(marker);
     const dateLabel = markerDateLabel(marker);
@@ -377,16 +550,21 @@ const exportMarkerHtml = (marker: GatewayMarker, status?: GatewayStatus) => {
     `;
 };
 
-const hasMeetingInput = (input?: ProjectMeetingInput) => Boolean(input?.size || input?.priority || input?.goLive);
+const hasMeetingInput = (input?: ProjectMeetingInput) => Boolean(input?.size || input?.priority || input?.goLive || input?.note);
 const sumGatewayCount = (project: GatewayProject) => MONTHS.reduce(
     (sum, month) => sum + (project.gatewayMonths[month] ?? []).filter(isGatewayMarker).length,
     0,
 );
 const allGatewayMarkers = (project: GatewayProject) => MONTHS.flatMap(month => project.gatewayMonths[month] ?? []).filter(isGatewayMarker);
+const allNodeMarkers = (project: GatewayProject) => MONTHS.flatMap(month => project.gatewayMonths[month] ?? []);
 const firstGatewayDue = (project: GatewayProject) => allGatewayMarkers(project)
     .map(marker => marker.end || marker.start)
     .filter(Boolean)
     .sort()[0] ?? '';
+const shouldShowExportUrgency = (project: GatewayProject) => (
+    project.cscopNo === 'CSCOP-939'
+    && project.projectName.includes('Price Portal enhancement: MD pricing Phase 1 Retail MD')
+);
 const normalizedProjectSize = (project: GatewayProject, input?: ProjectMeetingInput) => {
     const rawSize = (input?.size ?? '').trim().toLowerCase();
     if (/小\s*cr|small|几天|s\b|^s$/.test(rawSize)) {
@@ -420,7 +598,7 @@ const projectUrgency = (project: GatewayProject, input?: ProjectMeetingInput) =>
     const goLive = input?.goLive ?? '';
     const due = firstGatewayDue(project);
     const isHighest = project.cscopNo === 'CSCOP-939' || project.projectName.includes('Price Portal enhancement: MD pricing Phase 1 Retail MD');
-    const isCanceled = priority.includes('cancel') || priority.includes('取消') || project.projectName.includes('Canceled');
+    const isCanceled = priority.includes('cancel') || priority.includes('取消') || project.projectName.includes('Canceled') || isCanceledProject(project);
     const isHold = priority.includes('hold');
     const isPending = priority.includes('pending');
     const isDone = priority.includes('done');
@@ -489,8 +667,9 @@ const urgencyBadgeClass = (tone: ReturnType<typeof projectUrgency>['tone']) => (
 export const GatewayCalendarPage: React.FC = () => {
     const [query, setQuery] = useState('');
     const [domain, setDomain] = useState('All');
-    const [show, setShow] = useState<'all' | 'with-gw' | 'missing-gw'>('with-gw');
+    const [show, setShow] = useState<'all' | 'with-gw' | 'missing-gw'>('all');
     const [selectedMonth, setSelectedMonth] = useState('All');
+    const [handoverStatusFilter, setHandoverStatusFilter] = useState<HandoverStatusFilter>('Active');
     const [meetingInputs, setMeetingInputs] = useState<Record<string, ProjectMeetingInput>>(() => loadMeetingInputs());
     const [gatewayDateOverrides, setGatewayDateOverrides] = useState<Record<string, GatewayDateOverride>>(() => loadGatewayDateOverrides());
     const [gatewayStatuses, setGatewayStatuses] = useState<Record<string, GatewayStatus>>(() => loadGatewayStatuses());
@@ -501,13 +680,13 @@ export const GatewayCalendarPage: React.FC = () => {
     const [draftGatewayStatus, setDraftGatewayStatus] = useState<GatewayStatus>('To Do');
 
     const displayProjects = useMemo(
-        () => applyGatewayDateOverrides(data.projects.filter(hasValidCscop), gatewayDateOverrides),
+        () => applyGatewayDateOverrides([...data.projects.filter(shouldShowProject), ...EXTRA_PROJECTS], gatewayDateOverrides),
         [gatewayDateOverrides],
     );
 
     const openMeetingInput = (project: GatewayProject) => {
         setEditingProject(project);
-        setDraftInput(meetingInputs[projectKey(project)] ?? emptyMeetingInput);
+        setDraftInput(projectInput(project, meetingInputs) ?? emptyMeetingInput);
     };
 
     const saveMeetingInput = () => {
@@ -522,6 +701,7 @@ export const GatewayCalendarPage: React.FC = () => {
                 size: draftInput.size.trim(),
                 priority: draftInput.priority.trim(),
                 goLive: draftInput.goLive,
+                note: draftInput.note?.trim(),
             },
         };
         setMeetingInputs(next);
@@ -575,14 +755,14 @@ export const GatewayCalendarPage: React.FC = () => {
                 project.status,
             ].some(value => value.toLowerCase().includes(needle));
             const matchesDomain = domain === 'All' || project.businessDomain === domain;
-            const matchesMonth = selectedMonth === 'All' || project.gatewayMonths[selectedMonth]?.length > 0;
+            const matchesMonth = selectedMonth === 'All' || projectHasMatchingHandoverInMonth(project, selectedMonth, gatewayStatuses, handoverStatusFilter);
             const matchesShow = show === 'all'
                 || (show === 'with-gw' && project.hasGateway)
                 || (show === 'missing-gw' && !project.hasGateway);
 
             return matchesQuery && matchesDomain && matchesMonth && matchesShow;
         });
-    }, [displayProjects, domain, query, selectedMonth, show]);
+    }, [displayProjects, domain, gatewayStatuses, handoverStatusFilter, query, selectedMonth, show]);
 
     const monthFilterCounts = useMemo(() => {
         const needle = query.trim().toLowerCase();
@@ -602,18 +782,18 @@ export const GatewayCalendarPage: React.FC = () => {
         });
 
         return MONTHS.reduce<Record<string, { projects: number; BRD: number; SRE: number; 'GW1/2': number; TUAT: number; 'GW3/4/5': number }>>((acc, month) => {
-            const monthProjects = baseProjects.filter(project => project.gatewayMonths[month]?.some(isGatewayMarker));
+            const monthProjects = baseProjects.filter(project => projectHasMatchingHandoverInMonth(project, month, gatewayStatuses, handoverStatusFilter));
             acc[month] = {
                 projects: monthProjects.length,
                 BRD: monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'BRD').length, 0),
                 SRE: monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'SRE').length, 0),
-                'GW1/2': monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'GW1/2').length, 0),
+                'GW1/2': monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'GW1/2' && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)).length, 0),
                 TUAT: monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'TUAT').length, 0),
-                'GW3/4/5': monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'GW3/4/5').length, 0),
+                'GW3/4/5': monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'GW3/4/5' && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)).length, 0),
             };
             return acc;
         }, {});
-    }, [displayProjects, domain, query, show]);
+    }, [displayProjects, domain, gatewayStatuses, handoverStatusFilter, query, show]);
 
     const selectedMonthProjects = useMemo(() => {
         if (selectedMonth === 'All') {
@@ -621,12 +801,12 @@ export const GatewayCalendarPage: React.FC = () => {
         }
 
         return filteredProjects
-            .filter(project => project.gatewayMonths[selectedMonth]?.length > 0)
+            .filter(project => projectHasMatchingHandoverInMonth(project, selectedMonth, gatewayStatuses, handoverStatusFilter))
             .map(project => ({
                 project,
                 markers: project.gatewayMonths[selectedMonth],
             }));
-    }, [filteredProjects, selectedMonth]);
+    }, [filteredProjects, gatewayStatuses, handoverStatusFilter, selectedMonth]);
 
     const selectedMonthCounts = selectedMonth === 'All'
         ? { projects: 0, BRD: 0, SRE: 0, 'GW1/2': 0, TUAT: 0, 'GW3/4/5': 0 }
@@ -640,8 +820,8 @@ export const GatewayCalendarPage: React.FC = () => {
             acc[month] = exportProjects.reduce((counts, project) => {
                 const markers = project.gatewayMonths[month] ?? [];
                 return {
-                    'GW1/2': counts['GW1/2'] + markers.filter(marker => marker.type === 'GW1/2').length,
-                    'GW3/4/5': counts['GW3/4/5'] + markers.filter(marker => marker.type === 'GW3/4/5').length,
+                    'GW1/2': counts['GW1/2'] + markers.filter(marker => marker.type === 'GW1/2' && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)).length,
+                    'GW3/4/5': counts['GW3/4/5'] + markers.filter(marker => marker.type === 'GW3/4/5' && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)).length,
                 };
             }, { 'GW1/2': 0, 'GW3/4/5': 0 });
             return acc;
@@ -654,7 +834,8 @@ export const GatewayCalendarPage: React.FC = () => {
                 </td>
             </tr>
             ${group.projects.map((project) => {
-                const meetingInput = meetingInputs[projectKey(project)];
+                const meetingInput = projectInput(project, meetingInputs);
+                const exportUrgency = shouldShowExportUrgency(project) ? projectUrgency(project, meetingInput).label : '';
                 return `
                     <tr>
                         <td style="width:150px;height:88px;vertical-align:top;color:#746b62;font-style:italic;padding:10px;border:1px solid #d8d0c5;background-color:#fffdf8;font-size:14px;">
@@ -663,10 +844,11 @@ export const GatewayCalendarPage: React.FC = () => {
                         </td>
                         <td style="width:340px;height:88px;vertical-align:top;color:#17203a;font-weight:700;padding:10px;border:1px solid #d8d0c5;background-color:#fffdf8;font-size:14px;line-height:20px;">
                             ${escapeHtml(project.projectName)}
-                            ${projectUrgency(project, meetingInput).label ? `<div style="margin-top:8px;color:#d31321;font-size:11px;font-weight:700;line-height:16px;">${escapeHtml(projectUrgency(project, meetingInput).label)}</div>` : ''}
+                            ${exportUrgency ? `<div style="margin-top:8px;color:#d31321;font-size:11px;font-weight:700;line-height:16px;">${escapeHtml(exportUrgency)}</div>` : ''}
                             ${hasMeetingInput(meetingInput)
                                 ? `<div style="margin-top:4px;color:#6f665d;font-size:11px;font-weight:600;line-height:16px;">
                                     Size: ${escapeHtml(meetingInput?.size || '-')} / Priority: ${escapeHtml(meetingInput?.priority || '-')} / Go-live: ${escapeHtml(meetingInput?.goLive || '-')}
+                                    ${meetingInput?.note ? `<div>Note: ${escapeHtml(meetingInput.note)}</div>` : ''}
                                 </div>`
                                 : ''}
                         </td>
@@ -744,7 +926,7 @@ export const GatewayCalendarPage: React.FC = () => {
                     <x:ExcelWorkbook>
                         <x:ExcelWorksheets>
                             <x:ExcelWorksheet>
-                                <x:Name>Gateway Calendar</x:Name>
+                                <x:Name>Gateway Handover Calendar</x:Name>
                                 <x:WorksheetOptions>
                                     <x:DisplayGridlines/>
                                     <x:FreezePanes/>
@@ -815,7 +997,7 @@ export const GatewayCalendarPage: React.FC = () => {
                         <div>
                             <div className="mb-4 inline-flex items-center gap-2 border border-white/35 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]">
                                 <CalendarRange size={14} />
-                                Gateway handover calendar
+                                Gateway Handover Calendar
                             </div>
                             <h1 className="text-4xl font-semibold tracking-normal md:text-5xl">
                                 2026 Project Implementation Calendar
@@ -857,6 +1039,19 @@ export const GatewayCalendarPage: React.FC = () => {
                                     {DOMAINS.map(item => <option key={item}>{item}</option>)}
                                 </select>
                                 <Segmented value={show} onChange={setShow} />
+                                <select
+                                    value={handoverStatusFilter}
+                                    onChange={event => setHandoverStatusFilter(event.target.value as HandoverStatusFilter)}
+                                    className="h-10 border border-[#111111] bg-white px-3 text-xs font-bold uppercase tracking-[0.08em] outline-none"
+                                    title="Filter GW1/2 and GW3/4/5 by status"
+                                >
+                                    <option value="Active">Active Handover</option>
+                                    <option value="To Do">To Do</option>
+                                    <option value="WIP">WIP</option>
+                                    <option value="Done">Done</option>
+                                    <option value="On Hold">On Hold</option>
+                                    <option value="All">All Status</option>
+                                </select>
                                 <button
                                     type="button"
                                     onClick={() => setSelectedMonth('All')}
@@ -880,6 +1075,9 @@ export const GatewayCalendarPage: React.FC = () => {
                         <div className="mb-3 flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#5f574e]">
                             <Filter size={15} />
                             Month filter
+                        </div>
+                        <div className="mb-3 text-[11px] font-semibold text-[#7b7166]">
+                            Status: {handoverStatusFilter === 'Active' ? 'Active handover excludes Done / On Hold / Cancelled' : handoverStatusFilter}
                         </div>
                         <div className="grid grid-cols-6 gap-1">
                             {MONTHS.map(month => (
@@ -908,7 +1106,7 @@ export const GatewayCalendarPage: React.FC = () => {
                             <div>
                                 <h2 className="text-lg font-semibold">{selectedMonth} Gateway Project List</h2>
                                 <p className="text-sm text-[#6f665d]">
-                                    {selectedMonthGatewayTotal} GW completions / GW1/2 {selectedMonthCounts['GW1/2']} / GW3/4/5 {selectedMonthCounts['GW3/4/5']} / {selectedMonthCounts.projects} projects with BRD/SRE/GW/TUAT nodes
+                                    {selectedMonthGatewayTotal} handover items / GW1/2 handover {selectedMonthCounts['GW1/2']} / GW3/4/5 handover {selectedMonthCounts['GW3/4/5']} / {selectedMonthCounts.projects} projects
                                 </p>
                             </div>
                             <button
@@ -925,8 +1123,8 @@ export const GatewayCalendarPage: React.FC = () => {
                                     <div className="bg-[#f4aa00] px-5 py-2 text-sm font-bold text-white">{group.domain}</div>
                                     <div className="grid grid-cols-1 divide-y divide-[#eee6dc] xl:grid-cols-2 xl:divide-x xl:divide-y-0">
                                         {group.projects.map((project) => {
-                                            const markers = project.gatewayMonths[selectedMonth] ?? [];
-                                            const meetingInput = meetingInputs[projectKey(project)];
+                                            const markers = monthDetailMarkers(project, selectedMonth, gatewayStatuses, handoverStatusFilter);
+                                            const meetingInput = projectInput(project, meetingInputs);
                                             const urgency = projectUrgency(project, meetingInput);
                                             return (
                                                 <div key={`${project.businessDomain}-${project.projectName}-${project.cscopNo}`} className="p-4">
@@ -940,6 +1138,9 @@ export const GatewayCalendarPage: React.FC = () => {
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Size {meetingInput.size || '-'}</span>
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Priority {meetingInput.priority || '-'}</span>
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Go-live {meetingInput.goLive || '-'}</span>
+                                                                {meetingInput.note && (
+                                                                    <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Note {meetingInput.note}</span>
+                                                                )}
                                                             </>
                                                         )}
                                                         <button
@@ -998,7 +1199,7 @@ export const GatewayCalendarPage: React.FC = () => {
                     <div className="flex items-center justify-between border-b border-[#d8d0c5] bg-[#344154] px-5 py-4 text-white">
                         <div className="flex items-center gap-3">
                             <Table2 size={18} />
-                            <h2 className="text-sm font-bold uppercase tracking-[0.16em]">Gateway Calendar by Domain / Project</h2>
+                            <h2 className="text-sm font-bold uppercase tracking-[0.16em]">Gateway Handover Calendar by Domain / Project</h2>
                         </div>
                         <div className="text-xs font-semibold text-white/75">
                             {filteredProjects.length} visible projects{selectedMonth !== 'All' ? ` / ${selectedMonth}` : ''}
@@ -1036,8 +1237,8 @@ export const GatewayCalendarPage: React.FC = () => {
                                             <GatewayRow
                                                 key={`${project.businessDomain}-${project.projectName}-${project.cscopNo}`}
                                                 project={project}
-                                                meetingInput={meetingInputs[projectKey(project)]}
-                                                urgency={projectUrgency(project, meetingInputs[projectKey(project)])}
+                                                meetingInput={projectInput(project, meetingInputs)}
+                                                urgency={projectUrgency(project, projectInput(project, meetingInputs))}
                                                 onEdit={() => openMeetingInput(project)}
                                                 onEditGateway={openGatewayDateEditor}
                                                 gatewayStatuses={gatewayStatuses}
@@ -1202,8 +1403,8 @@ const groupProjects = (projects: GatewayProject[], meetingInputs: Record<string,
     return Array.from(groups.entries()).map(([domain, items]) => ({
         domain,
         projects: [...items].sort((first, second) => {
-            const firstUrgency = projectUrgency(first, meetingInputs[projectKey(first)]);
-            const secondUrgency = projectUrgency(second, meetingInputs[projectKey(second)]);
+            const firstUrgency = projectUrgency(first, projectInput(first, meetingInputs));
+            const secondUrgency = projectUrgency(second, projectInput(second, meetingInputs));
             if (firstUrgency.score !== secondUrgency.score) {
                 return firstUrgency.score - secondUrgency.score;
             }
@@ -1287,6 +1488,9 @@ const GatewayRow = ({
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Size {meetingInput?.size || '-'}</span>
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Priority {meetingInput?.priority || '-'}</span>
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Go-live {meetingInput?.goLive || '-'}</span>
+                    {meetingInput?.note && (
+                        <span className="border border-[#d8d0c5] px-1.5 py-0.5">Note {meetingInput.note}</span>
+                    )}
                 </div>
             )}
         </td>
