@@ -1113,6 +1113,7 @@ export const GatewayCalendarPage: React.FC = () => {
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Week</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Project Name</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Domain / CSCOP</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Touchbase Date</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Tech Release</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Handover</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Complete Date</th>
@@ -1125,6 +1126,7 @@ export const GatewayCalendarPage: React.FC = () => {
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;">${week.label}<div style="font-weight:600;color:#7b7166;">${escapeHtml(selectedMonth)} ${week.startDay}-${week.endDay}</div></td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#17203a;">${escapeHtml(item.project.projectName)}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;color:#5f574e;">${escapeHtml(item.project.businessDomain)} / ${escapeHtml(item.project.cscopNo)}</td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;color:#5f574e;">${escapeHtml(weeklyProjectInput?.size || '-')}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;color:#5f574e;">${escapeHtml(weeklyProjectInput?.goLive || '-')}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;"><span style="${markerInlineStyle(item.marker.type)}display:inline-block;padding:4px 8px;font-weight:700;">${escapeHtml(item.marker.type)} Handover</span></td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#5f574e;">${escapeHtml(compactDate(item.dueDate))}</td>
