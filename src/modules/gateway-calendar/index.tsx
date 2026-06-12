@@ -351,14 +351,7 @@ const loadGatewayDateOverrides = (): Record<string, GatewayDateOverride> => {
         const appliedPatchVersion = window.localStorage.getItem(GATEWAY_PATCH_VERSION_STORAGE_KEY);
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
-            const patchedKeys = confirmedPatchOverrideKeys();
-            const cleanedOverrides = Object.fromEntries(
-                Object.entries(overrides).filter(([key]) => !patchedKeys.has(key)),
-            ) as Record<string, GatewayDateOverride>;
-
-            window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(cleanedOverrides));
             window.localStorage.setItem(GATEWAY_PATCH_VERSION_STORAGE_KEY, CURRENT_GATEWAY_PATCH_VERSION);
-            return cleanedOverrides;
         }
 
         return overrides;
@@ -378,14 +371,7 @@ const loadGatewayStatuses = (): Record<string, GatewayStatus> => {
         const appliedPatchVersion = window.localStorage.getItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY);
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
-            const patchedKeys = confirmedPatchOverrideKeys();
-            const cleanedStatuses = Object.fromEntries(
-                Object.entries(statuses).filter(([key]) => !patchedKeys.has(key)),
-            ) as Record<string, GatewayStatus>;
-
-            window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(cleanedStatuses));
             window.localStorage.setItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY, CURRENT_GATEWAY_PATCH_VERSION);
-            return cleanedStatuses;
         }
 
         return statuses;
