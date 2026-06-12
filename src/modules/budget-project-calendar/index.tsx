@@ -788,6 +788,30 @@ export const BudgetProjectCalendarPage: React.FC = () => {
         setEditingGateway(null);
     };
 
+    const updateGatewayEndDate = (project: GatewayProject, marker: GatewayMarker, endDate: string) => {
+        const key = gatewayOverrideKey(project, marker.type);
+        const current = gatewayDateOverrides[key] ?? { start: marker.start, end: marker.end };
+        const next = {
+            ...gatewayDateOverrides,
+            [key]: {
+                start: current.start || marker.start,
+                end: endDate,
+            },
+        };
+        setGatewayDateOverrides(next);
+        window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(next));
+    };
+
+    const updateGatewayStatus = (project: GatewayProject, marker: GatewayMarker, status: GatewayStatus) => {
+        const key = gatewayOverrideKey(project, marker.type);
+        const next = {
+            ...gatewayStatuses,
+            [key]: status,
+        };
+        setGatewayStatuses(next);
+        window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(next));
+    };
+
     const filteredProjects = useMemo(() => {
         const needle = query.trim().toLowerCase();
         return displayProjects.filter((project) => {
@@ -965,6 +989,61 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 <div style="font-size:10px;font-weight:600;">GW1/2 ${exportMonthCounts[month]['GW1/2']} / GW3/4/5 ${exportMonthCounts[month]['GW3/4/5']}</div>
             </td>
         `).join('');
+        const weeklyExportHtml = selectedMonth === 'All' ? '' : `
+            <tr>
+                <td colspan="14" style="border:1px solid #d8d0c5;background-color:#fffdf8;padding:14px 18px;">
+                    <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5f574e;">Weekly Filter / Resource Load</div>
+                    <div style="font-size:11px;color:#7b7166;margin-top:4px;">${escapeHtml(selectedMonth)} weekly handover count is based on GW1/2 and GW3/4/5 end date. Weekly capacity: ${weeklyCapacity}</div>
+                    <table style="width:100%;border-collapse:collapse;margin-top:10px;">
+                        <tr>
+                            ${selectedMonthWeekCounts.map(week => `
+                                <td style="width:20%;border:1px solid #d8d0c5;background-color:${
+                                    week.load.tone === 'critical'
+                                        ? '#ffe5e8'
+                                        : week.load.tone === 'full'
+                                            ? '#fff4c7'
+                                            : week.load.tone === 'tight'
+                                                ? '#fff8e2'
+                                                : '#ffffff'
+                                };padding:10px;vertical-align:top;">
+                                    <div style="font-size:14px;font-weight:700;color:#17203a;">${week.label}</div>
+                                    <div style="font-size:11px;font-weight:600;color:#7b7166;">${escapeHtml(selectedMonth)} ${week.startDay}-${week.endDay}</div>
+                                    <div style="font-size:24px;font-weight:700;color:#111111;margin-top:6px;">${week.total}</div>
+                                    <div style="font-size:11px;font-weight:700;color:#5f574e;">GW1/2 ${week.counts['GW1/2']} / GW3/4/5 ${week.counts['GW3/4/5']}</div>
+                                    <div style="font-size:11px;font-weight:700;color:#5f574e;">${week.projects} projects / ${week.load.percent}%</div>
+                                    <div style="display:inline-block;margin-top:6px;border:1px solid #111111;padding:2px 6px;font-size:10px;font-weight:700;">${escapeHtml(week.load.label)}</div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="14" style="border:1px solid #d8d0c5;background-color:#ffffff;padding:14px 18px;">
+                    <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#17203a;">Weekly Handover Project List</div>
+                    <table style="width:100%;border-collapse:collapse;margin-top:10px;">
+                        <tr>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Week</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Project Name</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Domain / CSCOP</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Handover</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Complete Date</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Status</th>
+                        </tr>
+                        ${selectedMonthWeekCounts.flatMap(week => week.items.map(item => `
+                            <tr>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;">${week.label}<div style="font-weight:600;color:#7b7166;">${escapeHtml(selectedMonth)} ${week.startDay}-${week.endDay}</div></td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#17203a;">${escapeHtml(item.project.projectName)}</td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;color:#5f574e;">${escapeHtml(item.project.businessDomain)} / ${escapeHtml(item.project.cscopNo)}</td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;"><span style="${markerInlineStyle(item.marker.type)}display:inline-block;padding:4px 8px;font-weight:700;">${escapeHtml(item.marker.type)} Handover</span></td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#5f574e;">${escapeHtml(compactDate(item.dueDate))}</td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;"><span style="${statusInlineStyle(item.status)}display:inline-block;padding:3px 7px;font-weight:700;">${escapeHtml(item.status)}</span></td>
+                            </tr>
+                        `)).join('')}
+                    </table>
+                </td>
+            </tr>
+        `;
 
         const html = `
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
@@ -1057,6 +1136,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                         </td>
                         ${monthSummaryHtml}
                     </tr>
+                    ${weeklyExportHtml}
                     <tr style="height:48px;background-color:#344154;color:#ffffff;">
                         <th style="width:150px;background-color:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:10px;text-align:left;font-size:12px;font-weight:700;">Business<br/>Domain</th>
                         <th style="width:340px;background-color:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:10px;text-align:left;font-size:12px;font-weight:700;">Project Name</th>
@@ -1309,12 +1389,25 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                                 <div className={`inline-flex w-fit border px-2 py-1 text-[11px] font-bold ${markerClass(item.marker.type)}`}>
                                                     {item.marker.type} Handover
                                                 </div>
-                                                <div className="font-semibold text-[#5f574e]">
-                                                    Complete {compactDate(item.dueDate)}
-                                                </div>
-                                                <div className={`inline-flex w-fit border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] ${statusClass(item.status)}`}>
-                                                    {item.status}
-                                                </div>
+                                                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#5f574e]">
+                                                    Complete
+                                                    <input
+                                                        type="date"
+                                                        value={item.dueDate}
+                                                        onChange={event => updateGatewayEndDate(item.project, item.marker, event.target.value)}
+                                                        className="h-8 border border-[#d8d0c5] bg-white px-2 text-xs font-semibold tracking-normal text-[#111111] outline-none"
+                                                    />
+                                                </label>
+                                                <select
+                                                    value={item.status}
+                                                    onChange={event => updateGatewayStatus(item.project, item.marker, event.target.value as GatewayStatus)}
+                                                    className={`h-8 w-fit border px-2 text-[10px] font-bold uppercase tracking-[0.08em] outline-none ${statusClass(item.status)}`}
+                                                >
+                                                    <option value="To Do">To Do</option>
+                                                    <option value="WIP">WIP</option>
+                                                    <option value="Done">Done</option>
+                                                    <option value="On Hold">On Hold</option>
+                                                </select>
                                             </div>
                                         )) : (
                                             <div className="px-4 py-4 text-sm font-semibold text-[#7b7166]">
