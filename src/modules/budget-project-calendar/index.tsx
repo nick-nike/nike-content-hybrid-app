@@ -81,7 +81,7 @@ const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-date-overrid
 const GATEWAY_STATUS_STORAGE_KEY = 'budget-project-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
-const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v2';
+const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v3';
 const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'Done' },
     { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'Done' },
@@ -108,6 +108,9 @@ const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: '[MDM] Product Sibling', cscopNo: 'CSCOP-1011', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
     { projectName: 'Reporting Adoption for 3rd DC R2', cscopNo: 'CSCOP-967', type: 'TUAT', start: '2026-05-01', end: '2026-06-09' },
     { projectName: 'Reporting Adoption for 3rd DC R2', cscopNo: 'CSCOP-967', type: 'GW3/4/5', start: '2026-06-10', end: '2026-06-23', status: 'WIP' },
+    { projectName: 'MS Notification for After-sale Orders - Share Service Portal Integration', cscopNo: 'N/A-SCU-001', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
+    { projectName: 'Helios Location Channel_Code Integration', cscopNo: 'N/A-SCU-002', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
+    { projectName: 'FOH BOH Engine - Re Open Date Integration', cscopNo: 'N/A-SCU-003', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
 ];
 const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
     'CSCOP-956::SFS | JD channel': {
@@ -137,6 +140,21 @@ const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
         goLive: '2026-05-26',
         note: '06/10 Touchbase with Aki',
     },
+    'N/A-SCU-001::MS Notification for After-sale Orders - Share Service Portal Integration': {
+        size: '',
+        priority: 'Aki to provide handover materials during Jun 18-22',
+        goLive: 'Live',
+    },
+    'N/A-SCU-002::Helios Location Channel_Code Integration': {
+        size: '',
+        priority: 'Aki to provide handover materials during Jun 18-22',
+        goLive: 'Live',
+    },
+    'N/A-SCU-003::FOH BOH Engine - Re Open Date Integration': {
+        size: '',
+        priority: 'Aki to provide handover materials during Jun 18-22',
+        goLive: 'Live',
+    },
 };
 const REMOVED_GATEWAY_MARKERS = [
     { projectName: 'DC to Province Mapping data EDE Publish', cscopNo: 'CSCOP-984', type: 'GW1/2' },
@@ -153,6 +171,57 @@ const EXTRA_PROJECTS: GatewayProject[] = [
         taskCount: 0,
         taskStart: '2025-12-12',
         taskEnd: '2026-06-26',
+        gatewayCount: 0,
+        hasGateway: false,
+        gatewayMonths: MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
+            acc[month] = [];
+            return acc;
+        }, {}),
+    },
+    {
+        businessDomain: 'Supply Chain & Upstreams',
+        projectName: 'MS Notification for After-sale Orders - Share Service Portal Integration',
+        cscopNo: 'N/A-SCU-001',
+        status: '进行中',
+        contractOps: '',
+        handoverDone: '',
+        taskCount: 0,
+        taskStart: '2026-06-18',
+        taskEnd: '2026-07-01',
+        gatewayCount: 0,
+        hasGateway: false,
+        gatewayMonths: MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
+            acc[month] = [];
+            return acc;
+        }, {}),
+    },
+    {
+        businessDomain: 'Supply Chain & Upstreams',
+        projectName: 'Helios Location Channel_Code Integration',
+        cscopNo: 'N/A-SCU-002',
+        status: '进行中',
+        contractOps: '',
+        handoverDone: '',
+        taskCount: 0,
+        taskStart: '2026-06-18',
+        taskEnd: '2026-07-01',
+        gatewayCount: 0,
+        hasGateway: false,
+        gatewayMonths: MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
+            acc[month] = [];
+            return acc;
+        }, {}),
+    },
+    {
+        businessDomain: 'Supply Chain & Upstreams',
+        projectName: 'FOH BOH Engine - Re Open Date Integration',
+        cscopNo: 'N/A-SCU-003',
+        status: '进行中',
+        contractOps: '',
+        handoverDone: '',
+        taskCount: 0,
+        taskStart: '2026-06-18',
+        taskEnd: '2026-07-01',
         gatewayCount: 0,
         hasGateway: false,
         gatewayMonths: MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
@@ -522,6 +591,15 @@ const projectHasMatchingHandoverInMonth = (
     filter: HandoverStatusFilter,
 ) => (project.gatewayMonths[month] ?? []).some(marker => matchesHandoverStatusFilter(project, marker, statuses, filter));
 
+const matchesWeeklyHandoverMarker = (project: GatewayProject, marker: GatewayMarker) => (
+    isGatewayMarker(marker) && !isCanceledProject(project)
+);
+
+const projectHasWeeklyHandoverInMonth = (
+    project: GatewayProject,
+    month: string,
+) => (project.gatewayMonths[month] ?? []).some(marker => matchesWeeklyHandoverMarker(project, marker));
+
 const monthDetailMarkers = (
     project: GatewayProject,
     month: string,
@@ -812,7 +890,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
         window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(next));
     };
 
-    const filteredProjects = useMemo(() => {
+    const baseFilteredProjects = useMemo(() => {
         const needle = query.trim().toLowerCase();
         return displayProjects.filter((project) => {
             const matchesQuery = !needle || [
@@ -827,29 +905,19 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 || (show === 'with-gw' && project.hasGateway)
                 || (show === 'missing-gw' && !project.hasGateway);
 
-            return matchesQuery && matchesDomain && matchesMonth && matchesShow;
-        });
-    }, [displayProjects, domain, gatewayStatuses, handoverStatusFilter, query, selectedMonth, show]);
-
-    const monthFilterCounts = useMemo(() => {
-        const needle = query.trim().toLowerCase();
-        const baseProjects = displayProjects.filter((project) => {
-            const matchesQuery = !needle || [
-                project.businessDomain,
-                project.projectName,
-                project.cscopNo,
-                project.status,
-            ].some(value => value.toLowerCase().includes(needle));
-            const matchesDomain = domain === 'All' || project.businessDomain === domain;
-            const matchesShow = show === 'all'
-                || (show === 'with-gw' && project.hasGateway)
-                || (show === 'missing-gw' && !project.hasGateway);
-
             return matchesQuery && matchesDomain && matchesShow;
         });
+    }, [displayProjects, domain, query, show]);
 
+    const filteredProjects = useMemo(() => baseFilteredProjects.filter((project) => {
+        const matchesMonth = selectedMonth === 'All' || projectHasMatchingHandoverInMonth(project, selectedMonth, gatewayStatuses, handoverStatusFilter);
+
+        return matchesMonth;
+    }), [baseFilteredProjects, gatewayStatuses, handoverStatusFilter, selectedMonth]);
+
+    const monthFilterCounts = useMemo(() => {
         return MONTHS.reduce<Record<string, { projects: number; BRD: number; SRE: number; 'GW1/2': number; TUAT: number; 'GW3/4/5': number }>>((acc, month) => {
-            const monthProjects = baseProjects.filter(project => projectHasMatchingHandoverInMonth(project, month, gatewayStatuses, handoverStatusFilter));
+            const monthProjects = baseFilteredProjects.filter(project => projectHasMatchingHandoverInMonth(project, month, gatewayStatuses, handoverStatusFilter));
             acc[month] = {
                 projects: monthProjects.length,
                 BRD: monthProjects.reduce((sum, project) => sum + project.gatewayMonths[month].filter(marker => marker.type === 'BRD').length, 0),
@@ -860,7 +928,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
             };
             return acc;
         }, {});
-    }, [displayProjects, domain, gatewayStatuses, handoverStatusFilter, query, show]);
+    }, [baseFilteredProjects, gatewayStatuses, handoverStatusFilter]);
 
     const selectedMonthProjects = useMemo(() => {
         if (selectedMonth === 'All') {
@@ -874,6 +942,19 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 markers: project.gatewayMonths[selectedMonth],
             }));
     }, [filteredProjects, gatewayStatuses, handoverStatusFilter, selectedMonth]);
+
+    const selectedMonthWeeklyProjects = useMemo(() => {
+        if (selectedMonth === 'All') {
+            return [];
+        }
+
+        return baseFilteredProjects
+            .filter(project => projectHasWeeklyHandoverInMonth(project, selectedMonth))
+            .map(project => ({
+                project,
+                markers: project.gatewayMonths[selectedMonth],
+            }));
+    }, [baseFilteredProjects, selectedMonth]);
 
     const selectedMonthCounts = selectedMonth === 'All'
         ? { projects: 0, BRD: 0, SRE: 0, 'GW1/2': 0, TUAT: 0, 'GW3/4/5': 0 }
@@ -891,14 +972,14 @@ export const BudgetProjectCalendarPage: React.FC = () => {
         return monthWeekRanges(selectedMonth).map((week) => {
             const weekProjects = new Set<string>();
             const items: Array<{ project: GatewayProject; marker: GatewayMarker; dueDate: string; status: GatewayStatus }> = [];
-            const counts = selectedMonthProjects.reduce((acc, { project }) => {
+            const counts = selectedMonthWeeklyProjects.reduce((acc, { project }) => {
                 (project.gatewayMonths[selectedMonth] ?? []).forEach((marker) => {
                     const day = markerDayInMonth(marker, selectedMonth);
                     if (
                         day !== null
                         && day >= week.startDay
                         && day <= week.endDay
-                        && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)
+                        && matchesWeeklyHandoverMarker(project, marker)
                     ) {
                         acc[marker.type as 'GW1/2' | 'GW3/4/5'] += 1;
                         weekProjects.add(projectKey(project));
@@ -927,7 +1008,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 load: resourceLoad(total, weeklyCapacity),
             };
         });
-    }, [gatewayStatuses, handoverStatusFilter, selectedMonth, selectedMonthProjects, weeklyCapacity]);
+    }, [gatewayStatuses, selectedMonth, selectedMonthWeeklyProjects, weeklyCapacity]);
     const selectedWeek = selectedMonthWeekCounts.find(week => week.label === selectedWeekLabel);
 
     const exportWorkbook = () => {
