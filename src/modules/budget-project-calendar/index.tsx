@@ -1378,7 +1378,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                         {selectedWeek.items.length > 0 ? selectedWeek.items.map(item => (
                                             <div
                                                 key={`${projectKey(item.project)}-${item.marker.type}-${item.dueDate}`}
-                                                className="grid gap-3 px-4 py-3 text-sm md:grid-cols-[minmax(240px,1fr)_120px_140px_90px] md:items-center"
+                                                className="grid gap-3 px-4 py-3 text-sm xl:grid-cols-[minmax(260px,1fr)_130px_260px] xl:items-center"
                                             >
                                                 <div>
                                                     <div className="font-bold text-[#17203a]">{item.project.projectName}</div>
@@ -1389,25 +1389,30 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                                 <div className={`inline-flex w-fit border px-2 py-1 text-[11px] font-bold ${markerClass(item.marker.type)}`}>
                                                     {item.marker.type} Handover
                                                 </div>
-                                                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#5f574e]">
-                                                    Complete
-                                                    <input
-                                                        type="date"
-                                                        value={item.dueDate}
-                                                        onChange={event => updateGatewayEndDate(item.project, item.marker, event.target.value)}
-                                                        className="h-8 border border-[#d8d0c5] bg-white px-2 text-xs font-semibold tracking-normal text-[#111111] outline-none"
-                                                    />
-                                                </label>
-                                                <select
-                                                    value={item.status}
-                                                    onChange={event => updateGatewayStatus(item.project, item.marker, event.target.value as GatewayStatus)}
-                                                    className={`h-8 w-fit border px-2 text-[10px] font-bold uppercase tracking-[0.08em] outline-none ${statusClass(item.status)}`}
-                                                >
-                                                    <option value="To Do">To Do</option>
-                                                    <option value="WIP">WIP</option>
-                                                    <option value="Done">Done</option>
-                                                    <option value="On Hold">On Hold</option>
-                                                </select>
+                                                <div className="flex flex-wrap items-end gap-2">
+                                                    <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#5f574e]">
+                                                        Complete
+                                                        <input
+                                                            type="date"
+                                                            value={item.dueDate}
+                                                            onChange={event => updateGatewayEndDate(item.project, item.marker, event.target.value)}
+                                                            className="h-8 w-[150px] border border-[#d8d0c5] bg-white px-2 text-xs font-semibold tracking-normal text-[#111111] outline-none"
+                                                        />
+                                                    </label>
+                                                    <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#5f574e]">
+                                                        Status
+                                                        <select
+                                                            value={item.status}
+                                                            onChange={event => updateGatewayStatus(item.project, item.marker, event.target.value as GatewayStatus)}
+                                                            className={`h-8 w-[100px] border px-2 text-[10px] font-bold uppercase tracking-[0.08em] outline-none ${statusClass(item.status)}`}
+                                                        >
+                                                            <option value="To Do">To Do</option>
+                                                            <option value="WIP">WIP</option>
+                                                            <option value="Done">Done</option>
+                                                            <option value="On Hold">On Hold</option>
+                                                        </select>
+                                                    </label>
+                                                </div>
                                             </div>
                                         )) : (
                                             <div className="px-4 py-4 text-sm font-semibold text-[#7b7166]">
