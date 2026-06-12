@@ -712,6 +712,7 @@ export const GatewayCalendarPage: React.FC = () => {
     const [selectedMonth, setSelectedMonth] = useState('All');
     const [handoverStatusFilter, setHandoverStatusFilter] = useState<HandoverStatusFilter>('Active');
     const [weeklyCapacity, setWeeklyCapacity] = useState(5);
+    const [selectedWeekLabel, setSelectedWeekLabel] = useState('');
     const [meetingInputs, setMeetingInputs] = useState<Record<string, ProjectMeetingInput>>(() => loadMeetingInputs());
     const [gatewayDateOverrides, setGatewayDateOverrides] = useState<Record<string, GatewayDateOverride>>(() => loadGatewayDateOverrides());
     const [gatewayStatuses, setGatewayStatuses] = useState<Record<string, GatewayStatus>>(() => loadGatewayStatuses());
@@ -854,6 +855,10 @@ export const GatewayCalendarPage: React.FC = () => {
         ? { projects: 0, BRD: 0, SRE: 0, 'GW1/2': 0, TUAT: 0, 'GW3/4/5': 0 }
         : monthFilterCounts[selectedMonth];
     const selectedMonthGatewayTotal = selectedMonthCounts['GW1/2'] + selectedMonthCounts['GW3/4/5'];
+    const chooseMonth = (month: string) => {
+        setSelectedMonth(month);
+        setSelectedWeekLabel('');
+    };
     const selectedMonthWeekCounts = useMemo(() => {
         if (selectedMonth === 'All') {
             return [];
@@ -861,6 +866,7 @@ export const GatewayCalendarPage: React.FC = () => {
 
         return monthWeekRanges(selectedMonth).map((week) => {
             const weekProjects = new Set<string>();
+            const items: Array<{ project: GatewayProject; marker: GatewayMarker; dueDate: string; status: GatewayStatus }> = [];
             const counts = selectedMonthProjects.reduce((acc, { project }) => {
                 (project.gatewayMonths[selectedMonth] ?? []).forEach((marker) => {
                     const day = markerDayInMonth(marker, selectedMonth);
@@ -872,6 +878,12 @@ export const GatewayCalendarPage: React.FC = () => {
                     ) {
                         acc[marker.type as 'GW1/2' | 'GW3/4/5'] += 1;
                         weekProjects.add(projectKey(project));
+                        items.push({
+                            project,
+                            marker,
+                            dueDate: marker.end || marker.start,
+                            status: resolveGatewayStatus(project, marker, gatewayStatuses),
+                        });
                     }
                 });
                 return acc;
@@ -883,10 +895,16 @@ export const GatewayCalendarPage: React.FC = () => {
                 counts,
                 total,
                 projects: weekProjects.size,
+                items: items.sort((first, second) => (
+                    first.dueDate.localeCompare(second.dueDate)
+                    || first.project.businessDomain.localeCompare(second.project.businessDomain)
+                    || first.project.projectName.localeCompare(second.project.projectName)
+                )),
                 load: resourceLoad(total, weeklyCapacity),
             };
         });
     }, [gatewayStatuses, handoverStatusFilter, selectedMonth, selectedMonthProjects, weeklyCapacity]);
+    const selectedWeek = selectedMonthWeekCounts.find(week => week.label === selectedWeekLabel);
 
     const exportWorkbook = () => {
         const exportProjects = displayProjects;
@@ -1129,7 +1147,7 @@ export const GatewayCalendarPage: React.FC = () => {
                                 </select>
                                 <button
                                     type="button"
-                                    onClick={() => setSelectedMonth('All')}
+                                    onClick={() => chooseMonth('All')}
                                     className={`h-10 border border-[#111111] px-3 text-xs font-bold uppercase tracking-[0.08em] ${selectedMonth === 'All' ? 'bg-[#111111] text-white' : 'bg-white text-[#111111]'}`}
                                 >
                                     All Months
@@ -1159,7 +1177,7 @@ export const GatewayCalendarPage: React.FC = () => {
                                 <button
                                     key={month}
                                     type="button"
-                                    onClick={() => setSelectedMonth(month)}
+                                    onClick={() => chooseMonth(month)}
                                     className={`border p-2 text-center transition-colors ${selectedMonth === month ? 'border-[#d31321] bg-[#d31321] text-white' : 'border-[#e5ded5] bg-white text-[#111111] hover:border-[#d31321]'}`}
                                 >
                                     <div className="text-[11px] font-bold">{month}</div>
@@ -1186,7 +1204,7 @@ export const GatewayCalendarPage: React.FC = () => {
                             </div>
                             <button
                                 type="button"
-                                onClick={() => setSelectedMonth('All')}
+                                onClick={() => chooseMonth('All')}
                                 className="h-9 border border-[#111111] px-3 text-xs font-bold uppercase tracking-[0.08em]"
                             >
                                 Clear Month
@@ -1215,9 +1233,13 @@ export const GatewayCalendarPage: React.FC = () => {
                             </div>
                             <div className="grid grid-cols-1 gap-2 md:grid-cols-5">
                                 {selectedMonthWeekCounts.map((week) => (
-                                    <div
+                                    <button
+                                        type="button"
                                         key={week.label}
-                                        className={`border p-3 ${
+                                        onClick={() => setSelectedWeekLabel(selectedWeekLabel === week.label ? '' : week.label)}
+                                        className={`border p-3 text-left transition-shadow ${
+                                            selectedWeekLabel === week.label ? 'ring-2 ring-[#111111] ring-offset-1' : ''
+                                        } ${
                                             week.load.tone === 'critical'
                                                 ? 'border-[#d31321] bg-[#ffe5e8]'
                                                 : week.load.tone === 'full'
@@ -1250,9 +1272,58 @@ export const GatewayCalendarPage: React.FC = () => {
                                         <div className="mt-2 inline-block border border-[#111111] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#111111]">
                                             {week.load.label}
                                         </div>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
+                            {selectedWeek && (
+                                <div className="mt-4 border border-[#d8d0c5] bg-white">
+                                    <div className="flex flex-col gap-2 border-b border-[#eee6dc] px-4 py-3 md:flex-row md:items-center md:justify-between">
+                                        <div>
+                                            <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#17203a]">
+                                                {selectedWeek.label} Handover Project List
+                                            </div>
+                                            <div className="mt-1 text-xs font-semibold text-[#6f665d]">
+                                                {selectedMonth} {selectedWeek.startDay}-{selectedWeek.endDay} / {selectedWeek.total} handover items / GW1/2 {selectedWeek.counts['GW1/2']} / GW3/4/5 {selectedWeek.counts['GW3/4/5']}
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setSelectedWeekLabel('')}
+                                            className="h-8 border border-[#111111] px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#111111]"
+                                        >
+                                            Hide list
+                                        </button>
+                                    </div>
+                                    <div className="divide-y divide-[#eee6dc]">
+                                        {selectedWeek.items.length > 0 ? selectedWeek.items.map(item => (
+                                            <div
+                                                key={`${projectKey(item.project)}-${item.marker.type}-${item.dueDate}`}
+                                                className="grid gap-3 px-4 py-3 text-sm md:grid-cols-[minmax(240px,1fr)_120px_140px_90px] md:items-center"
+                                            >
+                                                <div>
+                                                    <div className="font-bold text-[#17203a]">{item.project.projectName}</div>
+                                                    <div className="mt-1 text-xs font-semibold text-[#7b7166]">
+                                                        {item.project.businessDomain} / {item.project.cscopNo}
+                                                    </div>
+                                                </div>
+                                                <div className={`inline-flex w-fit border px-2 py-1 text-[11px] font-bold ${markerClass(item.marker.type)}`}>
+                                                    {item.marker.type} Handover
+                                                </div>
+                                                <div className="font-semibold text-[#5f574e]">
+                                                    Complete {compactDate(item.dueDate)}
+                                                </div>
+                                                <div className={`inline-flex w-fit border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] ${statusClass(item.status)}`}>
+                                                    {item.status}
+                                                </div>
+                                            </div>
+                                        )) : (
+                                            <div className="px-4 py-4 text-sm font-semibold text-[#7b7166]">
+                                                No handover items in this week.
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className="divide-y divide-[#eee6dc]">
                             {groupProjects(selectedMonthProjects.map(item => item.project), meetingInputs).map(group => (
