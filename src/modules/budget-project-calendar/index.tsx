@@ -1045,7 +1045,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                             ${exportUrgency ? `<div style="margin-top:8px;color:#d31321;font-size:11px;font-weight:700;line-height:16px;">${escapeHtml(exportUrgency)}</div>` : ''}
                             ${hasMeetingInput(meetingInput)
                                 ? `<div style="margin-top:4px;color:#6f665d;font-size:11px;font-weight:600;line-height:16px;">
-                                    Size: ${escapeHtml(meetingInput?.size || '-')} / Priority: ${escapeHtml(meetingInput?.priority || '-')} / Go-live: ${escapeHtml(meetingInput?.goLive || '-')}
+                                    Touchbase Date: ${escapeHtml(meetingInput?.size || '-')} / Priority: ${escapeHtml(meetingInput?.priority || '-')} / Tech Release: ${escapeHtml(meetingInput?.goLive || '-')}
                                     ${meetingInput?.note ? `<div>Note: ${escapeHtml(meetingInput.note)}</div>` : ''}
                                 </div>`
                                 : ''}
@@ -1522,9 +1522,9 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                                         )}
                                                         {hasMeetingInput(meetingInput) && (
                                                             <>
-                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Size {meetingInput.size || '-'}</span>
+                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Touchbase Date {meetingInput.size || '-'}</span>
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Priority {meetingInput.priority || '-'}</span>
-                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Go-live {meetingInput.goLive || '-'}</span>
+                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Tech Release {meetingInput.goLive || '-'}</span>
                                                                 {meetingInput.note && (
                                                                     <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Note {meetingInput.note}</span>
                                                                 )}
@@ -1658,12 +1658,12 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                             </div>
                             <div className="grid gap-4 px-5 py-5">
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
-                                    Size
+                                    Touchbase Date
                                     <input
                                         value={draftInput.size}
                                         onChange={event => setDraftInput({ ...draftInput, size: event.target.value })}
                                         className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
-                                        placeholder="S / M / L / XL"
+                                        placeholder="YYYY-MM-DD / TBD"
                                     />
                                 </label>
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
@@ -1676,12 +1676,12 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                     />
                                 </label>
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
-                                    Go-live
+                                    Tech Release
                                     <input
-                                        type="date"
                                         value={draftInput.goLive}
                                         onChange={event => setDraftInput({ ...draftInput, goLive: event.target.value })}
                                         className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="YYYY-MM-DD / Live / TBD"
                                     />
                                 </label>
                             </div>
@@ -1872,9 +1872,9 @@ const GatewayRow = ({
             )}
             {hasMeetingInput(meetingInput) && (
                 <div className="mt-2 flex flex-wrap gap-1 text-[10px] font-semibold text-[#655f57]">
-                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Size {meetingInput?.size || '-'}</span>
+                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Touchbase Date {meetingInput?.size || '-'}</span>
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Priority {meetingInput?.priority || '-'}</span>
-                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Go-live {meetingInput?.goLive || '-'}</span>
+                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Tech Release {meetingInput?.goLive || '-'}</span>
                     {meetingInput?.note && (
                         <span className="border border-[#d8d0c5] px-1.5 py-0.5">Note {meetingInput.note}</span>
                     )}
