@@ -81,7 +81,7 @@ const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-date-overrid
 const GATEWAY_STATUS_STORAGE_KEY = 'budget-project-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
-const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v3';
+const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v4';
 const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'Done' },
     { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'Done' },
@@ -111,6 +111,7 @@ const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'MS Notification for After-sale Orders - Share Service Portal Integration', cscopNo: 'N/A-SCU-001', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
     { projectName: 'Helios Location Channel_Code Integration', cscopNo: 'N/A-SCU-002', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
     { projectName: 'FOH BOH Engine - Re Open Date Integration', cscopNo: 'N/A-SCU-003', type: 'GW3/4/5', start: '2026-06-18', end: '2026-07-01', status: 'To Do' },
+    { projectName: '3rd DC : Inbound Release', cscopNo: 'CSCOP-965', type: 'GW3/4/5', start: '2026-06-22', end: '2026-07-03', status: 'To Do' },
 ];
 const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
     'CSCOP-956::SFS | JD channel': {
@@ -154,6 +155,11 @@ const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
         size: '',
         priority: 'Aki to provide handover materials during Jun 18-22',
         goLive: 'Live',
+    },
+    'CSCOP-965::3rd DC : Inbound Release': {
+        size: '2026-06-22',
+        priority: '',
+        goLive: '',
     },
 };
 const REMOVED_GATEWAY_MARKERS = [
@@ -1107,20 +1113,25 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Week</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Project Name</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Domain / CSCOP</th>
+                            <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Tech Release</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Handover</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Complete Date</th>
                             <th style="background:#344154;color:#ffffff;border:1px solid #cfc7bd;padding:8px;text-align:left;font-size:11px;">Status</th>
                         </tr>
-                        ${selectedMonthWeekCounts.flatMap(week => week.items.map(item => `
+                        ${selectedMonthWeekCounts.flatMap(week => week.items.map((item) => {
+                            const weeklyProjectInput = projectInput(item.project, meetingInputs);
+                            return `
                             <tr>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;">${week.label}<div style="font-weight:600;color:#7b7166;">${escapeHtml(selectedMonth)} ${week.startDay}-${week.endDay}</div></td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#17203a;">${escapeHtml(item.project.projectName)}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;color:#5f574e;">${escapeHtml(item.project.businessDomain)} / ${escapeHtml(item.project.cscopNo)}</td>
+                                <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;font-weight:700;color:#5f574e;">${escapeHtml(weeklyProjectInput?.goLive || '-')}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;"><span style="${markerInlineStyle(item.marker.type)}display:inline-block;padding:4px 8px;font-weight:700;">${escapeHtml(item.marker.type)} Handover</span></td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:12px;font-weight:700;color:#5f574e;">${escapeHtml(compactDate(item.dueDate))}</td>
                                 <td style="border:1px solid #d8d0c5;padding:8px;font-size:11px;"><span style="${statusInlineStyle(item.status)}display:inline-block;padding:3px 7px;font-weight:700;">${escapeHtml(item.status)}</span></td>
                             </tr>
-                        `)).join('')}
+                        `;
+                        })).join('')}
                     </table>
                 </td>
             </tr>
