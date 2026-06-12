@@ -179,7 +179,7 @@ const EXTRA_PROJECTS: GatewayProject[] = [
         }, {}),
     },
     {
-        businessDomain: 'Supply Chain & Upstreams',
+        businessDomain: 'Supply chain & upstream',
         projectName: 'MS Notification for After-sale Orders - Share Service Portal Integration',
         cscopNo: 'N/A-SCU-001',
         status: '进行中',
@@ -196,7 +196,7 @@ const EXTRA_PROJECTS: GatewayProject[] = [
         }, {}),
     },
     {
-        businessDomain: 'Supply Chain & Upstreams',
+        businessDomain: 'Supply chain & upstream',
         projectName: 'Helios Location Channel_Code Integration',
         cscopNo: 'N/A-SCU-002',
         status: '进行中',
@@ -213,7 +213,7 @@ const EXTRA_PROJECTS: GatewayProject[] = [
         }, {}),
     },
     {
-        businessDomain: 'Supply Chain & Upstreams',
+        businessDomain: 'Supply chain & upstream',
         projectName: 'FOH BOH Engine - Re Open Date Integration',
         cscopNo: 'N/A-SCU-003',
         status: '进行中',
