@@ -535,6 +535,47 @@ const monthDetailMarkers = (
     return [...nonGatewayMarkers, ...monthGatewayMarkers];
 };
 
+const monthNumber = (month: string) => MONTHS.indexOf(month) + 1;
+const monthWeekRanges = (month: string) => {
+    const monthNo = monthNumber(month);
+    const lastDay = new Date(2026, monthNo, 0).getDate();
+    return [
+        { label: 'W1', startDay: 1, endDay: Math.min(7, lastDay) },
+        { label: 'W2', startDay: 8, endDay: Math.min(14, lastDay) },
+        { label: 'W3', startDay: 15, endDay: Math.min(21, lastDay) },
+        { label: 'W4', startDay: 22, endDay: Math.min(28, lastDay) },
+        { label: 'W5', startDay: 29, endDay: lastDay },
+    ].filter(week => week.startDay <= week.endDay);
+};
+
+const markerDayInMonth = (marker: GatewayMarker, month: string) => {
+    const targetDate = marker.end || marker.start;
+    const monthNo = monthNumber(month);
+    if (!targetDate || !targetDate.startsWith(`2026-${String(monthNo).padStart(2, '0')}-`)) {
+        return null;
+    }
+
+    return Number(targetDate.slice(8, 10));
+};
+
+const resourceLoad = (count: number, capacity: number) => {
+    if (capacity <= 0) {
+        return { label: 'Set capacity', tone: 'neutral' as const, percent: 0 };
+    }
+
+    const percent = Math.round((count / capacity) * 100);
+    if (count > capacity) {
+        return { label: 'Over capacity', tone: 'critical' as const, percent };
+    }
+    if (count === capacity) {
+        return { label: 'Full', tone: 'full' as const, percent };
+    }
+    if (percent >= 80) {
+        return { label: 'Tight', tone: 'tight' as const, percent };
+    }
+    return { label: 'Available', tone: 'available' as const, percent };
+};
+
 const exportMarkerHtml = (marker: GatewayMarker, status?: GatewayStatus) => {
     const subLabel = markerSubLabel(marker);
     const dateLabel = markerDateLabel(marker);
@@ -670,6 +711,7 @@ export const GatewayCalendarPage: React.FC = () => {
     const [show, setShow] = useState<'all' | 'with-gw' | 'missing-gw'>('all');
     const [selectedMonth, setSelectedMonth] = useState('All');
     const [handoverStatusFilter, setHandoverStatusFilter] = useState<HandoverStatusFilter>('Active');
+    const [weeklyCapacity, setWeeklyCapacity] = useState(5);
     const [meetingInputs, setMeetingInputs] = useState<Record<string, ProjectMeetingInput>>(() => loadMeetingInputs());
     const [gatewayDateOverrides, setGatewayDateOverrides] = useState<Record<string, GatewayDateOverride>>(() => loadGatewayDateOverrides());
     const [gatewayStatuses, setGatewayStatuses] = useState<Record<string, GatewayStatus>>(() => loadGatewayStatuses());
@@ -812,6 +854,39 @@ export const GatewayCalendarPage: React.FC = () => {
         ? { projects: 0, BRD: 0, SRE: 0, 'GW1/2': 0, TUAT: 0, 'GW3/4/5': 0 }
         : monthFilterCounts[selectedMonth];
     const selectedMonthGatewayTotal = selectedMonthCounts['GW1/2'] + selectedMonthCounts['GW3/4/5'];
+    const selectedMonthWeekCounts = useMemo(() => {
+        if (selectedMonth === 'All') {
+            return [];
+        }
+
+        return monthWeekRanges(selectedMonth).map((week) => {
+            const weekProjects = new Set<string>();
+            const counts = selectedMonthProjects.reduce((acc, { project }) => {
+                (project.gatewayMonths[selectedMonth] ?? []).forEach((marker) => {
+                    const day = markerDayInMonth(marker, selectedMonth);
+                    if (
+                        day !== null
+                        && day >= week.startDay
+                        && day <= week.endDay
+                        && matchesHandoverStatusFilter(project, marker, gatewayStatuses, handoverStatusFilter)
+                    ) {
+                        acc[marker.type as 'GW1/2' | 'GW3/4/5'] += 1;
+                        weekProjects.add(projectKey(project));
+                    }
+                });
+                return acc;
+            }, { 'GW1/2': 0, 'GW3/4/5': 0 });
+            const total = counts['GW1/2'] + counts['GW3/4/5'];
+
+            return {
+                ...week,
+                counts,
+                total,
+                projects: weekProjects.size,
+                load: resourceLoad(total, weeklyCapacity),
+            };
+        });
+    }, [gatewayStatuses, handoverStatusFilter, selectedMonth, selectedMonthProjects, weeklyCapacity]);
 
     const exportWorkbook = () => {
         const exportProjects = displayProjects;
@@ -1116,6 +1191,68 @@ export const GatewayCalendarPage: React.FC = () => {
                             >
                                 Clear Month
                             </button>
+                        </div>
+                        <div className="border-b border-[#d8d0c5] px-5 py-4">
+                            <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#5f574e]">
+                                        Weekly filter / Resource load
+                                    </div>
+                                    <div className="mt-1 text-xs text-[#7b7166]">
+                                        Week count is based on handover due date. W1=1-7, W2=8-14, W3=15-21, W4=22-28, W5=29-end.
+                                    </div>
+                                </div>
+                                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#5f574e]">
+                                    Weekly capacity
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        value={weeklyCapacity}
+                                        onChange={event => setWeeklyCapacity(Math.max(1, Number(event.target.value) || 1))}
+                                        className="h-9 w-20 border border-[#d8d0c5] bg-white px-2 text-center text-sm font-semibold text-[#111111] outline-none"
+                                    />
+                                </label>
+                            </div>
+                            <div className="grid grid-cols-1 gap-2 md:grid-cols-5">
+                                {selectedMonthWeekCounts.map((week) => (
+                                    <div
+                                        key={week.label}
+                                        className={`border p-3 ${
+                                            week.load.tone === 'critical'
+                                                ? 'border-[#d31321] bg-[#ffe5e8]'
+                                                : week.load.tone === 'full'
+                                                    ? 'border-[#b7791f] bg-[#fff4c7]'
+                                                    : week.load.tone === 'tight'
+                                                        ? 'border-[#d8a03a] bg-[#fff8e2]'
+                                                        : 'border-[#d8d0c5] bg-white'
+                                        }`}
+                                    >
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div>
+                                                <div className="text-sm font-bold text-[#17203a]">{week.label}</div>
+                                                <div className="text-[11px] font-semibold text-[#7b7166]">
+                                                    {selectedMonth} {week.startDay}-{week.endDay}
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="text-2xl font-semibold text-[#111111]">{week.total}</div>
+                                                <div className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#6f665d]">
+                                                    {week.load.percent}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 text-[11px] font-semibold text-[#5f574e]">
+                                            GW1/2 {week.counts['GW1/2']} / GW3/4/5 {week.counts['GW3/4/5']}
+                                        </div>
+                                        <div className="mt-1 text-[11px] font-semibold text-[#5f574e]">
+                                            {week.projects} projects
+                                        </div>
+                                        <div className="mt-2 inline-block border border-[#111111] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#111111]">
+                                            {week.load.label}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                         <div className="divide-y divide-[#eee6dc]">
                             {groupProjects(selectedMonthProjects.map(item => item.project), meetingInputs).map(group => (
