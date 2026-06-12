@@ -57,25 +57,6 @@ const Arrow = ({
     marker?: 'arrow' | 'thinArrow';
 }) => <path d={d} stroke="#343434" strokeWidth={marker === 'thinArrow' ? 1.2 : 1.5} fill="none" markerEnd={`url(#${marker})`} />;
 
-const StatusTag = ({ x, y, label, tone = 'blue' }: { x: number; y: number; label: string; tone?: 'gray' | 'blue' | 'green' }) => {
-    const fill = tone === 'green' ? '#dbeec2' : tone === 'gray' ? '#e8e3dc' : '#dce9f8';
-    const stroke = tone === 'green' ? '#8cbf5a' : tone === 'gray' ? '#c8beb4' : '#9cb9d6';
-
-    return (
-        <>
-            <rect x={x} y={y} width={label.length * 7 + 16} height={16} rx={3} fill={fill} stroke={stroke} />
-            <text x={x + 8} y={y + 12} fontSize="10" fontWeight="700" fill="#28313d">{label}</text>
-        </>
-    );
-};
-
-const StatusSourceNote = ({ x, y }: { x: number; y: number }) => (
-    <>
-        <rect x={x} y={y} width={190} height={26} rx={3} fill="#f1f6fb" stroke="#9cb9d6" />
-        <text x={x + 10} y={y + 17} fontSize="11" fontWeight="700" fill="#344154">Status source: Jira Epic status</text>
-    </>
-);
-
 const SwimlaneSvg = () => (
     <svg viewBox="0 0 1260 690" className="block min-w-[1260px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to solution swimlane">
         <defs>
@@ -188,26 +169,19 @@ const CleanFlowSvg = () => (
         <text x="726" y="327" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
         <text x="792" y="327" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="690" y1="360" x2="1370" y2="360" stroke="#d8d0c5" />
-        <StatusSourceNote x={1180} y={314} />
         <Box x={690} y={382} width={140} height={46} title="Jira Task" sub="Bug/Enh details" tone="red" />
-        <StatusTag x={720} y={433} label="STRATEGY" tone="gray" />
-        <Box x={878} y={382} width={140} height={46} title="Gateway" sub="Charley approve" />
-        <StatusTag x={910} y={433} label="STRATEGY" tone="gray" />
-        <Box x={1066} y={382} width={140} height={46} title="Wishlist" sub="delivery backlog" />
-        <StatusTag x={1100} y={433} label="DISCOVERY" />
+        <Box x={858} y={382} width={140} height={46} title="Gateway" sub="Charley approve" />
+        <Box x={1026} y={382} width={140} height={46} title="Create CSCOP" sub="Jenny" />
+        <Box x={1194} y={382} width={140} height={46} title="Wishlist" sub="delivery backlog" />
         <Box x={690} y={470} width={140} height={46} title="Business Confirm" sub="go / no-go" />
-        <StatusTag x={720} y={521} label="DISCOVERY" />
         <Box x={878} y={470} width={140} height={46} title="Create Intake" sub="business owner" />
-        <StatusTag x={914} y={521} label="EXECUTION" />
-        <Box x={1066} y={470} width={140} height={46} title="Create CSCOP" sub="Jenny" />
-        <StatusTag x={1106} y={521} label="EXECUTION" />
-        <Box x={1254} y={470} width={140} height={46} title="Delivery Gateway" sub="business sign-off" />
-        <Arrow d="M830 405 L878 405" marker="thinArrow" />
-        <Arrow d="M1018 405 L1066 405" marker="thinArrow" />
-        <Arrow d="M1136 428 L1136 448 L760 448 L760 470" marker="thinArrow" />
+        <Box x={1066} y={470} width={156} height={46} title="Delivery Gateway" sub="business sign-off" />
+        <Arrow d="M830 405 L858 405" marker="thinArrow" />
+        <Arrow d="M998 405 L1026 405" marker="thinArrow" />
+        <Arrow d="M1166 405 L1194 405" marker="thinArrow" />
+        <Arrow d="M1264 428 L1264 448 L760 448 L760 470" marker="thinArrow" />
         <Arrow d="M830 493 L878 493" marker="thinArrow" />
         <Arrow d="M1018 493 L1066 493" marker="thinArrow" />
-        <Arrow d="M1206 493 L1254 493" marker="thinArrow" />
     </svg>
 );
 
@@ -271,26 +245,19 @@ const TpmoIntakeOwnerSvg = () => (
         <text x="710" y="399" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
         <text x="776" y="399" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="680" y1="428" x2="1370" y2="428" stroke="#d8d0c5" />
-        <StatusSourceNote x={1180} y={382} />
         <Box x={680} y={448} width={142} height={44} title="Jira Task" sub="Bug/Enh details" tone="red" />
-        <StatusTag x={710} y={497} label="STRATEGY" tone="gray" />
-        <Box x={866} y={448} width={142} height={44} title="Gateway" sub="Charley approve" />
-        <StatusTag x={898} y={497} label="STRATEGY" tone="gray" />
-        <Box x={1052} y={448} width={142} height={44} title="Wishlist" sub="delivery backlog" />
-        <StatusTag x={1086} y={497} label="DISCOVERY" />
+        <Box x={856} y={448} width={142} height={44} title="Gateway" sub="Charley approve" />
+        <Box x={1032} y={448} width={142} height={44} title="Create CSCOP" sub="Jenny" />
+        <Box x={1208} y={448} width={142} height={44} title="Wishlist" sub="delivery backlog" />
         <Box x={680} y={528} width={142} height={44} title="Business Confirm" sub="go / no-go" />
-        <StatusTag x={710} y={577} label="DISCOVERY" />
         <Box x={866} y={528} width={142} height={44} title="Create Intake" sub="business owner" />
-        <StatusTag x={902} y={577} label="EXECUTION" />
-        <Box x={1052} y={528} width={142} height={44} title="Create CSCOP" sub="Jenny" />
-        <StatusTag x={1092} y={577} label="EXECUTION" />
-        <Box x={1238} y={528} width={142} height={44} title="Delivery Gateway" sub="business sign-off" />
-        <path d="M822 470 L866 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
-        <path d="M1008 470 L1052 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
-        <path d="M1123 492 L1123 510 L751 510 L751 528" stroke="#343434" strokeWidth="1.5" fill="none" markerEnd="url(#tpmoArrow)" />
+        <Box x={1052} y={528} width={156} height={44} title="Delivery Gateway" sub="business sign-off" />
+        <path d="M822 470 L856 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M998 470 L1032 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1174 470 L1208 470" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
+        <path d="M1279 492 L1279 510 L751 510 L751 528" stroke="#343434" strokeWidth="1.5" fill="none" markerEnd="url(#tpmoArrow)" />
         <path d="M822 550 L866 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
         <path d="M1008 550 L1052 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
-        <path d="M1194 550 L1238 550" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
     </svg>
 );
 
