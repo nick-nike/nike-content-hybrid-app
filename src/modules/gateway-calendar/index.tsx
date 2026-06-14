@@ -662,6 +662,19 @@ const exportMarkerHtml = (marker: GatewayMarker, status?: GatewayStatus) => {
 };
 
 const hasMeetingInput = (input?: ProjectMeetingInput) => Boolean(input?.size || input?.priority || input?.goLive || input?.note);
+const checklistItems = (value?: string) => (value ?? '')
+    .split(/;|\n/)
+    .map(item => item.trim())
+    .filter(Boolean);
+const checklistText = (value?: string) => checklistItems(value).join(' / ');
+const checklistHtml = (value?: string) => {
+    const items = checklistItems(value);
+    if (!items.length) {
+        return '-';
+    }
+
+    return items.map(item => `<div>&bull; ${escapeHtml(item)}</div>`).join('');
+};
 const sumGatewayCount = (project: GatewayProject) => MONTHS.reduce(
     (sum, month) => sum + (project.gatewayMonths[month] ?? []).filter(isGatewayMarker).length,
     0,
@@ -1037,7 +1050,9 @@ export const GatewayCalendarPage: React.FC = () => {
                             ${exportUrgency ? `<div style="margin-top:8px;color:#d31321;font-size:11px;font-weight:700;line-height:16px;">${escapeHtml(exportUrgency)}</div>` : ''}
                             ${hasMeetingInput(meetingInput)
                                 ? `<div style="margin-top:4px;color:#6f665d;font-size:11px;font-weight:600;line-height:16px;">
-                                    Touchbase Date: ${escapeHtml(meetingInput?.size || '-')} / Priority: ${escapeHtml(meetingInput?.priority || '-')} / Tech Release: ${escapeHtml(meetingInput?.goLive || '-')}
+                                    <div>Touchbase Date: ${escapeHtml(meetingInput?.size || '-')} / Tech Release: ${escapeHtml(meetingInput?.goLive || '-')}</div>
+                                    <div>Checklist:</div>
+                                    ${checklistHtml(meetingInput?.priority)}
                                     ${meetingInput?.note ? `<div>Note: ${escapeHtml(meetingInput.note)}</div>` : ''}
                                 </div>`
                                 : ''}
@@ -1522,7 +1537,7 @@ export const GatewayCalendarPage: React.FC = () => {
                                                         {hasMeetingInput(meetingInput) && (
                                                             <>
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Touchbase Date {meetingInput.size || '-'}</span>
-                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Priority {meetingInput.priority || '-'}</span>
+                                                                <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Checklist {checklistText(meetingInput.priority) || '-'}</span>
                                                                 <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Tech Release {meetingInput.goLive || '-'}</span>
                                                                 {meetingInput.note && (
                                                                     <span className="border border-[#d8d0c5] px-2 py-0.5 text-[11px] font-semibold text-[#655f57]">Note {meetingInput.note}</span>
@@ -1666,12 +1681,12 @@ export const GatewayCalendarPage: React.FC = () => {
                                     />
                                 </label>
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
-                                    Priority
-                                    <input
+                                    Checklist
+                                    <textarea
                                         value={draftInput.priority}
                                         onChange={event => setDraftInput({ ...draftInput, priority: event.target.value })}
-                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
-                                        placeholder="P0 / P1 / P2 / P3"
+                                        className="min-h-[96px] border border-[#d8d0c5] bg-white px-3 py-2 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="One item per line, or separate with ;"
                                     />
                                 </label>
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
@@ -1872,7 +1887,7 @@ const GatewayRow = ({
             {hasMeetingInput(meetingInput) && (
                 <div className="mt-2 flex flex-wrap gap-1 text-[10px] font-semibold text-[#655f57]">
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Touchbase Date {meetingInput?.size || '-'}</span>
-                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Priority {meetingInput?.priority || '-'}</span>
+                    <span className="border border-[#d8d0c5] px-1.5 py-0.5">Checklist {checklistText(meetingInput?.priority) || '-'}</span>
                     <span className="border border-[#d8d0c5] px-1.5 py-0.5">Tech Release {meetingInput?.goLive || '-'}</span>
                     {meetingInput?.note && (
                         <span className="border border-[#d8d0c5] px-1.5 py-0.5">Note {meetingInput.note}</span>
