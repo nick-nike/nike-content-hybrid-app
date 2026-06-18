@@ -1,14 +1,14 @@
 {
   "summary": {
     "sourceFile": "C:\\Users\\hanhc\\Desktop\\pm\\项目信息.xlsx",
-    "projectCount": 65,
+    "projectCount": 67,
     "taskCount": 1299,
-    "projectsWithGateway": 55,
+    "projectsWithGateway": 57,
     "projectsWithoutGateway": 10,
     "gatewayReferenceMatched": 60,
     "gatewayReferenceMissing": 5,
     "domainCounts": {
-      "Corporate": 14,
+      "Corporate": 16,
       "Fulfillment": 20,
       "Operation": 8,
       "Product": 15,
@@ -3107,6 +3107,88 @@
     },
     {
       "businessDomain": "Corporate",
+      "projectName": "Dashboard to PPT CR - Chart Attribute Change",
+      "sourceProjectName": "Dashboard to PPT CR - Chart Attribute Change",
+      "cscopNo": "N/A-CORP-CHART-PPT",
+      "sourceCscopNo": "N/A-CORP-CHART-PPT",
+      "status": "进行中",
+      "contractOps": "",
+      "handoverDone": "",
+      "gatewayReferenceMatched": true,
+      "taskCount": 0,
+      "taskStart": "2026-04-16",
+      "taskEnd": "2026-04-22",
+      "gatewayMonths": {
+        "Jan": [],
+        "Feb": [],
+        "Mar": [],
+        "Apr": [
+          {
+            "type": "GW3/4/5",
+            "milestone": "Gateway Handover 3/4/5",
+            "deliverable": "GW3/4/5 Handover",
+            "start": "2026-04-16",
+            "end": "2026-04-22",
+            "basis": "Aligned with China People Data Compliance Project - External Candidate Sensitive Data Collection in Avature GW3/4/5 due date"
+          }
+        ],
+        "May": [],
+        "Jun": [],
+        "Jul": [],
+        "Aug": [],
+        "Sep": [],
+        "Oct": [],
+        "Nov": [],
+        "Dec": []
+      },
+      "tasks": [],
+      "gatewayCount": 1,
+      "nodeCount": 1,
+      "hasGateway": true
+    },
+    {
+      "businessDomain": "Corporate",
+      "projectName": "Product E2P CR",
+      "sourceProjectName": "Product E2P CR",
+      "cscopNo": "N/A-CORP-E2P",
+      "sourceCscopNo": "N/A-CORP-E2P",
+      "status": "进行中",
+      "contractOps": "",
+      "handoverDone": "",
+      "gatewayReferenceMatched": true,
+      "taskCount": 0,
+      "taskStart": "2026-04-16",
+      "taskEnd": "2026-04-22",
+      "gatewayMonths": {
+        "Jan": [],
+        "Feb": [],
+        "Mar": [],
+        "Apr": [
+          {
+            "type": "GW3/4/5",
+            "milestone": "Gateway Handover 3/4/5",
+            "deliverable": "GW3/4/5 Handover",
+            "start": "2026-04-16",
+            "end": "2026-04-22",
+            "basis": "Aligned with China People Data Compliance Project - External Candidate Sensitive Data Collection in Avature GW3/4/5 due date"
+          }
+        ],
+        "May": [],
+        "Jun": [],
+        "Jul": [],
+        "Aug": [],
+        "Sep": [],
+        "Oct": [],
+        "Nov": [],
+        "Dec": []
+      },
+      "tasks": [],
+      "gatewayCount": 1,
+      "nodeCount": 1,
+      "hasGateway": true
+    },
+    {
+      "businessDomain": "Corporate",
       "projectName": "Helios AI",
       "sourceProjectName": "Helios AI",
       "cscopNo": "CSCOP-934",
@@ -5653,7 +5735,7 @@
     },
     {
       "businessDomain": "Fulfillment",
-      "projectName": "SFS Enhancement :​ Low ROI Item",
+      "projectName": "SFS Enhancement :​ Low ROI Item-discovery",
       "sourceProjectName": "SFS Enhancement :​ Low ROI Item",
       "cscopNo": "N/A",
       "sourceCscopNo": "CSCOP-883",

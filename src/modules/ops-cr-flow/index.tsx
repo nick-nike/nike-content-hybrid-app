@@ -88,7 +88,7 @@ const SwimlaneSvg = () => (
         <Box x={508} y={266} width={180} height={58} title="Dependency check" sub="related incidents" />
         <Decision x={598} y={384} label="Solution" />
         <Box x={452} y={560} width={172} height={58} title="ST solution" sub="SCM & Corp Tech Ops" tone="red" />
-        <Box x={660} y={560} width={172} height={58} title="LT Bug/Enhancement" sub="business funded" tone="red" />
+        <Box x={660} y={560} width={172} height={58} title="LT Enhancement" sub="business funded" tone="red" />
 
         <Box x={942} y={384} width={190} height={58} title="Business intake" sub="budget owner" />
         <Box x={942} y={560} width={190} height={58} title="Domain delivery" sub="deliver / handover" />
@@ -161,7 +161,7 @@ const CleanFlowSvg = () => (
         <Arrow d="M386 400 L426 400" marker="thinArrow" />
 
         <rect x="648" y="220" width="760" height="340" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="710" y="254" fontSize="18" fontWeight="700">Long-term: Bug/Enhancement Solution</text>
+        <text x="710" y="254" fontSize="18" fontWeight="700">Long-term: Enhancement Solution</text>
         <rect x="710" y="272" width="420" height="28" fill="#fffdf8" stroke="#e5ded5" />
         <text x="726" y="290" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
         <text x="784" y="290" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
@@ -169,7 +169,7 @@ const CleanFlowSvg = () => (
         <text x="726" y="327" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
         <text x="792" y="327" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="690" y1="360" x2="1370" y2="360" stroke="#d8d0c5" />
-        <Box x={690} y={382} width={140} height={46} title="Jira Task" sub="Bug/Enh details" tone="red" />
+        <Box x={690} y={382} width={140} height={46} title="Jira Task" sub="Enhancement details" tone="red" />
         <Box x={858} y={382} width={140} height={46} title="Gateway" sub="Charley approve" />
         <Box x={1026} y={382} width={140} height={46} title="Create CSCOP" sub="Jenny" />
         <Box x={1194} y={382} width={140} height={46} title="Wishlist" sub="delivery backlog" />
@@ -186,7 +186,7 @@ const CleanFlowSvg = () => (
 );
 
 const TpmoIntakeOwnerSvg = () => (
-    <svg viewBox="0 0 1480 690" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to Bug/Enhancement solution process">
+    <svg viewBox="0 0 1480 690" className="block min-w-[1480px] bg-[#fffdf8]" role="img" aria-label="SCM and Corp Tech Ops incident to Enhancement solution process">
         <defs>
             <marker id="tpmoArrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L7,3 z" fill="#343434" />
@@ -195,7 +195,7 @@ const TpmoIntakeOwnerSvg = () => (
 
         <rect x="0" y="0" width="1480" height="690" fill="#fffdf8" stroke="#d8d0c5" />
         <rect x="0" y="0" width="1480" height="54" fill="#111111" />
-        <text x="740" y="35" textAnchor="middle" fill="#ffffff" fontSize="20" fontWeight="700" letterSpacing="5">SCM &amp; Corp Tech Ops Incident to Bug/Enhancement Solution Process</text>
+        <text x="740" y="35" textAnchor="middle" fill="#ffffff" fontSize="20" fontWeight="700" letterSpacing="5">SCM &amp; Corp Tech Ops Incident to Enhancement Solution Process</text>
 
         <rect x="18" y="74" width="1444" height="588" fill="#fffdf8" stroke="#d8d0c5" />
         <rect x="38" y="86" width="1200" height="20" fill="#f7f0e8" stroke="#d8d0c5" />
@@ -237,7 +237,7 @@ const TpmoIntakeOwnerSvg = () => (
         <path d="M380 477 L424 477" stroke="#343434" strokeWidth="1.5" markerEnd="url(#tpmoArrow)" />
 
         <rect x="646" y="294" width="760" height="316" fill="#ffffff" stroke="#d8d0c5" />
-        <text x="694" y="326" fontSize="18" fontWeight="700">Long-term: Bug/Enhancement Solution</text>
+        <text x="694" y="326" fontSize="18" fontWeight="700">Long-term: Enhancement Solution</text>
         <rect x="694" y="344" width="430" height="28" fill="#fffdf8" stroke="#e5ded5" />
         <text x="710" y="362" fontSize="12" fontWeight="700" fill="#d31321">Driver</text>
         <text x="768" y="362" fontSize="12" fontWeight="700">SCM & Corp Tech Ops</text>
@@ -245,7 +245,7 @@ const TpmoIntakeOwnerSvg = () => (
         <text x="710" y="399" fontSize="12" fontWeight="700" fill="#d31321">Delivery</text>
         <text x="776" y="399" fontSize="11" fontWeight="700">Product / Fulfillment / Corporate / Supply Chain & Upstreams</text>
         <line x1="680" y1="428" x2="1370" y2="428" stroke="#d8d0c5" />
-        <Box x={680} y={448} width={142} height={44} title="Jira Task" sub="Bug/Enh details" tone="red" />
+        <Box x={680} y={448} width={142} height={44} title="Jira Task" sub="Enhancement details" tone="red" />
         <Box x={856} y={448} width={142} height={44} title="Gateway" sub="Charley approve" />
         <Box x={1032} y={448} width={142} height={44} title="Create CSCOP" sub="Jenny" />
         <Box x={1208} y={448} width={142} height={44} title="Wishlist" sub="delivery backlog" />
@@ -267,11 +267,11 @@ export const OpsCrFlowPage: React.FC = () => (
             <div className="mx-auto max-w-[1600px] px-6 py-7 lg:px-10">
                 <div className="inline-flex items-center gap-2 border border-white/35 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]">
                     <Network size={14} />
-                    SCM &amp; Corp Tech Ops Incident to Bug/Enhancement Solution Process
+                    SCM &amp; Corp Tech Ops Incident to Enhancement Solution Process
                 </div>
                 <h1 className="mt-4 text-4xl font-semibold tracking-normal md:text-5xl">Incident to Solution Flow</h1>
                 <p className="mt-4 max-w-5xl text-sm leading-6 text-white/72">
-                    All cases start as incidents. SCM & Corp Tech Ops checks impact and dependency across related incidents. If the solution becomes LT, the Bug/Enhancement is documented in Jira first, approved through Gateway, then handed over to Delivery Domain teams.
+                    All cases start as incidents. SCM & Corp Tech Ops checks impact and dependency across related incidents. If the solution becomes LT, the Enhancement is documented in Jira first, approved through Gateway, then handed over to Delivery Domain teams.
                 </p>
             </div>
         </header>
@@ -283,13 +283,13 @@ export const OpsCrFlowPage: React.FC = () => (
                 </div>
             </Section>
 
-            <Section title="SCM & Corp Tech Ops Incident to Bug/Enhancement Solution Process">
+            <Section title="SCM & Corp Tech Ops Incident to Enhancement Solution Process">
                 <div className="overflow-auto">
                     <CleanFlowSvg />
                 </div>
             </Section>
 
-            <Section title="SCM & Corp Tech Ops Incident to Bug/Enhancement Solution Process">
+            <Section title="SCM & Corp Tech Ops Incident to Enhancement Solution Process">
                 <div className="overflow-auto">
                     <TpmoIntakeOwnerSvg />
                 </div>

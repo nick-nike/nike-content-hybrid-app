@@ -75,6 +75,7 @@ type DefaultGatewayPatch = {
 const data = gatewayCalendar as GatewayData;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const NODE_TYPES = ['BRD', 'SRE', 'GW1/2', 'TUAT', 'GW3/4/5'] as const;
+const isGatewayMarkerType = (type: GatewayMarker['type']) => type === 'GW1/2' || type === 'GW3/4/5';
 const DOMAINS = ['All', ...Object.keys(data.summary.domainCounts)];
 const MEETING_INPUTS_STORAGE_KEY = 'gateway-calendar-meeting-inputs-v1';
 const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'gateway-calendar-date-overrides-v1';
@@ -82,6 +83,14 @@ const GATEWAY_STATUS_STORAGE_KEY = 'gateway-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-status-patch-version';
 const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v4';
+const RENAMED_PROJECT_KEY_MIGRATIONS = [
+    {
+        oldInputKey: 'N/A::SFS Enhancement :​ Low ROI Item',
+        newInputKey: 'N/A::SFS Enhancement :​ Low ROI Item-discovery',
+        oldProjectKey: 'Fulfillment::N/A::SFS Enhancement :​ Low ROI Item',
+        newProjectKey: 'Fulfillment::N/A::SFS Enhancement :​ Low ROI Item-discovery',
+    },
+];
 const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'SFS Store Rollout – 9 Store', cscopNo: 'CSCOP-954', type: 'GW3/4/5', end: '2026-06-12', status: 'Done' },
     { projectName: 'CR : APS Report', cscopNo: 'CSCOP-881', type: 'GW1/2', end: '2026-06-05', status: 'Done' },
@@ -102,7 +111,7 @@ const DEFAULT_GATEWAY_PATCHES: DefaultGatewayPatch[] = [
     { projectName: 'SSOT : Product Dataset', cscopNo: 'CSCOP-851', type: 'TUAT', end: '2026-07-03' },
     { projectName: 'SSOT : Product Dataset', cscopNo: 'CSCOP-851', type: 'GW3/4/5', start: '2026-07-06', end: '2026-07-17', status: 'WIP' },
     { projectName: 'SFS | JD channel', cscopNo: 'CSCOP-956', type: 'GW3/4/5', start: '2026-06-17', end: '2026-06-30', status: 'WIP' },
-    { projectName: 'SFS Enhancement :​ Low ROI Item', cscopNo: 'N/A', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
+    { projectName: 'SFS Enhancement :​ Low ROI Item-discovery', cscopNo: 'N/A', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
     { projectName: 'FY25 CCTV监控视频云备份', cscopNo: 'N/A-CCTV', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
     { projectName: '[MDM] Timestamp & Dummy Indicator', cscopNo: 'CSCOP-1010', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
     { projectName: '[MDM] Product Sibling', cscopNo: 'CSCOP-1011', type: 'GW3/4/5', start: '2026-06-15', end: '2026-06-26', status: 'WIP' },
@@ -119,7 +128,7 @@ const DEFAULT_PROJECT_INPUTS: Record<string, ProjectMeetingInput> = {
         priority: 'Charley asks close by Jun 30',
         goLive: '2026-06-08',
     },
-    'N/A::SFS Enhancement :​ Low ROI Item': {
+    'N/A::SFS Enhancement :​ Low ROI Item-discovery': {
         size: '',
         priority: 'Confirm deliverables by Jun 19; complete GW3/4/5 by Jun 26',
         goLive: '2026-06-30',
@@ -306,7 +315,7 @@ const hasValidCscop = (project: GatewayProject) => {
     const value = project.cscopNo.trim().toUpperCase();
     return Boolean(value) && !['N/A', 'NA', 'NONE', 'NULL', '-'].includes(value);
 };
-const shouldShowProject = (project: GatewayProject) => hasValidCscop(project) || project.projectName === 'SFS Enhancement :​ Low ROI Item';
+const shouldShowProject = (project: GatewayProject) => hasValidCscop(project) || project.projectName === 'SFS Enhancement :​ Low ROI Item-discovery';
 const isCanceledProject = (project: GatewayProject) => CANCELED_PROJECT_NAMES.some(name => project.projectName === name);
 const defaultProjectInputKey = (project: GatewayProject) => `${project.cscopNo}::${project.projectName}`;
 const projectInput = (project: GatewayProject, meetingInputs: Record<string, ProjectMeetingInput>) => (
@@ -334,7 +343,21 @@ const loadMeetingInputs = (): Record<string, ProjectMeetingInput> => {
 
     try {
         const raw = window.localStorage.getItem(MEETING_INPUTS_STORAGE_KEY);
-        return raw ? JSON.parse(raw) as Record<string, ProjectMeetingInput> : {};
+        const inputs = raw ? JSON.parse(raw) as Record<string, ProjectMeetingInput> : {};
+        let changed = false;
+
+        RENAMED_PROJECT_KEY_MIGRATIONS.forEach((migration) => {
+            if (inputs[migration.oldInputKey] && !inputs[migration.newInputKey]) {
+                inputs[migration.newInputKey] = inputs[migration.oldInputKey];
+                changed = true;
+            }
+        });
+
+        if (changed) {
+            window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(inputs));
+        }
+
+        return inputs;
     }
     catch {
         return {};
@@ -348,10 +371,28 @@ const loadGatewayDateOverrides = (): Record<string, GatewayDateOverride> => {
     try {
         const raw = window.localStorage.getItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY);
         const overrides = raw ? JSON.parse(raw) as Record<string, GatewayDateOverride> : {};
+        let changed = false;
         const appliedPatchVersion = window.localStorage.getItem(GATEWAY_PATCH_VERSION_STORAGE_KEY);
+
+        RENAMED_PROJECT_KEY_MIGRATIONS.forEach((migration) => {
+            NODE_TYPES
+                .filter(isGatewayMarkerType)
+                .forEach((type) => {
+                    const oldKey = `${migration.oldProjectKey}::${type}`;
+                    const newKey = `${migration.newProjectKey}::${type}`;
+                    if (overrides[oldKey] && !overrides[newKey]) {
+                        overrides[newKey] = overrides[oldKey];
+                        changed = true;
+                    }
+                });
+        });
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
             window.localStorage.setItem(GATEWAY_PATCH_VERSION_STORAGE_KEY, CURRENT_GATEWAY_PATCH_VERSION);
+        }
+
+        if (changed) {
+            window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(overrides));
         }
 
         return overrides;
@@ -368,10 +409,28 @@ const loadGatewayStatuses = (): Record<string, GatewayStatus> => {
     try {
         const raw = window.localStorage.getItem(GATEWAY_STATUS_STORAGE_KEY);
         const statuses = raw ? JSON.parse(raw) as Record<string, GatewayStatus> : {};
+        let changed = false;
         const appliedPatchVersion = window.localStorage.getItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY);
+
+        RENAMED_PROJECT_KEY_MIGRATIONS.forEach((migration) => {
+            NODE_TYPES
+                .filter(isGatewayMarkerType)
+                .forEach((type) => {
+                    const oldKey = `${migration.oldProjectKey}::${type}`;
+                    const newKey = `${migration.newProjectKey}::${type}`;
+                    if (statuses[oldKey] && !statuses[newKey]) {
+                        statuses[newKey] = statuses[oldKey];
+                        changed = true;
+                    }
+                });
+        });
 
         if (appliedPatchVersion !== CURRENT_GATEWAY_PATCH_VERSION) {
             window.localStorage.setItem(GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY, CURRENT_GATEWAY_PATCH_VERSION);
+        }
+
+        if (changed) {
+            window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(statuses));
         }
 
         return statuses;
