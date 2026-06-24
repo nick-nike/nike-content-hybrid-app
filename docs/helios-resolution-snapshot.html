@@ -7,18 +7,17 @@
     <style>
       :root {
         --ink: #111111;
-        --muted: #6d6258;
-        --line: #ded5cb;
+        --muted: #6b6259;
+        --line: #ded6cc;
         --paper: #fbf8f3;
         --panel: #fffdf9;
         --red: #d31324;
-        --amber: #b36a00;
-        --green: #00875a;
+        --amber: #a56300;
+        --green: #007a4d;
         --blue: #24536b;
-        --soft-blue: #e8f0f4;
-        --soft-green: #e9f4ee;
-        --soft-amber: #fff3d8;
         --soft-red: #fde8ea;
+        --soft-amber: #fff3d8;
+        --soft-green: #e9f4ee;
       }
 
       * {
@@ -27,17 +26,13 @@
 
       body {
         margin: 0;
-        background: #f3efe8;
+        background: #f2eee7;
         color: var(--ink);
-        font-family:
-          Arial,
-          "Microsoft YaHei",
-          "PingFang SC",
-          sans-serif;
+        font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
       }
 
       .page {
-        width: min(1500px, calc(100vw - 32px));
+        width: min(1480px, calc(100vw - 32px));
         margin: 24px auto;
         background: var(--paper);
         border: 1px solid var(--line);
@@ -48,15 +43,13 @@
         background: #111111;
         color: #ffffff;
         padding: 26px 36px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+        text-align: center;
       }
 
       .hero h1 {
         margin: 0;
-        font-size: 28px;
-        line-height: 1.2;
-        text-align: center;
+        font-size: 30px;
+        letter-spacing: 0.14em;
       }
 
       .content {
@@ -65,14 +58,21 @@
 
       .summary {
         display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
+        grid-template-columns: 1.25fr 0.75fr;
         gap: 18px;
         margin-bottom: 22px;
       }
 
-      .message {
+      .message,
+      .metric,
+      .case,
+      .date,
+      .owner {
         border: 1px solid var(--line);
         background: var(--panel);
+      }
+
+      .message {
         padding: 20px 24px;
       }
 
@@ -80,8 +80,8 @@
         margin: 0 0 8px;
         color: var(--blue);
         font-size: 13px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
+        font-weight: 900;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
       }
 
@@ -98,8 +98,6 @@
       }
 
       .metric {
-        border: 1px solid var(--line);
-        background: #ffffff;
         min-height: 112px;
         padding: 18px;
       }
@@ -115,9 +113,8 @@
         margin-top: 10px;
         color: var(--muted);
         font-size: 13px;
-        font-weight: 800;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 0.08em;
       }
 
       .section-title {
@@ -127,7 +124,7 @@
         gap: 16px;
         border-top: 2px solid #111111;
         padding-top: 18px;
-        margin: 20px 0 14px;
+        margin: 18px 0 14px;
       }
 
       .section-title h2 {
@@ -149,21 +146,17 @@
 
       .case {
         display: grid;
-        grid-template-columns: 142px 1fr 190px;
+        grid-template-columns: 140px 1fr 210px;
         gap: 18px;
-        align-items: stretch;
-        border: 1px solid var(--line);
-        background: var(--panel);
         padding: 18px;
       }
 
       .date {
         display: flex;
+        min-height: 130px;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        min-height: 118px;
-        border: 1px solid var(--line);
+        justify-content: center;
         background: #ffffff;
       }
 
@@ -171,7 +164,7 @@
         color: var(--muted);
         font-size: 13px;
         font-weight: 900;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
       }
 
@@ -189,29 +182,24 @@
         font-weight: 800;
       }
 
-      .case-main {
-        min-width: 0;
-      }
-
       .case-top {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        align-items: center;
         margin-bottom: 10px;
       }
 
       .tag {
         display: inline-flex;
-        align-items: center;
         min-height: 26px;
+        align-items: center;
         padding: 4px 9px;
         border: 1px solid var(--line);
         background: #ffffff;
         color: #3e372f;
         font-size: 12px;
         font-weight: 900;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
       }
 
@@ -227,7 +215,8 @@
         color: var(--amber);
       }
 
-      .tag.done {
+      .tag.done,
+      .tag.transfer {
         border-color: var(--green);
         background: var(--soft-green);
         color: var(--green);
@@ -239,9 +228,9 @@
         color: #805800;
       }
 
-      .case h3 {
-        margin: 0 0 10px;
-        font-size: 20px;
+      h3 {
+        margin: 0 0 12px;
+        font-size: 21px;
         line-height: 1.35;
       }
 
@@ -276,21 +265,17 @@
         display: grid;
         align-content: center;
         gap: 10px;
-        border-left: 1px solid var(--line);
-        padding-left: 18px;
-      }
-
-      .owner-item {
-        display: grid;
-        gap: 3px;
+        padding: 14px 18px;
+        background: #ffffff;
       }
 
       .owner-item span {
+        display: block;
+        margin-bottom: 3px;
         color: var(--muted);
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 900;
         letter-spacing: 0.08em;
-        text-transform: uppercase;
       }
 
       .owner-item strong {
@@ -330,13 +315,6 @@
         .case-grid {
           grid-template-columns: 1fr;
         }
-
-        .owner {
-          border-left: 0;
-          border-top: 1px solid var(--line);
-          padding-left: 0;
-          padding-top: 14px;
-        }
       }
     </style>
   </head>
@@ -349,120 +327,38 @@
       <section class="content">
         <div class="summary">
           <div class="message">
-            <p class="eyebrow">重点信息</p>
-            <h2>当前跟进 6 个 Helios 事项，按最新解决/目标时间排序；P1 问题优先在 6 月底前闭环。</h2>
+            <p class="eyebrow">管理目标</p>
+            <h2>目标很明确：尽快解决关键问题，并让 Helios 项目恢复稳定运行。</h2>
           </div>
-          <div class="metrics" aria-label="summary metrics">
+          <div class="metrics">
             <div class="metric">
               <strong>6</strong>
               <span>跟进事项</span>
             </div>
             <div class="metric">
               <strong>3</strong>
-              <span>P1 重点</span>
+              <span>P1 优先</span>
             </div>
             <div class="metric">
-              <strong>1</strong>
-              <span>已完成</span>
+              <strong>2</strong>
+              <span>CR 已转交交付</span>
             </div>
           </div>
         </div>
 
         <div class="section-title">
-          <h2>处理时间线</h2>
-          <p>以截图中的最新完成/目标时间为准</p>
+          <h2>Incident 处理优先级</h2>
+          <p>每条均明确 Short-term / Long-term 方案与 deadline</p>
         </div>
 
         <section class="timeline">
           <article class="case">
             <div class="date">
               <span class="month">Jun</span>
-              <span class="day">05</span>
-              <span class="year">2026</span>
-            </div>
-            <div class="case-main">
-              <div class="case-top">
-                <span class="tag p3">P3</span>
-                <span class="tag progress">In Progress</span>
-                <span class="tag">CR</span>
-                <span class="tag">INC6527073</span>
-              </div>
-              <h3>Helios 1.0 支持 200 单，但 SPC 上传后报销数据量增加</h3>
-              <div class="case-grid">
-                <div class="mini">
-                  <b>影响</b>
-                  <p>无法支持财务 200 单以上批量支付，需要拆分多笔。</p>
-                </div>
-                <div class="mini">
-                  <b>当前处理</b>
-                  <p>已发版并进入测试反馈；批量支付上限仍在验证。</p>
-                </div>
-                <div class="mini">
-                  <b>下一步</b>
-                  <p>确认 gateway service 和上限方案，必要时进入 intake。</p>
-                </div>
-              </div>
-            </div>
-            <aside class="owner">
-              <div class="owner-item">
-                <span>业务</span>
-                <strong>Lei Xu</strong>
-              </div>
-              <div class="owner-item">
-                <span>处理团队</span>
-                <strong>Helios</strong>
-              </div>
-            </aside>
-          </article>
-
-          <article class="case">
-            <div class="date">
-              <span class="month">Jun</span>
-              <span class="day">15</span>
-              <span class="year">2026</span>
-            </div>
-            <div class="case-main">
-              <div class="case-top">
-                <span class="tag p3">P3</span>
-                <span class="tag done">Done</span>
-                <span class="tag">CR</span>
-                <span class="tag">INC6501193</span>
-              </div>
-              <h3>GL DATE 与 Oracle 入账 Period 存在时差</h3>
-              <div class="case-grid">
-                <div class="mini">
-                  <b>影响</b>
-                  <p>最后一天操作时，财务入账 Period 与北美时间不一致。</p>
-                </div>
-                <div class="mini">
-                  <b>短期</b>
-                  <p>财务 review EBS accrual file，确认 EBS 是否已有 journal。</p>
-                </div>
-                <div class="mini">
-                  <b>长期</b>
-                  <p>评估报表记账日期精确到时分秒及 auto check 字段。</p>
-                </div>
-              </div>
-            </div>
-            <aside class="owner">
-              <div class="owner-item">
-                <span>业务</span>
-                <strong>Esther Sun</strong>
-              </div>
-              <div class="owner-item">
-                <span>处理团队</span>
-                <strong>Helios</strong>
-              </div>
-            </aside>
-          </article>
-
-          <article class="case">
-            <div class="date">
-              <span class="month">Jun</span>
               <span class="day">25</span>
               <span class="year">2026</span>
             </div>
-            <div class="case-main">
+            <div>
               <div class="case-top">
                 <span class="tag p1">P1</span>
                 <span class="tag progress">In Progress</span>
@@ -473,15 +369,15 @@
               <div class="case-grid">
                 <div class="mini">
                   <b>影响</b>
-                  <p>User 侧无法找到正确分类，影响发票提交和审批。</p>
+                  <p>User 侧找不到正确分类，影响发票提交和审批。</p>
                 </div>
                 <div class="mini">
-                  <b>已处理</b>
-                  <p>6/24 Helios 已配置税收编码。</p>
+                  <b>Short-term / Deadline</b>
+                  <p>6/24 已配置税收编码；6/25 与业务完成验证。</p>
                 </div>
                 <div class="mini">
-                  <b>下一步</b>
-                  <p>6/25 与业务确认，并评估白名单配置机制。</p>
+                  <b>Long-term / Deadline</b>
+                  <p>梳理税收编码白名单机制；6/25 后进入评估。</p>
                 </div>
               </div>
             </div>
@@ -503,7 +399,7 @@
               <span class="day">26</span>
               <span class="year">2026</span>
             </div>
-            <div class="case-main">
+            <div>
               <div class="case-top">
                 <span class="tag p1">P1</span>
                 <span class="tag progress">In Progress</span>
@@ -517,12 +413,12 @@
                   <p>财务无法提交手工付款单，紧急付款处理受影响。</p>
                 </div>
                 <div class="mini">
-                  <b>已处理</b>
-                  <p>6/3 已对付款公司授权，并完成 ER 单验证。</p>
+                  <b>Short-term / Deadline</b>
+                  <p>6/3 已授权并验证 ER；持续 daily 验证至 6/26。</p>
                 </div>
                 <div class="mini">
-                  <b>下一步</b>
-                  <p>持续验证至 6/26，MDM 与 Helios 共同关注数据质量。</p>
+                  <b>Long-term / Deadline</b>
+                  <p>MDM 与 Helios 联合监控数据质量；6/26 前确认稳定。</p>
                 </div>
               </div>
             </div>
@@ -544,7 +440,7 @@
               <span class="day">30</span>
               <span class="year">2026</span>
             </div>
-            <div class="case-main">
+            <div>
               <div class="case-top">
                 <span class="tag p1">P1</span>
                 <span class="tag progress">In Progress</span>
@@ -555,15 +451,15 @@
               <div class="case-grid">
                 <div class="mini">
                   <b>影响</b>
-                  <p>人员审批线、尤其 Global 审批线受到影响。</p>
+                  <p>人员审批线，尤其 Global 审批线受到影响。</p>
                 </div>
                 <div class="mini">
-                  <b>根本原因</b>
-                  <p>SPC 增强数据逻辑未覆盖反向回传场景。</p>
+                  <b>Short-term / Deadline</b>
+                  <p>6/18 已确认历史数据有效性；继续同步数据。</p>
                 </div>
                 <div class="mini">
-                  <b>下一步</b>
-                  <p>GA 历史数据清理与审批规则优化，目标 6/30 版。</p>
+                  <b>Long-term / Deadline</b>
+                  <p>优化 GA 历史数据与审批规则；目标 6/30 版本。</p>
                 </div>
               </div>
             </div>
@@ -585,7 +481,7 @@
               <span class="day">20</span>
               <span class="year">2026</span>
             </div>
-            <div class="case-main">
+            <div>
               <div class="case-top">
                 <span class="tag p3">P3</span>
                 <span class="tag progress">In Progress</span>
@@ -596,15 +492,15 @@
               <div class="case-grid">
                 <div class="mini">
                   <b>影响</b>
-                  <p>部分发票校验受影响，数据交失败。</p>
+                  <p>部分发票校验受影响，数据提交失败。</p>
                 </div>
                 <div class="mini">
-                  <b>根本原因</b>
-                  <p>当前系统按关键字做管控，关键字匹配逻辑需优化。</p>
+                  <b>Short-term / Deadline</b>
+                  <p>通过关键词排除方式临时处理；目标 6/25 完成业务 review。</p>
                 </div>
                 <div class="mini">
-                  <b>下一步</b>
-                  <p>评估白名单方式，继续与业务确认解决方案。</p>
+                  <b>Long-term / Deadline</b>
+                  <p>优化关键字匹配逻辑；目标 8/20 完成长期方案。</p>
                 </div>
               </div>
             </div>
@@ -619,10 +515,93 @@
               </div>
             </aside>
           </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">05</span>
+              <span class="year">2026</span>
+            </div>
+            <div>
+              <div class="case-top">
+                <span class="tag p3">P3</span>
+                <span class="tag transfer">已转交交付团队</span>
+                <span class="tag">CR</span>
+                <span class="tag">INC6527073</span>
+              </div>
+              <h3>Helios 1.0 支持 200 单，但 SPC 上传后报销数据量增加</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>影响</b>
+                  <p>无法支持财务 200 单以上批量支付，需要拆分多笔。</p>
+                </div>
+                <div class="mini">
+                  <b>Short-term / Deadline</b>
+                  <p>按现有批量拆分方式处理；已进入测试反馈。</p>
+                </div>
+                <div class="mini">
+                  <b>Long-term / Deadline</b>
+                  <p>转交交付团队评估 gateway service 与上限方案；已进入 CR 跟进。</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>业务</span>
+                <strong>Lei Xu</strong>
+              </div>
+              <div class="owner-item">
+                <span>处理团队</span>
+                <strong>Helios / Delivery</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">15</span>
+              <span class="year">2026</span>
+            </div>
+            <div>
+              <div class="case-top">
+                <span class="tag p3">P3</span>
+                <span class="tag done">Done</span>
+                <span class="tag transfer">已转交交付团队</span>
+                <span class="tag">CR</span>
+                <span class="tag">INC6501193</span>
+              </div>
+              <h3>GL DATE 与 Oracle 入账 Period 存在时差</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>影响</b>
+                  <p>最后一天操作时，财务入账 Period 与北美时间不一致。</p>
+                </div>
+                <div class="mini">
+                  <b>Short-term / Deadline</b>
+                  <p>财务 review EBS accrual file；6/15 已完成短期确认。</p>
+                </div>
+                <div class="mini">
+                  <b>Long-term / Deadline</b>
+                  <p>转交交付团队评估记账日期精确度与 auto check 字段。</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>业务</span>
+                <strong>Esther Sun</strong>
+              </div>
+              <div class="owner-item">
+                <span>处理团队</span>
+                <strong>Helios / Delivery</strong>
+              </div>
+            </aside>
+          </article>
         </section>
 
         <p class="footer-note">
-          说明：本页根据截图中的 6 条 Helios 事项整理，保留原始中文信息的核心内容，并以最新可见完成/目标时间作为排序依据。
+          说明：两个 CR 已放在最后，并标识为“已转交交付团队”。本页只保留老板决策需要看的核心信息：影响、Short-term 方案与 deadline、Long-term 方案与 deadline。
         </p>
       </section>
     </main>
