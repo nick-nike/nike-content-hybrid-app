@@ -246,12 +246,45 @@
       }
 
       .mini b {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         margin-bottom: 4px;
         color: var(--blue);
         font-size: 12px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 18px;
+        padding: 2px 6px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: #3e372f;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+      }
+
+      .status-pill.done {
+        border-color: var(--green);
+        background: var(--soft-green);
+        color: var(--green);
+      }
+
+      .status-pill.wip {
+        border-color: #d29a00;
+        background: #fff4c8;
+        color: #805800;
+      }
+
+      .status-pill.todo {
+        border-color: #9ea7b3;
+        background: #eef2f6;
+        color: #405163;
       }
 
       .mini p {
@@ -321,34 +354,34 @@
   <body>
     <main class="page">
       <header class="hero">
-        <h1>SCM & Corp Tech Ops Helios 问题处理进展快照</h1>
+        <h1>SCM & Corp Tech Ops Helios Issue Resolution Snapshot</h1>
       </header>
 
       <section class="content">
         <div class="summary">
           <div class="message">
-            <p class="eyebrow">管理目标</p>
-            <h2>目标很明确：尽快解决关键问题，并让 Helios 项目恢复稳定运行。</h2>
+            <p class="eyebrow">Executive Focus</p>
+            <h2>Resolve critical Helios issues quickly and stabilize business operations.</h2>
           </div>
           <div class="metrics">
             <div class="metric">
               <strong>6</strong>
-              <span>跟进事项</span>
+              <span>Open Items</span>
             </div>
             <div class="metric">
               <strong>3</strong>
-              <span>P1 优先</span>
+              <span>P1 Focus</span>
             </div>
             <div class="metric">
               <strong>2</strong>
-              <span>CR 已转交交付</span>
+              <span>CR To Delivery</span>
             </div>
           </div>
         </div>
 
         <div class="section-title">
-          <h2>Incident 处理优先级</h2>
-          <p>每条均明确 Short-term / Long-term 方案与 deadline</p>
+          <h2>Incident Priority View</h2>
+          <p>Each case includes Short-term / Long-term action, status, and deadline</p>
         </div>
 
         <section class="timeline">
@@ -372,11 +405,11 @@
                   <p>User 侧找不到正确分类，影响发票提交和审批。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill done">DONE</span></b>
                   <p>6/24 已配置税收编码；6/25 与业务完成验证。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill todo">TO DO</span></b>
                   <p>梳理税收编码白名单机制；6/25 后进入评估。</p>
                 </div>
               </div>
@@ -413,11 +446,11 @@
                   <p>财务无法提交手工付款单，紧急付款处理受影响。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>6/3 已授权并验证 ER；持续 daily 验证至 6/26。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>MDM 与 Helios 联合监控数据质量；6/26 前确认稳定。</p>
                 </div>
               </div>
@@ -454,11 +487,11 @@
                   <p>人员审批线，尤其 Global 审批线受到影响。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>6/18 已确认历史数据有效性；继续同步数据。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>优化 GA 历史数据与审批规则；目标 6/30 版本。</p>
                 </div>
               </div>
@@ -495,11 +528,11 @@
                   <p>部分发票校验受影响，数据提交失败。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>通过关键词排除方式临时处理；目标 6/25 完成业务 review。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill todo">TO DO</span></b>
                   <p>优化关键字匹配逻辑；目标 8/20 完成长期方案。</p>
                 </div>
               </div>
@@ -536,11 +569,11 @@
                   <p>无法支持财务 200 单以上批量支付，需要拆分多笔。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>按现有批量拆分方式处理；已进入测试反馈。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>转交交付团队评估 gateway service 与上限方案；已进入 CR 跟进。</p>
                 </div>
               </div>
@@ -578,11 +611,11 @@
                   <p>最后一天操作时，财务入账 Period 与北美时间不一致。</p>
                 </div>
                 <div class="mini">
-                  <b>Short-term / Deadline</b>
+                  <b>Short-term / Deadline <span class="status-pill done">DONE</span></b>
                   <p>财务 review EBS accrual file；6/15 已完成短期确认。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term / Deadline</b>
+                  <b>Long-term / Deadline <span class="status-pill wip">WIP</span></b>
                   <p>转交交付团队评估记账日期精确度与 auto check 字段。</p>
                 </div>
               </div>
