@@ -19,6 +19,7 @@ import { BudgetProjectCalendarPage } from '@/modules/budget-project-calendar';
 import { OpsCrFlowPage } from '@/modules/ops-cr-flow';
 import { WbsBuilderPage } from '@/modules/wbs-builder';
 import { DailySnapshotPage } from '@/modules/daily-snapshot';
+import { GanttBuilderPage } from '@/modules/gantt-builder';
 
 import { Main as DocmentMain } from '../../modules/document';
 import { Main as DocmentListMain } from '../../modules/document-list';
@@ -176,6 +177,9 @@ const AppRoutes: FC = () => {
 
                     {/* Daily Snapshot */}
                     <Route path="daily-snapshot" element={<DailySnapshotPage />} />
+
+                    {/* Gantt Builder */}
+                    <Route path="gantt-builder" element={<GanttBuilderPage />} />
 
                     {/* Interview Knowledge Base */}
                     <Route path="interview-knowledge-base" element={<InterviewKnowledgeBasePage />} />

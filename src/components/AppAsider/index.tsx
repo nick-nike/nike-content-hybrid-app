@@ -92,6 +92,13 @@ const menus: Menu[] = [
         children: [],
     },
     {
+        label: 'Gantt Builder',
+        icon: BarChart3,
+        key: 'gantt-builder',
+        link: '/gantt-builder',
+        children: [],
+    },
+    {
         label: 'Interview KB',
         icon: GraduationCap,
         key: 'interview-knowledge-base',
