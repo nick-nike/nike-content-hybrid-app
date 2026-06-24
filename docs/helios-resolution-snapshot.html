@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Helios Resolution Snapshot</title>
+    <style>
+      :root {
+        --ink: #111111;
+        --muted: #6d6258;
+        --line: #ded5cb;
+        --paper: #fbf8f3;
+        --panel: #fffdf9;
+        --red: #d31324;
+        --amber: #b36a00;
+        --green: #00875a;
+        --blue: #24536b;
+        --soft-blue: #e8f0f4;
+        --soft-green: #e9f4ee;
+        --soft-amber: #fff3d8;
+        --soft-red: #fde8ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f3efe8;
+        color: var(--ink);
+        font-family:
+          Arial,
+          "Microsoft YaHei",
+          "PingFang SC",
+          sans-serif;
+      }
+
+      .page {
+        width: min(1500px, calc(100vw - 32px));
+        margin: 24px auto;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 50px rgba(17, 17, 17, 0.08);
+      }
+
+      .hero {
+        background: #111111;
+        color: #ffffff;
+        padding: 26px 36px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      .content {
+        padding: 30px 36px 36px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .message {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 20px 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .message h2 {
+        margin: 0;
+        font-size: 26px;
+        line-height: 1.35;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        background: #ffffff;
+        min-height: 112px;
+        padding: 18px;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        border-top: 2px solid #111111;
+        padding-top: 18px;
+        margin: 20px 0 14px;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .section-title p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 14px;
+      }
+
+      .case {
+        display: grid;
+        grid-template-columns: 142px 1fr 190px;
+        gap: 18px;
+        align-items: stretch;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .date {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 118px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .date .month {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .date .day {
+        margin-top: 4px;
+        font-size: 46px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .date .year {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .case-main {
+        min-width: 0;
+      }
+
+      .case-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 26px;
+        padding: 4px 9px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: #3e372f;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .tag.p1 {
+        border-color: var(--red);
+        background: var(--soft-red);
+        color: var(--red);
+      }
+
+      .tag.p3 {
+        border-color: var(--amber);
+        background: var(--soft-amber);
+        color: var(--amber);
+      }
+
+      .tag.done {
+        border-color: var(--green);
+        background: var(--soft-green);
+        color: var(--green);
+      }
+
+      .tag.progress {
+        border-color: #d29a00;
+        background: #fff4c8;
+        color: #805800;
+      }
+
+      .case h3 {
+        margin: 0 0 10px;
+        font-size: 20px;
+        line-height: 1.35;
+      }
+
+      .case-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .mini {
+        border-left: 3px solid var(--line);
+        padding-left: 10px;
+      }
+
+      .mini b {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--blue);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .mini p {
+        margin: 0;
+        color: #2b2723;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .owner {
+        display: grid;
+        align-content: center;
+        gap: 10px;
+        border-left: 1px solid var(--line);
+        padding-left: 18px;
+      }
+
+      .owner-item {
+        display: grid;
+        gap: 3px;
+      }
+
+      .owner-item span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .owner-item strong {
+        font-size: 16px;
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        padding: 14px 16px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      @media print {
+        body {
+          background: #ffffff;
+        }
+
+        .page {
+          width: 100%;
+          margin: 0;
+          border: 0;
+          box-shadow: none;
+        }
+
+        .case {
+          break-inside: avoid;
+        }
+      }
+
+      @media (max-width: 980px) {
+        .summary,
+        .case,
+        .case-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .owner {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+          padding-left: 0;
+          padding-top: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <h1>SCM & Corp Tech Ops Helios Resolution Snapshot</h1>
+      </header>
+
+      <section class="content">
+        <div class="summary">
+          <div class="message">
+            <p class="eyebrow">Executive Message</p>
+            <h2>6 Helios items are being tracked by latest target resolution date, with P1 items prioritized through Jun 30.</h2>
+          </div>
+          <div class="metrics" aria-label="summary metrics">
+            <div class="metric">
+              <strong>6</strong>
+              <span>Total items</span>
+            </div>
+            <div class="metric">
+              <strong>3</strong>
+              <span>P1 focus</span>
+            </div>
+            <div class="metric">
+              <strong>1</strong>
+              <span>Done</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h2>Resolution Timeline</h2>
+          <p>Sorted by latest target / completion date from the screenshots</p>
+        </div>
+
+        <section class="timeline">
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">05</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p3">P3</span>
+                <span class="tag progress">In Progress</span>
+                <span class="tag">CR</span>
+                <span class="tag">INC6527073</span>
+              </div>
+              <h3>Helios 1.0 payment batch capacity and SPC upload volume support</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>Finance cannot support payment volume above 200 orders; batch volume needs to be split.</p>
+                </div>
+                <div class="mini">
+                  <b>Current Handling</b>
+                  <p>Helios testing and batch-volume validation are in progress after OOP payment volume review.</p>
+                </div>
+                <div class="mini">
+                  <b>Next Focus</b>
+                  <p>Confirm gateway service / upper-limit handling and align final intake path.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Lei Xu</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">15</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p3">P3</span>
+                <span class="tag done">Done</span>
+                <span class="tag">CR</span>
+                <span class="tag">INC6501193</span>
+              </div>
+              <h3>GL date mismatch between Helios and Oracle posting period</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>Finance posting period differed between Helios and Oracle on final-day operations.</p>
+                </div>
+                <div class="mini">
+                  <b>Closure</b>
+                  <p>Short-term EBS accrual review completed; intake has been created for long-term optimization.</p>
+                </div>
+                <div class="mini">
+                  <b>Long-term Idea</b>
+                  <p>Evaluate date precision and auto-check fields in Helios report logic.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Esther Sun</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">25</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p1">P1</span>
+                <span class="tag progress">In Progress</span>
+                <span class="tag">Incident</span>
+                <span class="tag">INC6567204</span>
+              </div>
+              <h3>Tax billing code whitelist issue blocks transportation reimbursement approval</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>User cannot find the correct category, impacting reimbursement submission and approval.</p>
+                </div>
+                <div class="mini">
+                  <b>Resolved</b>
+                  <p>Helios configured the missing tax billing code on Jun 24.</p>
+                </div>
+                <div class="mini">
+                  <b>Next Focus</b>
+                  <p>Validate with business on Jun 25 and review reimbursement-code whitelist governance.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Esther Sun</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">26</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p1">P1</span>
+                <span class="tag progress">In Progress</span>
+                <span class="tag">Incident</span>
+                <span class="tag">INC6533124</span>
+              </div>
+              <h3>Manual payment request fails due to payment-company mapping issue</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>Finance cannot submit manual payment; repeated errors affect urgent payment handling.</p>
+                </div>
+                <div class="mini">
+                  <b>Resolved</b>
+                  <p>Helios updated payment-company mapping on Jun 3 and validated the ER item.</p>
+                </div>
+                <div class="mini">
+                  <b>Next Focus</b>
+                  <p>Continue daily validation until Jun 26; MDM and Helios monitor data quality together.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Lei Xu</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios / MDM</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Jun</span>
+              <span class="day">30</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p1">P1</span>
+                <span class="tag progress">In Progress</span>
+                <span class="tag">Incident</span>
+                <span class="tag">INC6501193</span>
+              </div>
+              <h3>GA personnel data synchronization exception impacts approval flow and Global approver route</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>Personnel approval flow is impacted due to abnormal data synchronization.</p>
+                </div>
+                <div class="mini">
+                  <b>Root Cause</b>
+                  <p>SPC enhancement data logic gap: approval solution logic was not fully aligned with reverse feedback.</p>
+                </div>
+                <div class="mini">
+                  <b>Next Focus</b>
+                  <p>P2 GA history data cleanup and rule optimization are being followed up toward Jun 30.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Nana Wu</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios</strong>
+              </div>
+            </aside>
+          </article>
+
+          <article class="case">
+            <div class="date">
+              <span class="month">Aug</span>
+              <span class="day">20</span>
+              <span class="year">2026</span>
+            </div>
+            <div class="case-main">
+              <div class="case-top">
+                <span class="tag p3">P3</span>
+                <span class="tag progress">In Progress</span>
+                <span class="tag">Incident</span>
+                <span class="tag">INC6576306</span>
+              </div>
+              <h3>Spam typo in expense submission flow impacts partial invoice verification</h3>
+              <div class="case-grid">
+                <div class="mini">
+                  <b>Impact</b>
+                  <p>Invoice verification may be blocked when the expense flow contains the typo route.</p>
+                </div>
+                <div class="mini">
+                  <b>Root Cause</b>
+                  <p>Current system uses keyword-based control; business keyword logic needs optimization.</p>
+                </div>
+                <div class="mini">
+                  <b>Next Focus</b>
+                  <p>Whitelist approach is under review; Helios and business continue solution alignment.</p>
+                </div>
+              </div>
+            </div>
+            <aside class="owner">
+              <div class="owner-item">
+                <span>Business Owner</span>
+                <strong>Rebecca Wu</strong>
+              </div>
+              <div class="owner-item">
+                <span>Handling Team</span>
+                <strong>Helios</strong>
+              </div>
+            </aside>
+          </article>
+        </section>
+
+        <p class="footer-note">
+          Note: The source screenshots include 6 case rows across 5 attached images. This HTML keeps the wording concise for executive review and uses the latest visible target / completion date as the timeline anchor.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
