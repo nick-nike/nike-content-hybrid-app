@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Helios Resolution Snapshot</title>
+    <title>Helios 问题处理进展快照</title>
     <style>
       :root {
         --ink: #111111;
@@ -343,34 +343,34 @@
   <body>
     <main class="page">
       <header class="hero">
-        <h1>SCM & Corp Tech Ops Helios Resolution Snapshot</h1>
+        <h1>SCM & Corp Tech Ops Helios 问题处理进展快照</h1>
       </header>
 
       <section class="content">
         <div class="summary">
           <div class="message">
-            <p class="eyebrow">Executive Message</p>
-            <h2>6 Helios items are being tracked by latest target resolution date, with P1 items prioritized through Jun 30.</h2>
+            <p class="eyebrow">重点信息</p>
+            <h2>当前跟进 6 个 Helios 事项，按最新解决/目标时间排序；P1 问题优先在 6 月底前闭环。</h2>
           </div>
           <div class="metrics" aria-label="summary metrics">
             <div class="metric">
               <strong>6</strong>
-              <span>Total items</span>
+              <span>跟进事项</span>
             </div>
             <div class="metric">
               <strong>3</strong>
-              <span>P1 focus</span>
+              <span>P1 重点</span>
             </div>
             <div class="metric">
               <strong>1</strong>
-              <span>Done</span>
+              <span>已完成</span>
             </div>
           </div>
         </div>
 
         <div class="section-title">
-          <h2>Resolution Timeline</h2>
-          <p>Sorted by latest target / completion date from the screenshots</p>
+          <h2>处理时间线</h2>
+          <p>以截图中的最新完成/目标时间为准</p>
         </div>
 
         <section class="timeline">
@@ -387,29 +387,29 @@
                 <span class="tag">CR</span>
                 <span class="tag">INC6527073</span>
               </div>
-              <h3>Helios 1.0 payment batch capacity and SPC upload volume support</h3>
+              <h3>Helios 1.0 支持 200 单，但 SPC 上传后报销数据量增加</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>Finance cannot support payment volume above 200 orders; batch volume needs to be split.</p>
+                  <b>影响</b>
+                  <p>无法支持财务 200 单以上批量支付，需要拆分多笔。</p>
                 </div>
                 <div class="mini">
-                  <b>Current Handling</b>
-                  <p>Helios testing and batch-volume validation are in progress after OOP payment volume review.</p>
+                  <b>当前处理</b>
+                  <p>已发版并进入测试反馈；批量支付上限仍在验证。</p>
                 </div>
                 <div class="mini">
-                  <b>Next Focus</b>
-                  <p>Confirm gateway service / upper-limit handling and align final intake path.</p>
+                  <b>下一步</b>
+                  <p>确认 gateway service 和上限方案，必要时进入 intake。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Lei Xu</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios</strong>
               </div>
             </aside>
@@ -428,29 +428,29 @@
                 <span class="tag">CR</span>
                 <span class="tag">INC6501193</span>
               </div>
-              <h3>GL date mismatch between Helios and Oracle posting period</h3>
+              <h3>GL DATE 与 Oracle 入账 Period 存在时差</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>Finance posting period differed between Helios and Oracle on final-day operations.</p>
+                  <b>影响</b>
+                  <p>最后一天操作时，财务入账 Period 与北美时间不一致。</p>
                 </div>
                 <div class="mini">
-                  <b>Closure</b>
-                  <p>Short-term EBS accrual review completed; intake has been created for long-term optimization.</p>
+                  <b>短期</b>
+                  <p>财务 review EBS accrual file，确认 EBS 是否已有 journal。</p>
                 </div>
                 <div class="mini">
-                  <b>Long-term Idea</b>
-                  <p>Evaluate date precision and auto-check fields in Helios report logic.</p>
+                  <b>长期</b>
+                  <p>评估报表记账日期精确到时分秒及 auto check 字段。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Esther Sun</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios</strong>
               </div>
             </aside>
@@ -469,29 +469,29 @@
                 <span class="tag">Incident</span>
                 <span class="tag">INC6567204</span>
               </div>
-              <h3>Tax billing code whitelist issue blocks transportation reimbursement approval</h3>
+              <h3>税收编码不在白名单，影响交通费用审批</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>User cannot find the correct category, impacting reimbursement submission and approval.</p>
+                  <b>影响</b>
+                  <p>User 侧无法找到正确分类，影响发票提交和审批。</p>
                 </div>
                 <div class="mini">
-                  <b>Resolved</b>
-                  <p>Helios configured the missing tax billing code on Jun 24.</p>
+                  <b>已处理</b>
+                  <p>6/24 Helios 已配置税收编码。</p>
                 </div>
                 <div class="mini">
-                  <b>Next Focus</b>
-                  <p>Validate with business on Jun 25 and review reimbursement-code whitelist governance.</p>
+                  <b>下一步</b>
+                  <p>6/25 与业务确认，并评估白名单配置机制。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Esther Sun</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios</strong>
               </div>
             </aside>
@@ -510,29 +510,29 @@
                 <span class="tag">Incident</span>
                 <span class="tag">INC6533124</span>
               </div>
-              <h3>Manual payment request fails due to payment-company mapping issue</h3>
+              <h3>手工付款单提交失败，付款公司与员工公司不匹配</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>Finance cannot submit manual payment; repeated errors affect urgent payment handling.</p>
+                  <b>影响</b>
+                  <p>财务无法提交手工付款单，紧急付款处理受影响。</p>
                 </div>
                 <div class="mini">
-                  <b>Resolved</b>
-                  <p>Helios updated payment-company mapping on Jun 3 and validated the ER item.</p>
+                  <b>已处理</b>
+                  <p>6/3 已对付款公司授权，并完成 ER 单验证。</p>
                 </div>
                 <div class="mini">
-                  <b>Next Focus</b>
-                  <p>Continue daily validation until Jun 26; MDM and Helios monitor data quality together.</p>
+                  <b>下一步</b>
+                  <p>持续验证至 6/26，MDM 与 Helios 共同关注数据质量。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Lei Xu</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios / MDM</strong>
               </div>
             </aside>
@@ -551,29 +551,29 @@
                 <span class="tag">Incident</span>
                 <span class="tag">INC6501193</span>
               </div>
-              <h3>GA personnel data synchronization exception impacts approval flow and Global approver route</h3>
+              <h3>GA 人员数据同步异常，影响审批线和 Global 审批线</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>Personnel approval flow is impacted due to abnormal data synchronization.</p>
+                  <b>影响</b>
+                  <p>人员审批线、尤其 Global 审批线受到影响。</p>
                 </div>
                 <div class="mini">
-                  <b>Root Cause</b>
-                  <p>SPC enhancement data logic gap: approval solution logic was not fully aligned with reverse feedback.</p>
+                  <b>根本原因</b>
+                  <p>SPC 增强数据逻辑未覆盖反向回传场景。</p>
                 </div>
                 <div class="mini">
-                  <b>Next Focus</b>
-                  <p>P2 GA history data cleanup and rule optimization are being followed up toward Jun 30.</p>
+                  <b>下一步</b>
+                  <p>GA 历史数据清理与审批规则优化，目标 6/30 版。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Nana Wu</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios</strong>
               </div>
             </aside>
@@ -592,29 +592,29 @@
                 <span class="tag">Incident</span>
                 <span class="tag">INC6576306</span>
               </div>
-              <h3>Spam typo in expense submission flow impacts partial invoice verification</h3>
+              <h3>费用提交中 “SPAM” 系统误识别为 “SPA”</h3>
               <div class="case-grid">
                 <div class="mini">
-                  <b>Impact</b>
-                  <p>Invoice verification may be blocked when the expense flow contains the typo route.</p>
+                  <b>影响</b>
+                  <p>部分发票校验受影响，数据交失败。</p>
                 </div>
                 <div class="mini">
-                  <b>Root Cause</b>
-                  <p>Current system uses keyword-based control; business keyword logic needs optimization.</p>
+                  <b>根本原因</b>
+                  <p>当前系统按关键字做管控，关键字匹配逻辑需优化。</p>
                 </div>
                 <div class="mini">
-                  <b>Next Focus</b>
-                  <p>Whitelist approach is under review; Helios and business continue solution alignment.</p>
+                  <b>下一步</b>
+                  <p>评估白名单方式，继续与业务确认解决方案。</p>
                 </div>
               </div>
             </div>
             <aside class="owner">
               <div class="owner-item">
-                <span>Business Owner</span>
+                <span>业务</span>
                 <strong>Rebecca Wu</strong>
               </div>
               <div class="owner-item">
-                <span>Handling Team</span>
+                <span>处理团队</span>
                 <strong>Helios</strong>
               </div>
             </aside>
@@ -622,7 +622,7 @@
         </section>
 
         <p class="footer-note">
-          Note: The source screenshots include 6 case rows across 5 attached images. This HTML keeps the wording concise for executive review and uses the latest visible target / completion date as the timeline anchor.
+          说明：本页根据截图中的 6 条 Helios 事项整理，保留原始中文信息的核心内容，并以最新可见完成/目标时间作为排序依据。
         </p>
       </section>
     </main>
