@@ -146,13 +146,13 @@
 
       .case {
         display: grid;
-        grid-template-columns: 140px 1fr 210px;
+        grid-template-columns: 1fr 210px;
         gap: 18px;
         padding: 18px;
       }
 
       .date {
-        display: flex;
+        display: none;
         min-height: 130px;
         flex-direction: column;
         align-items: center;
@@ -381,7 +381,7 @@
 
         <div class="section-title">
           <h2>Incident Priority View</h2>
-          <p>Each case includes Short-term / Long-term action, status, and deadline</p>
+          <p>Each case shows deadline inside Short-term / Long-term to avoid ambiguity</p>
         </div>
 
         <section class="timeline">
