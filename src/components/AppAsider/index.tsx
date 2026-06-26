@@ -21,7 +21,7 @@ import {
     Workflow,
 } from 'lucide-react';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import iconLululemon from '@/assets/images/lululemon-logo.svg';
@@ -179,6 +179,20 @@ const menus: Menu[] = [
     },
 ];
 
+const publicMenuKeys = new Set(['budget-project-calendar']);
+
+const isLocalWorkspace = () => {
+    if (typeof window === 'undefined') {
+        return true;
+    }
+
+    return ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+};
+
+const visibleMenus = () => (
+    isLocalWorkspace() ? menus : menus.filter(menu => publicMenuKeys.has(menu.key))
+);
+
 // 拆分出渲染直接链接菜单项的函数，减少主组件函数长度
 const renderDirectMenuItem = (
     menu: Menu,
@@ -312,8 +326,9 @@ const renderSubmenuItem = (
 
 const AppAsider: FC = () => {
     const location = useLocation();
+    const displayMenus = useMemo(() => visibleMenus(), []);
     const [openMenu, setOpenMenu] = useState<string | null>(null);
-    const [activeMenu, setActiveMenu] = useState<string>('dashboard'); // Default to dashboard
+    const [activeMenu, setActiveMenu] = useState<string>(displayMenus[0]?.key ?? 'budget-project-calendar');
     const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
 
     // Toggle submenu display status
@@ -326,7 +341,7 @@ const AppAsider: FC = () => {
         const path = location.pathname;
 
         // Check for direct menu matches
-        for (const menu of menus) {
+        for (const menu of displayMenus) {
             if (menu.children.length === 0) {
                 // For direct menus, check if path starts with the menu's path base
                 const basePath = menu.link.split('/').slice(0, 2).join('/');
@@ -358,10 +373,10 @@ const AppAsider: FC = () => {
 
         // Default to dashboard if no match found
         if (path === '/' || !activeMenu) {
-            setActiveMenu('dashboard');
+            setActiveMenu(displayMenus[0]?.key ?? 'budget-project-calendar');
             setActiveSubmenu(null);
         }
-    }, [location.pathname, activeMenu]); // 添加 activeMenu 作为依赖项
+    }, [location.pathname, activeMenu, displayMenus]);
 
     return (
         <div className="flex w-20 shrink-0 transition-all duration-300 group-hover:w-56">
@@ -375,7 +390,7 @@ const AppAsider: FC = () => {
                 {/* Navigation menu */}
                 <nav className="mt-4">
                     <ul className="space-y-1">
-                        {menus.map((menu) => {
+                        {displayMenus.map((menu) => {
                             const isActive = activeMenu === menu.key;
 
                             return (
