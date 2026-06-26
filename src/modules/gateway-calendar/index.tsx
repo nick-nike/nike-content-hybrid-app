@@ -8,9 +8,10 @@
     Table2,
     X,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import gatewayCalendar from '@/data/gatewayCalendar.json';
+import { isCalendarCloudConfigured, loadCalendarState, saveCalendarState } from '@/services/supabaseCalendarState';
 
 type GatewayMarker = {
     type: 'BRD' | 'SRE' | 'GW1/2' | 'TUAT' | 'GW3/4/5';
@@ -82,6 +83,7 @@ const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'gateway-calendar-date-overrides-v1';
 const GATEWAY_STATUS_STORAGE_KEY = 'gateway-calendar-status-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'gateway-calendar-confirmed-status-patch-version';
+const CLOUD_STATE_ID = 'gateway-calendar';
 const CURRENT_GATEWAY_PATCH_VERSION = '2026-06-12-v4';
 const RENAMED_PROJECT_KEY_MIGRATIONS = [
     {
@@ -858,11 +860,88 @@ export const GatewayCalendarPage: React.FC = () => {
     const [meetingInputs, setMeetingInputs] = useState<Record<string, ProjectMeetingInput>>(() => loadMeetingInputs());
     const [gatewayDateOverrides, setGatewayDateOverrides] = useState<Record<string, GatewayDateOverride>>(() => loadGatewayDateOverrides());
     const [gatewayStatuses, setGatewayStatuses] = useState<Record<string, GatewayStatus>>(() => loadGatewayStatuses());
+    const [cloudLoaded, setCloudLoaded] = useState(!isCalendarCloudConfigured());
+    const [cloudStatus, setCloudStatus] = useState(isCalendarCloudConfigured() ? 'Cloud sync loading' : 'Local save only');
+    const cloudSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [editingProject, setEditingProject] = useState<GatewayProject | null>(null);
     const [draftInput, setDraftInput] = useState<ProjectMeetingInput>(emptyMeetingInput);
     const [editingGateway, setEditingGateway] = useState<{ project: GatewayProject; marker: GatewayMarker } | null>(null);
     const [draftGatewayDate, setDraftGatewayDate] = useState<GatewayDateOverride>(emptyGatewayDateOverride);
     const [draftGatewayStatus, setDraftGatewayStatus] = useState<GatewayStatus>('To Do');
+
+    useEffect(() => {
+        let cancelled = false;
+
+        if (!isCalendarCloudConfigured()) {
+            setCloudStatus('Local save only');
+            return;
+        }
+
+        loadCalendarState(CLOUD_STATE_ID)
+            .then((state) => {
+                if (cancelled) {
+                    return;
+                }
+
+                if (state?.meetingInputs) {
+                    const next = state.meetingInputs as Record<string, ProjectMeetingInput>;
+                    setMeetingInputs(next);
+                    window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(next));
+                }
+
+                if (state?.gatewayDateOverrides) {
+                    const next = state.gatewayDateOverrides as Record<string, GatewayDateOverride>;
+                    setGatewayDateOverrides(next);
+                    window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(next));
+                }
+
+                if (state?.gatewayStatuses) {
+                    const next = state.gatewayStatuses as Record<string, GatewayStatus>;
+                    setGatewayStatuses(next);
+                    window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(next));
+                }
+
+                setCloudLoaded(true);
+                setCloudStatus(state ? 'Cloud synced' : 'Cloud ready');
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setCloudLoaded(true);
+                    setCloudStatus('Cloud load failed, local save active');
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!cloudLoaded || !isCalendarCloudConfigured()) {
+            return;
+        }
+
+        if (cloudSaveTimer.current) {
+            clearTimeout(cloudSaveTimer.current);
+        }
+
+        setCloudStatus('Saving to cloud');
+        cloudSaveTimer.current = setTimeout(() => {
+            saveCalendarState(CLOUD_STATE_ID, {
+                meetingInputs,
+                gatewayDateOverrides,
+                gatewayStatuses,
+            })
+                .then(() => setCloudStatus('Cloud synced'))
+                .catch(() => setCloudStatus('Cloud save failed, local save active'));
+        }, 500);
+
+        return () => {
+            if (cloudSaveTimer.current) {
+                clearTimeout(cloudSaveTimer.current);
+            }
+        };
+    }, [cloudLoaded, gatewayDateOverrides, gatewayStatuses, meetingInputs]);
 
     const displayProjects = useMemo(
         () => applyGatewayDateOverrides([...data.projects.filter(shouldShowProject), ...EXTRA_PROJECTS], gatewayDateOverrides),
@@ -1394,6 +1473,9 @@ export const GatewayCalendarPage: React.FC = () => {
                                     <Download size={15} />
                                     Export XLS
                                 </button>
+                                <span className="inline-flex h-10 items-center border border-[#d8d0c5] bg-white px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#5f574e]">
+                                    {cloudStatus}
+                                </span>
                             </div>
                         </div>
                     </div>
