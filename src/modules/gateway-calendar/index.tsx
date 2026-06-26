@@ -904,10 +904,10 @@ export const GatewayCalendarPage: React.FC = () => {
                 setCloudLoaded(true);
                 setCloudStatus(state ? 'Cloud synced' : 'Cloud ready');
             })
-            .catch(() => {
+            .catch((error: Error) => {
                 if (!cancelled) {
                     setCloudLoaded(true);
-                    setCloudStatus('Cloud load failed, local save active');
+                    setCloudStatus(error.message.slice(0, 80));
                 }
             });
 
@@ -933,7 +933,7 @@ export const GatewayCalendarPage: React.FC = () => {
                 gatewayStatuses,
             })
                 .then(() => setCloudStatus('Cloud synced'))
-                .catch(() => setCloudStatus('Cloud save failed, local save active'));
+                .catch((error: Error) => setCloudStatus(error.message.slice(0, 80)));
         }, 500);
 
         return () => {

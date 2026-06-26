@@ -38,7 +38,8 @@ export const loadCalendarState = async (id: string): Promise<CalendarCloudState 
     );
 
     if (!response.ok) {
-        throw new Error(`Supabase load failed: ${response.status}`);
+        const detail = await response.text();
+        throw new Error(`Supabase load failed: ${response.status} ${detail}`);
     }
 
     const rows = await response.json() as { data?: CalendarCloudState }[];
@@ -50,11 +51,11 @@ export const saveCalendarState = async (id: string, data: CalendarCloudState) =>
         return;
     }
 
-    const response = await fetch(`${supabaseUrl}/rest/v1/${STATE_TABLE}`, {
+    const response = await fetch(`${supabaseUrl}/rest/v1/${STATE_TABLE}?on_conflict=id`, {
         method: 'POST',
         headers: {
             ...headers(),
-            Prefer: 'resolution=merge-duplicates',
+            Prefer: 'resolution=merge-duplicates,return=minimal',
         },
         body: JSON.stringify({
             id,
@@ -64,6 +65,7 @@ export const saveCalendarState = async (id: string, data: CalendarCloudState) =>
     });
 
     if (!response.ok) {
-        throw new Error(`Supabase save failed: ${response.status}`);
+        const detail = await response.text();
+        throw new Error(`Supabase save failed: ${response.status} ${detail}`);
     }
 };
