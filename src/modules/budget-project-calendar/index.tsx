@@ -837,13 +837,28 @@ const monthNumber = (month: string) => MONTHS.indexOf(month) + 1;
 const monthWeekRanges = (month: string) => {
     const monthNo = monthNumber(month);
     const lastDay = new Date(2026, monthNo, 0).getDate();
-    return [
-        { label: 'W1', startDay: 1, endDay: Math.min(7, lastDay) },
-        { label: 'W2', startDay: 8, endDay: Math.min(14, lastDay) },
-        { label: 'W3', startDay: 15, endDay: Math.min(21, lastDay) },
-        { label: 'W4', startDay: 22, endDay: Math.min(28, lastDay) },
-        { label: 'W5', startDay: 29, endDay: lastDay },
-    ].filter(week => week.startDay <= week.endDay);
+    const weeks: Array<{ label: string; startDay: number; endDay: number }> = [];
+    let day = 1;
+
+    while (day <= lastDay) {
+        const weekDay = new Date(2026, monthNo - 1, day).getDay();
+        if (weekDay === 0 || weekDay === 6) {
+            day += 1;
+            continue;
+        }
+
+        const isoWeekDay = weekDay === 0 ? 7 : weekDay;
+        const startDay = day;
+        const endDay = Math.min(lastDay, day + (5 - isoWeekDay));
+        weeks.push({
+            label: `W${weeks.length + 1}`,
+            startDay,
+            endDay,
+        });
+        day = endDay + 1;
+    }
+
+    return weeks;
 };
 
 const markerDayInMonth = (marker: GatewayMarker, month: string) => {
@@ -1620,7 +1635,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
             <tr>
                 <td colspan="14" style="border:1px solid #d8d0c5;background-color:#fffdf8;padding:14px 18px;">
                     <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5f574e;">Weekly Filter / Resource Load</div>
-                    <div style="font-size:11px;color:#7b7166;margin-top:4px;">${escapeHtml(selectedMonth)} weekly handover count is based on GW1/2 and GW3/4/5 end date. Weekly capacity: ${weeklyCapacity}</div>
+                    <div style="font-size:11px;color:#7b7166;margin-top:4px;">${escapeHtml(selectedMonth)} weekly handover count is based on GW1/2 and GW3/4/5 end date, grouped by actual Mon-Fri workweeks. Weekly capacity: ${weeklyCapacity}</div>
                     <table style="width:100%;border-collapse:collapse;margin-top:10px;">
                         <tr>
                             ${selectedMonthWeekCounts.map(week => `
@@ -1942,7 +1957,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                         Weekly filter / Resource load
                                     </div>
                                     <div className="mt-1 text-xs text-[#7b7166]">
-                                        Week count is based on handover due date. W1=1-7, W2=8-14, W3=15-21, W4=22-28, W5=29-end.
+                                        Week count is based on handover due date and actual Mon-Fri workweeks. Partial first/last weeks follow the real calendar days.
                                     </div>
                                 </div>
                                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#5f574e]">
