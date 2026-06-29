@@ -94,7 +94,7 @@ const AppRoutes: FC = () => {
         <>
             <Routes>
                 {/* Root route - directly navigate to dashboard */}
-                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route path="/" element={<Navigate to="/budget-project-calendar" />} />
 
                 {/* Okta callback route */}
                 <Route path="/authorize/callback" element={<OktaCallback />} />

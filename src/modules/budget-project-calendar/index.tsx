@@ -958,6 +958,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
     const cloudSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [editingProject, setEditingProject] = useState<GatewayProject | null>(null);
     const [draftInput, setDraftInput] = useState<ProjectMeetingInput>(emptyMeetingInput);
+    const [draftProjectIdentity, setDraftProjectIdentity] = useState({ businessDomain: '', projectName: '', cscopNo: '' });
     const [addingProject, setAddingProject] = useState(false);
     const [draftCustomProject, setDraftCustomProject] = useState<CustomProjectDraft>(emptyCustomProjectDraft);
     const [editingGateway, setEditingGateway] = useState<{ project: GatewayProject; marker: GatewayMarker } | null>(null);
@@ -1053,6 +1054,11 @@ export const BudgetProjectCalendarPage: React.FC = () => {
     const openMeetingInput = (project: GatewayProject) => {
         setEditingProject(project);
         setDraftInput(projectInput(project, meetingInputs) ?? emptyMeetingInput);
+        setDraftProjectIdentity({
+            businessDomain: project.businessDomain,
+            projectName: project.projectName,
+            cscopNo: project.cscopNo,
+        });
     };
 
     const saveMeetingInput = () => {
@@ -1060,18 +1066,90 @@ export const BudgetProjectCalendarPage: React.FC = () => {
             return;
         }
 
-        const key = projectKey(editingProject);
-        const next = {
-            ...meetingInputs,
-            [key]: {
-                size: draftInput.size.trim(),
-                priority: draftInput.priority.trim(),
-                goLive: draftInput.goLive,
-                note: draftInput.note?.trim(),
-            },
+        const oldKey = projectKey(editingProject);
+        const isCustom = customProjects.some(project => projectKey(project) === oldKey);
+        const nextProject = isCustom
+            ? {
+                    ...editingProject,
+                    businessDomain: draftProjectIdentity.businessDomain.trim() || editingProject.businessDomain,
+                    projectName: draftProjectIdentity.projectName.trim() || editingProject.projectName,
+                    cscopNo: draftProjectIdentity.cscopNo.trim() || editingProject.cscopNo,
+                }
+            : editingProject;
+        const newKey = projectKey(nextProject);
+        const next = { ...meetingInputs };
+        delete next[oldKey];
+        next[newKey] = {
+            size: draftInput.size.trim(),
+            priority: draftInput.priority.trim(),
+            goLive: draftInput.goLive,
+            note: draftInput.note?.trim(),
         };
+        let nextOverrides = gatewayDateOverrides;
+        let nextStatuses = gatewayStatuses;
+
+        if (isCustom && oldKey !== newKey) {
+            nextOverrides = { ...gatewayDateOverrides };
+            nextStatuses = { ...gatewayStatuses };
+            NODE_TYPES.filter(isGatewayMarkerType).forEach((type) => {
+                const oldOverrideKey = `${oldKey}::${type}`;
+                const newOverrideKey = `${newKey}::${type}`;
+                if (nextOverrides[oldOverrideKey]) {
+                    nextOverrides[newOverrideKey] = nextOverrides[oldOverrideKey];
+                    delete nextOverrides[oldOverrideKey];
+                }
+                if (nextStatuses[oldOverrideKey]) {
+                    nextStatuses[newOverrideKey] = nextStatuses[oldOverrideKey];
+                    delete nextStatuses[oldOverrideKey];
+                }
+            });
+            setGatewayDateOverrides(nextOverrides);
+            window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(nextOverrides));
+            setGatewayStatuses(nextStatuses);
+            window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(nextStatuses));
+        }
+
+        if (isCustom) {
+            const nextCustomProjects = customProjects.map(project => (
+                projectKey(project) === oldKey ? nextProject : project
+            ));
+            setCustomProjects(nextCustomProjects);
+            window.localStorage.setItem(CUSTOM_PROJECTS_STORAGE_KEY, JSON.stringify(nextCustomProjects));
+        }
+
         setMeetingInputs(next);
         window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(next));
+        setEditingProject(null);
+    };
+
+    const deleteCustomProject = () => {
+        if (!editingProject) {
+            return;
+        }
+
+        const key = projectKey(editingProject);
+        if (!customProjects.some(project => projectKey(project) === key)) {
+            return;
+        }
+
+        const nextCustomProjects = customProjects.filter(project => projectKey(project) !== key);
+        const nextMeetingInputs = { ...meetingInputs };
+        const nextOverrides = { ...gatewayDateOverrides };
+        const nextStatuses = { ...gatewayStatuses };
+        delete nextMeetingInputs[key];
+        NODE_TYPES.filter(isGatewayMarkerType).forEach((type) => {
+            delete nextOverrides[`${key}::${type}`];
+            delete nextStatuses[`${key}::${type}`];
+        });
+
+        setCustomProjects(nextCustomProjects);
+        window.localStorage.setItem(CUSTOM_PROJECTS_STORAGE_KEY, JSON.stringify(nextCustomProjects));
+        setMeetingInputs(nextMeetingInputs);
+        window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(nextMeetingInputs));
+        setGatewayDateOverrides(nextOverrides);
+        window.localStorage.setItem(GATEWAY_DATE_OVERRIDES_STORAGE_KEY, JSON.stringify(nextOverrides));
+        setGatewayStatuses(nextStatuses);
+        window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(nextStatuses));
         setEditingProject(null);
     };
 
@@ -2114,6 +2192,36 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                 </button>
                             </div>
                             <div className="grid gap-4 px-5 py-5">
+                                {customProjects.some(project => projectKey(project) === projectKey(editingProject)) && (
+                                    <>
+                                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                            Business Domain
+                                            <select
+                                                value={draftProjectIdentity.businessDomain}
+                                                onChange={event => setDraftProjectIdentity({ ...draftProjectIdentity, businessDomain: event.target.value })}
+                                                className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                            >
+                                                {DOMAINS.filter(item => item !== 'All').map(item => <option key={item}>{item}</option>)}
+                                            </select>
+                                        </label>
+                                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                            Project Name
+                                            <input
+                                                value={draftProjectIdentity.projectName}
+                                                onChange={event => setDraftProjectIdentity({ ...draftProjectIdentity, projectName: event.target.value })}
+                                                className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                            />
+                                        </label>
+                                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                            CSCOP / Code
+                                            <input
+                                                value={draftProjectIdentity.cscopNo}
+                                                onChange={event => setDraftProjectIdentity({ ...draftProjectIdentity, cscopNo: event.target.value })}
+                                                className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                            />
+                                        </label>
+                                    </>
+                                )}
                                 <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
                                     Touchbase Date
                                     <input
@@ -2143,6 +2251,15 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                 </label>
                             </div>
                             <div className="flex justify-end gap-2 border-t border-[#d8d0c5] px-5 py-4">
+                                {customProjects.some(project => projectKey(project) === projectKey(editingProject)) && (
+                                    <button
+                                        type="button"
+                                        onClick={deleteCustomProject}
+                                        className="mr-auto h-10 border border-[#d31321] px-4 text-xs font-bold uppercase tracking-[0.1em] text-[#d31321]"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                                 <button
                                     type="button"
                                     onClick={() => setEditingProject(null)}
