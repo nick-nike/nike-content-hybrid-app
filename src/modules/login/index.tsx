@@ -47,7 +47,7 @@ export type PmAuthSession = {
 };
 
 const demoAccounts: Array<{ username: string; password: string; role: PmRole; name: string }> = [
-    { username: 'admin', password: 'admin', role: 'admin', name: 'Admin' },
+    { username: 'admin', password: '102938', role: 'admin', name: 'Admin' },
     { username: 'user', password: 'user', role: 'user', name: 'User' },
 ];
 
@@ -117,9 +117,7 @@ export const Main: FC = () => {
         <main className="flex min-h-screen items-start justify-center bg-[#0d1117] px-6 py-12 text-[#f0f6fc]">
             <div className="w-full max-w-[352px]">
                 <div className="mb-5 flex justify-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f0f6fc]">
-                        <img src={iconLululemon} alt="lululemon" className="h-11 w-11" />
-                    </div>
+                    <img src={iconLululemon} alt="lululemon" className="h-14 w-14" />
                 </div>
 
                 <h1 className="mb-7 text-center text-2xl font-semibold tracking-[-0.01em] text-[#f0f6fc]">
