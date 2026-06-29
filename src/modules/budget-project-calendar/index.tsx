@@ -279,7 +279,14 @@ const CANCELED_PROJECT_NAMES = [
 ];
 const isGatewayMarker = (marker: GatewayMarker) => marker.type === 'GW1/2' || marker.type === 'GW3/4/5';
 
-const compactDate = (value: string) => value ? value.slice(5).replace('-', '/') : '';
+const compactDate = (value: string) => {
+    const parsed = parseFlexibleDate(value);
+    if (!parsed) {
+        return value || '';
+    }
+
+    return `${String(parsed.month).padStart(2, '0')}/${String(parsed.day).padStart(2, '0')}`;
+};
 const isoFromDate = (value: Date) => {
     const year = value.getFullYear();
     const month = String(value.getMonth() + 1).padStart(2, '0');
@@ -293,6 +300,33 @@ const addDaysIso = (value: string, days: number) => {
     return isoFromDate(date);
 };
 const isIsoDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);
+const parseFlexibleDate = (value?: string) => {
+    const text = (value ?? '').trim();
+    if (!text) {
+        return null;
+    }
+
+    const yearFirst = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+    if (yearFirst) {
+        return {
+            year: Number(yearFirst[1]),
+            month: Number(yearFirst[2]),
+            day: Number(yearFirst[3]),
+        };
+    }
+
+    const monthFirst = text.match(/^(\d{1,2})[-/](\d{1,2})(?:[-/](\d{2,4}))?$/);
+    if (monthFirst) {
+        const rawYear = monthFirst[3] ? Number(monthFirst[3]) : 2026;
+        return {
+            year: rawYear < 100 ? 2000 + rawYear : rawYear,
+            month: Number(monthFirst[1]),
+            day: Number(monthFirst[2]),
+        };
+    }
+
+    return null;
+};
 const addBusinessDaysInclusive = (value: string, businessDays: number) => {
     if (!isIsoDate(value) || businessDays <= 1) {
         return value;
@@ -534,11 +568,12 @@ const emptyGatewayMonths = () => MONTHS.reduce<Record<string, GatewayMarker[]>>(
 }, {});
 
 const monthFromIso = (value: string) => {
-    if (!isIsoDate(value)) {
+    const parsed = parseFlexibleDate(value);
+    if (!parsed || parsed.month < 1 || parsed.month > 12) {
         return '';
     }
 
-    return MONTHS[Number(value.slice(5, 7)) - 1] ?? '';
+    return MONTHS[parsed.month - 1] ?? '';
 };
 
 const suggestedHandoverEnd = (month: string) => {
@@ -862,13 +897,13 @@ const monthWeekRanges = (month: string) => {
 };
 
 const markerDayInMonth = (marker: GatewayMarker, month: string) => {
-    const targetDate = marker.end || marker.start;
     const monthNo = monthNumber(month);
-    if (!targetDate || !targetDate.startsWith(`2026-${String(monthNo).padStart(2, '0')}-`)) {
+    const targetDate = parseFlexibleDate(marker.end) ?? parseFlexibleDate(marker.start);
+    if (!targetDate || targetDate.month !== monthNo) {
         return null;
     }
 
-    return Number(targetDate.slice(8, 10));
+    return targetDate.day;
 };
 
 const resourceLoad = (count: number, capacity: number) => {
