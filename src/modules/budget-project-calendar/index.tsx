@@ -275,7 +275,6 @@ const EXTRA_PROJECTS: GatewayProject[] = [
 ];
 const CANCELED_PROJECT_NAMES = [
     'CR : Inventory Efficiency Tool Enhancement',
-    'Demand Factors PBI enhancement',
     'On order OTP',
 ];
 const isGatewayMarker = (marker: GatewayMarker) => marker.type === 'GW1/2' || marker.type === 'GW3/4/5';
