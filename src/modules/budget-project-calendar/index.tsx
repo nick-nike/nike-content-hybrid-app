@@ -97,6 +97,7 @@ const MEETING_INPUTS_STORAGE_KEY = 'budget-project-calendar-meeting-inputs-v1';
 const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-date-overrides-v1';
 const GATEWAY_STATUS_STORAGE_KEY = 'budget-project-calendar-status-v1';
 const CUSTOM_PROJECTS_STORAGE_KEY = 'budget-project-calendar-custom-projects-v1';
+const DELETE_ADMIN_STORAGE_KEY = 'budget-project-calendar-delete-admin-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
 const CLOUD_STATE_ID = 'budget-project-calendar';
@@ -956,6 +957,18 @@ export const BudgetProjectCalendarPage: React.FC = () => {
     const [cloudLoaded, setCloudLoaded] = useState(!isCalendarCloudConfigured());
     const [cloudStatus, setCloudStatus] = useState(isCalendarCloudConfigured() ? 'Cloud sync loading' : 'Local save only');
     const cloudSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [canDeleteCustomProjects] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('adminDelete') === '1') {
+            window.localStorage.setItem(DELETE_ADMIN_STORAGE_KEY, '1');
+            return true;
+        }
+        if (params.get('adminDelete') === '0') {
+            window.localStorage.removeItem(DELETE_ADMIN_STORAGE_KEY);
+            return false;
+        }
+        return window.localStorage.getItem(DELETE_ADMIN_STORAGE_KEY) === '1';
+    });
     const [editingProject, setEditingProject] = useState<GatewayProject | null>(null);
     const [draftInput, setDraftInput] = useState<ProjectMeetingInput>(emptyMeetingInput);
     const [draftProjectIdentity, setDraftProjectIdentity] = useState({ businessDomain: '', projectName: '', cscopNo: '' });
@@ -1128,7 +1141,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
         }
 
         const key = projectKey(editingProject);
-        if (!customProjects.some(project => projectKey(project) === key)) {
+        if (!canDeleteCustomProjects || !customProjects.some(project => projectKey(project) === key)) {
             return;
         }
 
@@ -2251,7 +2264,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                 </label>
                             </div>
                             <div className="flex justify-end gap-2 border-t border-[#d8d0c5] px-5 py-4">
-                                {customProjects.some(project => projectKey(project) === projectKey(editingProject)) && (
+                                {canDeleteCustomProjects && customProjects.some(project => projectKey(project) === projectKey(editingProject)) && (
                                     <button
                                         type="button"
                                         onClick={deleteCustomProject}
