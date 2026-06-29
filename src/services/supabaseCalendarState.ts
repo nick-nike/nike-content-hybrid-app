@@ -2,6 +2,7 @@ export type CalendarCloudState = {
     meetingInputs?: Record<string, unknown>;
     gatewayDateOverrides?: Record<string, unknown>;
     gatewayStatuses?: Record<string, unknown>;
+    customProjects?: unknown[];
 };
 
 const STATE_TABLE = 'project_calendar_state';

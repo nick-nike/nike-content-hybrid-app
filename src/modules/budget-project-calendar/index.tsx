@@ -3,6 +3,7 @@
     Download,
     Filter,
     Pencil,
+    Plus,
     Save,
     Search,
     Table2,
@@ -64,6 +65,20 @@ type GatewayDateOverride = {
 type GatewayStatus = 'To Do' | 'WIP' | 'Done' | 'On Hold';
 type HandoverStatusFilter = 'Active' | GatewayStatus | 'All';
 
+type CustomProjectDraft = {
+    businessDomain: string;
+    projectName: string;
+    cscopNo: string;
+    touchbaseDate: string;
+    checklist: string;
+    techRelease: string;
+    gwType: 'GW1/2' | 'GW3/4/5';
+    gwStart: string;
+    gwEnd: string;
+    gwStatus: GatewayStatus;
+    note: string;
+};
+
 type DefaultGatewayPatch = {
     projectName: string;
     cscopNo: string;
@@ -81,6 +96,7 @@ const DOMAINS = ['All', ...Object.keys(data.summary.domainCounts)];
 const MEETING_INPUTS_STORAGE_KEY = 'budget-project-calendar-meeting-inputs-v1';
 const GATEWAY_DATE_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-date-overrides-v1';
 const GATEWAY_STATUS_STORAGE_KEY = 'budget-project-calendar-status-v1';
+const CUSTOM_PROJECTS_STORAGE_KEY = 'budget-project-calendar-custom-projects-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
 const CLOUD_STATE_ID = 'budget-project-calendar';
@@ -338,6 +354,19 @@ const confirmedPatchOverrideKeys = () => new Set(
 );
 const emptyMeetingInput = { size: '', priority: '', goLive: '' };
 const emptyGatewayDateOverride = { start: '', end: '' };
+const emptyCustomProjectDraft: CustomProjectDraft = {
+    businessDomain: 'Product',
+    projectName: '',
+    cscopNo: '',
+    touchbaseDate: '',
+    checklist: '',
+    techRelease: '',
+    gwType: 'GW3/4/5',
+    gwStart: '',
+    gwEnd: '',
+    gwStatus: 'To Do',
+    note: '',
+};
 const loadMeetingInputs = (): Record<string, ProjectMeetingInput> => {
     if (typeof window === 'undefined') {
         return {};
@@ -440,6 +469,69 @@ const loadGatewayStatuses = (): Record<string, GatewayStatus> => {
     catch {
         return {};
     }
+};
+
+const loadCustomProjects = (): GatewayProject[] => {
+    if (typeof window === 'undefined') {
+        return [];
+    }
+
+    try {
+        const raw = window.localStorage.getItem(CUSTOM_PROJECTS_STORAGE_KEY);
+        const projects = raw ? JSON.parse(raw) as GatewayProject[] : [];
+        return projects.filter(project => project?.projectName && project?.businessDomain && project?.gatewayMonths);
+    }
+    catch {
+        return [];
+    }
+};
+
+const emptyGatewayMonths = () => MONTHS.reduce<Record<string, GatewayMarker[]>>((acc, month) => {
+    acc[month] = [];
+    return acc;
+}, {});
+
+const monthFromIso = (value: string) => {
+    if (!isIsoDate(value)) {
+        return '';
+    }
+
+    return MONTHS[Number(value.slice(5, 7)) - 1] ?? '';
+};
+
+const suggestedHandoverEnd = (month: string) => {
+    const fallbackMonth = month === 'All' ? 'Jul' : month;
+    const monthNo = MONTHS.indexOf(fallbackMonth) + 1;
+    return `2026-${String(monthNo > 0 ? monthNo : 7).padStart(2, '0')}-15`;
+};
+
+const customProjectFromDraft = (draft: CustomProjectDraft): GatewayProject => {
+    const gatewayMonths = emptyGatewayMonths();
+    const cscopNo = draft.cscopNo.trim() || `MANUAL-${Date.now()}`;
+    const marker: GatewayMarker = {
+        type: draft.gwType,
+        milestone: draft.gwType === 'GW1/2' ? 'Gateway Handover 1/2' : 'Gateway Handover 3/4/5',
+        deliverable: `${draft.gwType} Handover`,
+        start: draft.gwStart || draft.gwEnd,
+        end: draft.gwEnd,
+    };
+    const month = monthFromIso(marker.end) || monthFromIso(marker.start) || 'Jul';
+    gatewayMonths[month].push(marker);
+
+    return {
+        businessDomain: draft.businessDomain.trim() || 'Product',
+        projectName: draft.projectName.trim(),
+        cscopNo,
+        status: 'Manual',
+        contractOps: '',
+        handoverDone: '',
+        taskCount: 0,
+        taskStart: draft.techRelease || draft.touchbaseDate || marker.start,
+        taskEnd: marker.end,
+        gatewayCount: 1,
+        hasGateway: true,
+        gatewayMonths,
+    };
 };
 
 const markerSubLabel = (marker: GatewayMarker) => {
@@ -860,11 +952,14 @@ export const BudgetProjectCalendarPage: React.FC = () => {
     const [meetingInputs, setMeetingInputs] = useState<Record<string, ProjectMeetingInput>>(() => loadMeetingInputs());
     const [gatewayDateOverrides, setGatewayDateOverrides] = useState<Record<string, GatewayDateOverride>>(() => loadGatewayDateOverrides());
     const [gatewayStatuses, setGatewayStatuses] = useState<Record<string, GatewayStatus>>(() => loadGatewayStatuses());
+    const [customProjects, setCustomProjects] = useState<GatewayProject[]>(() => loadCustomProjects());
     const [cloudLoaded, setCloudLoaded] = useState(!isCalendarCloudConfigured());
     const [cloudStatus, setCloudStatus] = useState(isCalendarCloudConfigured() ? 'Cloud sync loading' : 'Local save only');
     const cloudSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [editingProject, setEditingProject] = useState<GatewayProject | null>(null);
     const [draftInput, setDraftInput] = useState<ProjectMeetingInput>(emptyMeetingInput);
+    const [addingProject, setAddingProject] = useState(false);
+    const [draftCustomProject, setDraftCustomProject] = useState<CustomProjectDraft>(emptyCustomProjectDraft);
     const [editingGateway, setEditingGateway] = useState<{ project: GatewayProject; marker: GatewayMarker } | null>(null);
     const [draftGatewayDate, setDraftGatewayDate] = useState<GatewayDateOverride>(emptyGatewayDateOverride);
     const [draftGatewayStatus, setDraftGatewayStatus] = useState<GatewayStatus>('To Do');
@@ -901,6 +996,12 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                     window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(next));
                 }
 
+                if (state?.customProjects) {
+                    const next = state.customProjects as GatewayProject[];
+                    setCustomProjects(next);
+                    window.localStorage.setItem(CUSTOM_PROJECTS_STORAGE_KEY, JSON.stringify(next));
+                }
+
                 setCloudLoaded(true);
                 setCloudStatus(state ? 'Cloud synced' : 'Cloud ready');
             })
@@ -931,6 +1032,7 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 meetingInputs,
                 gatewayDateOverrides,
                 gatewayStatuses,
+                customProjects,
             })
                 .then(() => setCloudStatus('Cloud synced'))
                 .catch((error: Error) => setCloudStatus(error.message.slice(0, 80)));
@@ -941,11 +1043,11 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                 clearTimeout(cloudSaveTimer.current);
             }
         };
-    }, [cloudLoaded, gatewayDateOverrides, gatewayStatuses, meetingInputs]);
+    }, [cloudLoaded, customProjects, gatewayDateOverrides, gatewayStatuses, meetingInputs]);
 
     const displayProjects = useMemo(
-        () => applyGatewayDateOverrides([...data.projects.filter(shouldShowProject), ...EXTRA_PROJECTS], gatewayDateOverrides),
-        [gatewayDateOverrides],
+        () => applyGatewayDateOverrides([...data.projects.filter(shouldShowProject), ...EXTRA_PROJECTS, ...customProjects], gatewayDateOverrides),
+        [customProjects, gatewayDateOverrides],
     );
 
     const openMeetingInput = (project: GatewayProject) => {
@@ -971,6 +1073,50 @@ export const BudgetProjectCalendarPage: React.FC = () => {
         setMeetingInputs(next);
         window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(next));
         setEditingProject(null);
+    };
+
+    const openAddProject = () => {
+        const endDate = suggestedHandoverEnd(selectedMonth);
+        setDraftCustomProject({
+            ...emptyCustomProjectDraft,
+            gwEnd: endDate,
+            gwStart: '',
+        });
+        setAddingProject(true);
+    };
+
+    const saveCustomProject = () => {
+        if (!draftCustomProject.projectName.trim() || !draftCustomProject.gwEnd) {
+            return;
+        }
+
+        const project = customProjectFromDraft(draftCustomProject);
+        const key = projectKey(project);
+        const nextCustomProjects = [
+            ...customProjects.filter(item => projectKey(item) !== key),
+            project,
+        ];
+        const nextMeetingInputs = {
+            ...meetingInputs,
+            [key]: {
+                size: draftCustomProject.touchbaseDate.trim(),
+                priority: draftCustomProject.checklist.trim(),
+                goLive: draftCustomProject.techRelease.trim(),
+                note: draftCustomProject.note.trim(),
+            },
+        };
+        const nextGatewayStatuses = {
+            ...gatewayStatuses,
+            [gatewayOverrideKey(project, draftCustomProject.gwType)]: draftCustomProject.gwStatus,
+        };
+
+        setCustomProjects(nextCustomProjects);
+        window.localStorage.setItem(CUSTOM_PROJECTS_STORAGE_KEY, JSON.stringify(nextCustomProjects));
+        setMeetingInputs(nextMeetingInputs);
+        window.localStorage.setItem(MEETING_INPUTS_STORAGE_KEY, JSON.stringify(nextMeetingInputs));
+        setGatewayStatuses(nextGatewayStatuses);
+        window.localStorage.setItem(GATEWAY_STATUS_STORAGE_KEY, JSON.stringify(nextGatewayStatuses));
+        setAddingProject(false);
     };
 
     const openGatewayDateEditor = (project: GatewayProject, marker: GatewayMarker) => {
@@ -1473,6 +1619,14 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                                     <Download size={15} />
                                     Export XLS
                                 </button>
+                                <button
+                                    type="button"
+                                    onClick={openAddProject}
+                                    className="inline-flex h-10 items-center gap-2 border border-[#111111] bg-white px-4 text-xs font-bold uppercase tracking-[0.1em] text-[#111111]"
+                                >
+                                    <Plus size={15} />
+                                    Add Project
+                                </button>
                                 <span className="inline-flex h-10 items-center border border-[#d8d0c5] bg-white px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#5f574e]">
                                     {cloudStatus}
                                 </span>
@@ -1792,6 +1946,154 @@ export const BudgetProjectCalendarPage: React.FC = () => {
                         </table>
                     </div>
                 </section>
+
+                {addingProject && (
+                    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 px-4">
+                        <div className="max-h-[92vh] w-full max-w-2xl overflow-auto border border-[#d8d0c5] bg-[#fffdf8] shadow-2xl">
+                            <div className="flex items-start justify-between border-b border-[#d8d0c5] px-5 py-4">
+                                <div>
+                                    <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d31321]">Add Handover Project</div>
+                                    <h3 className="mt-1 text-base font-bold leading-6 text-[#17203a]">Create a manual project for online tracking</h3>
+                                    <div className="mt-1 text-xs text-[#7b7166]">Saved to cloud and included in month, week, and XLS export.</div>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setAddingProject(false)}
+                                    className="inline-flex size-8 items-center justify-center border border-[#111111]"
+                                    title="Close"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                            <div className="grid gap-4 px-5 py-5 md:grid-cols-2">
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Business Domain
+                                    <select
+                                        value={draftCustomProject.businessDomain}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, businessDomain: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                    >
+                                        {DOMAINS.filter(item => item !== 'All').map(item => <option key={item}>{item}</option>)}
+                                    </select>
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    CSCOP / Code
+                                    <input
+                                        value={draftCustomProject.cscopNo}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, cscopNo: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="CSCOP-xxx / optional"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e] md:col-span-2">
+                                    Project Name
+                                    <input
+                                        value={draftCustomProject.projectName}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, projectName: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="Project name"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Touchbase Date
+                                    <input
+                                        value={draftCustomProject.touchbaseDate}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, touchbaseDate: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="YYYY-MM-DD / TBD"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Tech Release
+                                    <input
+                                        value={draftCustomProject.techRelease}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, techRelease: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="YYYY-MM-DD / Live / TBD"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e] md:col-span-2">
+                                    Checklist
+                                    <textarea
+                                        value={draftCustomProject.checklist}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, checklist: event.target.value })}
+                                        className="min-h-[76px] border border-[#d8d0c5] bg-white px-3 py-2 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="One item per line, or separate with ;"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Handover Type
+                                    <select
+                                        value={draftCustomProject.gwType}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, gwType: event.target.value as CustomProjectDraft['gwType'] })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                    >
+                                        <option value="GW1/2">GW1/2 Handover</option>
+                                        <option value="GW3/4/5">GW3/4/5 Handover</option>
+                                    </select>
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Status
+                                    <select
+                                        value={draftCustomProject.gwStatus}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, gwStatus: event.target.value as GatewayStatus })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                    >
+                                        <option>To Do</option>
+                                        <option>WIP</option>
+                                        <option>Done</option>
+                                        <option>On Hold</option>
+                                    </select>
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Handover Start
+                                    <input
+                                        type="date"
+                                        value={draftCustomProject.gwStart}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, gwStart: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e]">
+                                    Handover Complete
+                                    <input
+                                        type="date"
+                                        value={draftCustomProject.gwEnd}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, gwEnd: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                    />
+                                </label>
+                                <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5f574e] md:col-span-2">
+                                    Note
+                                    <input
+                                        value={draftCustomProject.note}
+                                        onChange={event => setDraftCustomProject({ ...draftCustomProject, note: event.target.value })}
+                                        className="h-10 border border-[#d8d0c5] bg-white px-3 text-sm font-semibold normal-case tracking-normal text-[#111111] outline-none"
+                                        placeholder="Optional"
+                                    />
+                                </label>
+                            </div>
+                            <div className="flex justify-end gap-2 border-t border-[#d8d0c5] px-5 py-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setAddingProject(false)}
+                                    className="h-10 border border-[#111111] px-4 text-xs font-bold uppercase tracking-[0.1em]"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={saveCustomProject}
+                                    disabled={!draftCustomProject.projectName.trim() || !draftCustomProject.gwEnd}
+                                    className="inline-flex h-10 items-center gap-2 bg-[#d31321] px-4 text-xs font-bold uppercase tracking-[0.1em] text-white disabled:cursor-not-allowed disabled:bg-[#c9c0b6]"
+                                >
+                                    <Save size={15} />
+                                    Save Project
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {editingProject && (
                     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 px-4">
