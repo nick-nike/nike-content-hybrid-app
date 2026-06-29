@@ -25,7 +25,7 @@ import { Main as DocmentMain } from '../../modules/document';
 import { Main as DocmentListMain } from '../../modules/document-list';
 import { ImageToolkitPage } from '../../modules/image-toolkit-demo';
 import { ImageWorkflowDemo } from '../../modules/image-workflow-demo';
-import { OktaCallback } from '../../modules/login';
+import { Main as LoginMain, OktaCallback, readPmAuthSession } from '../../modules/login';
 import { AppLayout } from '../AppLayout';
 
 const UserListMain = lazy(() => import('../../modules/user-list').then(module => ({ default: module.Main })));
@@ -93,28 +93,24 @@ const AppRoutes: FC = () => {
     return (
         <>
             <Routes>
-                {/* Root route - directly navigate to dashboard */}
-                <Route path="/" element={<Navigate to="/budget-project-calendar" />} />
+                {/* Root route - go to login first when no local PM session exists */}
+                <Route path="/" element={<Navigate to={readPmAuthSession() ? '/budget-project-calendar' : '/login'} replace />} />
 
                 {/* Okta callback route */}
                 <Route path="/authorize/callback" element={<OktaCallback />} />
 
-                {/* Login page route - hidden by default */}
-                {/* <Route
-                path="/login"
-                element={isAuthenticated ? <Navigate to="/assets/list" /> : <LoginMain />}
-            /> */}
+                <Route path="/login" element={<LoginMain />} />
 
-                {/* Protected routes - no auth check */}
+                {/* Protected PM routes */}
                 <Route
                     path="/*"
-                    element={(
+                    element={readPmAuthSession() ? (
                         <AppLayout>
                             <Suspense fallback={<div>Loading content...</div>}>
                                 <Outlet />
                             </Suspense>
                         </AppLayout>
-                    )}
+                    ) : <Navigate to="/login" replace />}
                 >
                     {/* Dashboard route */}
                     <Route path="dashboard" element={<DashboardPage />} />

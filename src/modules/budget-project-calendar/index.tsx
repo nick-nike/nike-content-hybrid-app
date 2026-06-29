@@ -106,6 +106,7 @@ const CUSTOM_PROJECTS_STORAGE_KEY = 'budget-project-calendar-custom-projects-v1'
 const MANUAL_GATEWAY_MARKERS_STORAGE_KEY = 'budget-project-calendar-manual-gateway-markers-v1';
 const PROJECT_IDENTITY_OVERRIDES_STORAGE_KEY = 'budget-project-calendar-project-identity-overrides-v1';
 const DELETE_ADMIN_STORAGE_KEY = 'budget-project-calendar-delete-admin-v1';
+const PM_AUTH_STORAGE_KEY = 'pm-hands-on-auth-v1';
 const GATEWAY_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-patch-version';
 const GATEWAY_STATUS_PATCH_VERSION_STORAGE_KEY = 'budget-project-calendar-confirmed-status-patch-version';
 const CLOUD_STATE_ID = 'budget-project-calendar';
@@ -1049,16 +1050,19 @@ export const BudgetProjectCalendarPage: React.FC = () => {
     const [cloudStatus, setCloudStatus] = useState(isCalendarCloudConfigured() ? 'Cloud sync loading' : 'Local save only');
     const cloudSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [canDeleteCustomProjects] = useState(() => {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('adminDelete') === '1') {
-            window.localStorage.setItem(DELETE_ADMIN_STORAGE_KEY, '1');
-            return true;
+        try {
+            const session = JSON.parse(window.localStorage.getItem(PM_AUTH_STORAGE_KEY) ?? 'null') as { role?: string } | null;
+            if (session?.role === 'admin') {
+                window.localStorage.setItem(DELETE_ADMIN_STORAGE_KEY, '1');
+                return true;
+            }
         }
-        if (params.get('adminDelete') === '0') {
-            window.localStorage.removeItem(DELETE_ADMIN_STORAGE_KEY);
-            return false;
+        catch {
+            window.localStorage.removeItem(PM_AUTH_STORAGE_KEY);
         }
-        return window.localStorage.getItem(DELETE_ADMIN_STORAGE_KEY) === '1';
+
+        window.localStorage.removeItem(DELETE_ADMIN_STORAGE_KEY);
+        return false;
     });
     const [editingProject, setEditingProject] = useState<GatewayProject | null>(null);
     const [draftInput, setDraftInput] = useState<ProjectMeetingInput>(emptyMeetingInput);
