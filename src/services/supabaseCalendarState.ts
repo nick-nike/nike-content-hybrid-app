@@ -3,6 +3,8 @@ export type CalendarCloudState = {
     gatewayDateOverrides?: Record<string, unknown>;
     gatewayStatuses?: Record<string, unknown>;
     customProjects?: unknown[];
+    manualGatewayMarkers?: Record<string, unknown>;
+    projectIdentityOverrides?: Record<string, unknown>;
 };
 
 const STATE_TABLE = 'project_calendar_state';
