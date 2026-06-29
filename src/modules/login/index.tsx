@@ -123,7 +123,7 @@ export const Main: FC = () => {
                 </div>
 
                 <h1 className="mb-7 text-center text-2xl font-semibold tracking-[-0.01em] text-[#f0f6fc]">
-                    Sign in to lululemon
+                    Sign in Project Calendar Hub
                 </h1>
 
                 <form onSubmit={handleSubmit} className="grid gap-4">
