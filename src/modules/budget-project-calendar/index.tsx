@@ -970,16 +970,16 @@ const projectUrgency = (project: GatewayProject, input?: ProjectMeetingInput) =>
         return { score: 720, tone: 'normal' as const, label: '', reason: 'Pending' };
     }
     if (isHighest) {
-        return { score: 0, tone: 'critical' as const, label: 'Top Urgent', reason: 'Priority highest handover' };
+        return { score: 0, tone: 'critical' as const, label: '', reason: 'Priority highest handover' };
     }
     if (goLivePassed) {
-        return { score: 15, tone: 'critical' as const, label: 'Urgent', reason: 'Go-live passed' };
+        return { score: 15, tone: 'critical' as const, label: '', reason: 'Go-live passed' };
     }
     if (duePassed) {
-        return { score: 25, tone: 'critical' as const, label: 'Urgent', reason: 'GW due passed' };
+        return { score: 25, tone: 'critical' as const, label: '', reason: 'GW due passed' };
     }
     if (isDone && project.projectName.toLowerCase().includes('support')) {
-        return { score: 35, tone: 'critical' as const, label: 'Urgent', reason: 'Done support item' };
+        return { score: 35, tone: 'critical' as const, label: '', reason: 'Done support item' };
     }
     if (isDone) {
         return { score: 45, tone: 'normal' as const, label: '', reason: 'Project done, close handover' };
