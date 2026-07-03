@@ -99,7 +99,7 @@ const AppRoutes: FC = () => {
                 {/* Okta callback route */}
                 <Route path="/authorize/callback" element={<OktaCallback />} />
 
-                <Route path="/login" element={<LoginMain />} />
+                <Route path="/login/*" element={<LoginMain />} />
 
                 {/* Protected PM routes */}
                 <Route

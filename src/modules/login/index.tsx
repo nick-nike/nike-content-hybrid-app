@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import iconLululemon from '@/assets/images/lululemon-logo.svg';
 import { LoginForm } from './components/LoginForm';
@@ -74,6 +74,7 @@ export const signOutPmSession = () => {
 };
 
 export const Main: FC = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -109,7 +110,7 @@ export const Main: FC = () => {
             window.localStorage.removeItem(DELETE_ADMIN_STORAGE_KEY);
         }
 
-        window.location.replace('/budget-project-calendar');
+        navigate('/budget-project-calendar', { replace: true });
     };
 
     return (
