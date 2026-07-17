@@ -11,6 +11,7 @@ import {
     FileText,
     Flag,
     GraduationCap,
+    Gauge,
     Milestone,
     Image,
     Layers3,
@@ -25,6 +26,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import iconLululemon from '@/assets/images/lululemon-logo.svg';
+import { readPmAuthSession } from '@/modules/login';
 
 type Menu = {
     label: string;
@@ -96,6 +98,13 @@ const menus: Menu[] = [
         icon: BarChart3,
         key: 'gantt-builder',
         link: '/gantt-builder',
+        children: [],
+    },
+    {
+        label: 'Capacity Forecast',
+        icon: Gauge,
+        key: 'resource-capacity-forecast',
+        link: '/resource-capacity-forecast',
         children: [],
     },
     {
@@ -190,7 +199,9 @@ const isLocalWorkspace = () => {
 };
 
 const visibleMenus = () => (
-    isLocalWorkspace() ? menus : menus.filter(menu => publicMenuKeys.has(menu.key))
+    isLocalWorkspace() || readPmAuthSession()?.role === 'admin'
+        ? menus
+        : menus.filter(menu => publicMenuKeys.has(menu.key))
 );
 
 // 拆分出渲染直接链接菜单项的函数，减少主组件函数长度
